@@ -3,33 +3,58 @@
  */
 package view;
 import interfaces.Song;
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 
 public class View extends BorderPane{
-    private ListView<Song> lv;
-    private SplitPane song;
-    private SplitPane playlist;
-    private ScrollPane scrollp;
-
+    private ListView<Song> lvsong,lvplaylist;
+    private Button addall,load,save,addtoplaylist,commit,play,pause;
+    private SplitPane sp;
+    private HBox upperframe;
     public View(){
         setMaxSize(1024,1024);
 
-        lv = new ListView<>();
-        song = new SplitPane();
-        playlist = new  SplitPane();
-        song.setMinSize(500,500);
+        //listview
+        sp = new SplitPane();
+        lvsong = new ListView<>();
+        lvplaylist = new ListView<>();
+        setCenter(lvplaylist);
+        setLeft(lvsong);
+
+        //splittpane
+        sp.setMinSize(200,500);
+        sp.setDividerPosition(200,200);
+        //sp.getItems().add(new Button("teeest"));
+        setRight(sp);
 
 
-        playlist.setMinSize(500,500);
+        //Add All button
+        addall= new Button("Add all");
+        addall.setPadding(new Insets(10,10,10,10));
+        setBottom(addall);
 
+        //Load button
+        load = new Button("Load");
+        load.setPadding(new Insets(10,10,10,10));
 
-        setLeft(song);
-        setCenter(playlist);
+        //Save button
+        save = new Button("Save");
+        load.setPadding(new Insets(10,10,10,10));
+
+        //frame
+        upperframe = new HBox();
+        upperframe.setSpacing(10);
+        upperframe.setAlignment(Pos.CENTER);
+        upperframe.getChildren().add(load);
+        upperframe.getChildren().add(save);
+        setTop(upperframe);
 
 
     }
