@@ -43,6 +43,7 @@ public class View extends BorderPane{
         load.setPadding(new Insets(10,10,10,10));
         upperframe.add(load,8,0);
 
+
         //Save button
         save = new Button("Save");
         save.setPadding(new Insets(10,10,10,10));
