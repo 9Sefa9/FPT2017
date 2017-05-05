@@ -9,6 +9,14 @@ public class Song implements interfaces.Song{
 
     public String path,title,album,interpreter;
 
+    public Song (String path, String title, String album, String interpreter)
+    {
+        this.path = path;
+        this.title = title;
+        this.album = album;
+        this.interpreter = interpreter;
+    }
+
     @Override
     public String getAlbum() {
         return null;
@@ -16,37 +24,37 @@ public class Song implements interfaces.Song{
 
     @Override
     public void setAlbum(String album) {
-
+        this.album = album;
     }
 
     @Override
     public String getInterpret() {
-        return null;
+        return this.interpreter;
     }
 
     @Override
     public void setInterpret(String interpret) {
-
+        this.interpreter = interpret;
     }
 
     @Override
     public String getPath() {
-        return null;
+        return this.path;
     }
 
     @Override
     public void setPath(String path) {
-
+        this.path = path;
     }
 
     @Override
     public String getTitle() {
-        return null;
+        return this.title;
     }
 
     @Override
     public void setTitle(String title) {
-
+        this.title = title;
     }
 
     @Override
@@ -76,6 +84,11 @@ public class Song implements interfaces.Song{
 
     @Override
     public String toString() {
-        return null;
+        String output = this.title;
+        if (!this.interpreter.equals(""))
+            output = output  + " by " + this.interpreter;
+        if (!this.album.equals(""))
+            output = output + " (" + this.album + ")";
+        return output;
     }
 }

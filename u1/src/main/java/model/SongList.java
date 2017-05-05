@@ -11,11 +11,11 @@ import java.util.ArrayList;
 
 public class SongList extends ModifiableObservableListBase<Song> implements interfaces.Song {
 
-    public ArrayList<Song> list;
+    public ArrayList<Song> list = new ArrayList<>();
 
     @Override
     public String getAlbum() {
-        return null;
+        return this.list.get(0).getAlbum();
     }
 
     @Override
@@ -25,7 +25,7 @@ public class SongList extends ModifiableObservableListBase<Song> implements inte
 
     @Override
     public String getInterpret() {
-        return null;
+        return this.list.get(0).getInterpret();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class SongList extends ModifiableObservableListBase<Song> implements inte
 
     @Override
     public String getPath() {
-        return null;
+        return this.list.get(0).getPath();
     }
 
     @Override
@@ -45,7 +45,7 @@ public class SongList extends ModifiableObservableListBase<Song> implements inte
 
     @Override
     public String getTitle() {
-        return null;
+        return this.list.get(0).getTitle();
     }
 
     @Override
@@ -80,26 +80,28 @@ public class SongList extends ModifiableObservableListBase<Song> implements inte
 
     @Override
     public Song get(int index) {
-        return null;
+        return this.list.get(index);
     }
 
     @Override
     public int size() {
-        return 0;
+        return this.list.size();
     }
 
     @Override
     protected void doAdd(int index, Song element) {
-
+        this.list.add(index, element);
     }
 
     @Override
     protected Song doSet(int index, Song element) {
+        this.list.set(index, element);
         return null;
     }
 
     @Override
     protected Song doRemove(int index) {
+        this.list.remove(index);
         return null;
     }
 }
