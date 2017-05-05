@@ -1,3 +1,4 @@
+
 package view;
 import interfaces.Song;
 import javafx.geometry.Insets;
@@ -7,7 +8,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import model.SongList;
 
 public class View extends BorderPane{
     private ListView<Song> listviewsong,listviewplaylist;
@@ -61,19 +61,6 @@ public class View extends BorderPane{
         setCenter(listviewplaylist);
         setLeft(listviewsong);
 
-    }
-
-    public Button getAddall() {
-        return addall;
-    }
-
-    public void updateLVSong(SongList sl)
-    {
-        listviewsong.getItems().removeAll(); //TODO: Noch nicht wie erwartet
-        for (Song s : sl)
-        {
-            listviewsong.getItems().add(s);
-        }
     }
 
 }
