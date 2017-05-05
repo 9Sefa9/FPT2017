@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import model.SongList;
 
 public class View extends BorderPane{
     private ListView<Song> listviewsong,listviewplaylist;
@@ -63,4 +64,16 @@ public class View extends BorderPane{
 
     }
 
+    public Button getAddall() {
+        return addall;
+    }
+
+    public void updateLVSong(SongList sl)
+    {
+        listviewsong.getItems().removeAll(listviewsong.getItems());
+        for (Song s : sl)
+        {
+            listviewsong.getItems().add(s);
+        }
+    }
 }
