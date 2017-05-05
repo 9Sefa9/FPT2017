@@ -16,8 +16,8 @@
 		</file>
 		
 		<file>
-			<source>src/main/assembly/src.xml</source>
-			<outputDirectory>${project.groupId}/${project.artifactId}/src/main/assembly</outputDirectory>
+			<source>src/main.main/assembly/src.xml</source>
+			<outputDirectory>${project.groupId}/${project.artifactId}/src/main.main/assembly</outputDirectory>
 			<filtered>false</filtered>
 		</file>
 	</files>
@@ -27,8 +27,8 @@
 			<directory>${basedir}</directory>
 			<outputDirectory>${project.groupId}/${project.artifactId}</outputDirectory>
 			<includes>
-				<include>src/main/java/**</include>
-				<include>src/main/resources/**</include>
+				<include>src/main.main/java/**</include>
+				<include>src/main.main/resources/**</include>
 			</includes>
 		</fileSet>
 

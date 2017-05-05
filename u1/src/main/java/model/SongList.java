@@ -1,7 +1,7 @@
 /**
  * Created by Sefa on 05.05.2017.
  */
-package Classes;
+package model;
 
 
 import javafx.beans.value.ObservableValue;
@@ -9,9 +9,9 @@ import javafx.collections.ModifiableObservableListBase;
 
 import java.util.ArrayList;
 
-public class SongList extends ModifiableObservableListBase implements interfaces.Song {
+public class SongList extends ModifiableObservableListBase<Song> implements interfaces.Song {
 
-    public ArrayList<String> list;
+    public ArrayList<Song> list;
 
     @Override
     public String getAlbum() {
@@ -79,7 +79,7 @@ public class SongList extends ModifiableObservableListBase implements interfaces
     }
 
     @Override
-    public Object get(int index) {
+    public Song get(int index) {
         return null;
     }
 
@@ -89,17 +89,17 @@ public class SongList extends ModifiableObservableListBase implements interfaces
     }
 
     @Override
-    protected void doAdd(int index, Object element) {
+    protected void doAdd(int index, Song element) {
 
     }
 
     @Override
-    protected Object doSet(int index, Object element) {
+    protected Song doSet(int index, Song element) {
         return null;
     }
 
     @Override
-    protected Object doRemove(int index) {
+    protected Song doRemove(int index) {
         return null;
     }
 }

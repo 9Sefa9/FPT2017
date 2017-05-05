@@ -1,7 +1,7 @@
 /**
  * Created by Sefa on 05.05.2017.
  */
-package Classes;
+package model;
 
 import javafx.beans.value.ObservableValue;
 

@@ -1,9 +1,9 @@
 /**
  * Created by Sefa on 05.05.2017.
  */
-package Classes;
+package model;
 
-public class Model {
+public class Model{
     public SongList allsongs,playlist;
 
     public void setAllsongs(SongList allsongs){

@@ -1,9 +1,10 @@
 /**
  * Created by Sefa on 05.05.2017.
  */
-package Classes;
+package controller;
 
-import java.util.EventListener;
+import model.Model;
+import view.View;
 
 public class Controller{
 
