@@ -1,6 +1,7 @@
 
 package view;
-import interfaces.Song;
+import model.Song;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -24,6 +25,7 @@ public class View extends BorderPane{
         choicebox = new ChoiceBox<>();
         listviewsong = new ListView<>();
         listviewplaylist = new ListView<>();
+        listviewsong.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         rightframe = new SplitPane();
         upperframe = new GridPane();
         downframe = new GridPane();
@@ -68,6 +70,10 @@ public class View extends BorderPane{
         return addall;
     }
 
+    public Button getLoad() {
+        return load;
+    }
+
     public void updateLVSong(SongList sl)
     {
         listviewsong.getItems().removeAll(listviewsong.getItems());
@@ -75,5 +81,18 @@ public class View extends BorderPane{
         {
             listviewsong.getItems().add(s);
         }
+    }
+
+    public void updateLVPlaylist(SongList sl)
+    {
+        listviewplaylist.getItems().removeAll(listviewplaylist.getItems());
+        for (Song s : sl)
+        {
+            listviewplaylist.getItems().add(s);
+        }
+    }
+
+    public ObservableList<Song> getSelectedSongs() {
+        return listviewsong.getSelectionModel().getSelectedItems();
     }
 }
