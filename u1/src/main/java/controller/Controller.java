@@ -8,6 +8,7 @@ import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.DirectoryChooser;
@@ -29,7 +30,7 @@ public class Controller{
 
     public Model model;
     public View view;
-    public SongList sl;
+    public SongList sl, sl2;
 
     public Controller(){
 
@@ -42,49 +43,12 @@ public class Controller{
         this.model.setAllsongs(this.sl);
         this.sl.addListener((ListChangeListener<? super Song>) c -> this.view.updateLVSong(this.sl));
 
-        this.view.getAddall().setOnAction(new addAllButtonEventHandler());
-    }
+        this.sl2 = new SongList();
+        this.model.setPlaylist(this.sl2);
+        this.sl2.addListener((ListChangeListener<? super Song>) c -> this.view.updateLVPlaylist(this.sl2));
 
-    class addAllButtonEventHandler implements EventHandler<ActionEvent> {
-
-        @Override
-        public void handle(ActionEvent event) {
-            DirectoryChooser dirChooser = new DirectoryChooser();
-            File file = dirChooser.showDialog(new Stage());
-            Path dir = Paths.get(file.getPath());
-            SongList songList = new SongList();
-            try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir))
-            {
-                for (Path p : stream)
-                {
-                    String name = p.getFileName().toString();
-                    if (name.endsWith(".mp3"))
-                    {
-                        String track, interpret, album;
-                        interpret = "";
-                        album = "";
-                        String songPath = file.getPath() + "\\" + name;
-                        Mp3File song = new Mp3File(songPath);
-                        track = name.substring(0, name.length() - 4);
-                        if(song.hasId3v2Tag())
-                        {
-                            ID3v2 id3v2 = song.getId3v2Tag();
-                            if(id3v2.getTrack() != null)
-                                track = id3v2.getTrack();
-                            if(id3v2.getArtist() != null)
-                                interpret = id3v2.getArtist();
-                            if(id3v2.getAlbum() != null)
-                                album = id3v2.getAlbum();
-                        }
-                        Song s = new Song(songPath, track, album, interpret);
-                        songList.add(s);
-                    }
-                }
-                model.getAllsongs().setAll(songList);
-            } catch (IOException | InvalidDataException | UnsupportedTagException e) {
-                e.printStackTrace();
-            }
-        }
+        this.view.getAddall().setOnAction(e -> this.model.handleAddAllButton());
+        //this.view.getAddToPlaylist.setOnAction(e -> this.model.handleAddToPlaylistButtion(this.view.getSelectedSongs())); TODO: AddToPlaylist Button
     }
 
 }
