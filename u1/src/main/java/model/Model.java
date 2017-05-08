@@ -63,7 +63,6 @@ public class Model{
                         if(id3v2.getAlbum() != null)
                             album = id3v2.getAlbum();
                     }
-                    //Song s = new Song(songPath, track, album, interpret);
                     songList.add(new Song(songPath, track, album, interpret));
                 }
             }
