@@ -22,6 +22,8 @@ public class main extends Application {
         Controller controller = new Controller();
         controller.link(m, v);
 
+
+        primaryStage.setTitle("FTP Player v1.0");
         primaryStage.setScene(s);
         primaryStage.show();
     }
