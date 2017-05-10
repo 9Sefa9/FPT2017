@@ -12,11 +12,11 @@ import javafx.scene.text.Text;
 import model.SongList;
 
 public class View extends BorderPane{
-    private ListView<Song> listviewsong,listviewplaylist;
-    private Button addall,load,save,addtoplaylist,commit,play,pause;
+    public ListView<Song> listviewsong,listviewplaylist;
+    public Button addsongs,load,save,addtoplaylist,commit,play,pause;
     private ChoiceBox<String> choicebox;
     private GridPane upperframe,downframe,rightframe;
-    private TextField title,interpret,album;
+    public TextField title,interpret,album;
     private Text titleText, intepretText, albumText;
     public View(){
         setMaxSize(1024,1024);
@@ -31,7 +31,7 @@ public class View extends BorderPane{
         upperframe = new GridPane();
         downframe = new GridPane();
 
-        //splittpane
+        //rightframe
         rightframe.setMinSize(200,500);
 
         titleText = new Text("Title");
@@ -75,15 +75,15 @@ public class View extends BorderPane{
         rightframe.setHgap(10);
         rightframe.setVgap(10);
 
-        rightframe.setGridLinesVisible(true);
+        //rightframe.setGridLinesVisible(false);
         rightframe.getColumnConstraints().add(new ColumnConstraints(125));
         setRight(rightframe);
 
 
         //Add All button
-        addall= new Button("Add all");
-        addall.setPadding(new Insets(10,10,10,10));
-        downframe.add(addall,0,0);
+        addsongs= new Button("Add Songs");
+        addsongs.setPadding(new Insets(10,10,10,10));
+        downframe.add(addsongs,0,0);
 
         //Load button
         load = new Button("Load");
@@ -112,7 +112,7 @@ public class View extends BorderPane{
     }
 
     public Button getAddall() {
-        return addall;
+        return addsongs;
     }
 
     public Button getLoad() {

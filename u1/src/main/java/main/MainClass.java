@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 import model.Model;
 import view.View;
 
-public class main extends Application {
+public class MainClass extends Application {
 
     public static void main(String[] args) {
         Application.launch(args);
@@ -23,7 +23,7 @@ public class main extends Application {
         controller.link(m, v);
 
 
-        primaryStage.setTitle("FTP Player v1.0");
+        primaryStage.setTitle("FPT Player v1.0");
         primaryStage.setScene(s);
         primaryStage.show();
     }

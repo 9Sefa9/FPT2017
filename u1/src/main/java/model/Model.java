@@ -35,7 +35,7 @@ public class Model{
         return this.playlist;
     }
 
-    public void handleAddAllButton(){
+    public void handleAddSongsButton(){
         DirectoryChooser dirChooser = new DirectoryChooser();
         File file = dirChooser.showDialog(new Stage());
         Path dir = Paths.get(file.getPath());

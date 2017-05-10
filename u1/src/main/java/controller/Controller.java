@@ -47,8 +47,9 @@ public class Controller{
         this.model.setPlaylist(this.sl2);
         this.sl2.addListener((ListChangeListener<? super Song>) c -> this.view.updateLVPlaylist(this.sl2));
 
-        this.view.getAddall().setOnAction(e -> this.model.handleAddAllButton());
-        //this.view.getAddToPlaylist.setOnAction(e -> this.model.handleAddToPlaylistButtion(this.view.getSelectedSongs())); TODO: AddToPlaylist Button
+        this.view.getAddall().setOnAction(e -> this.model.handleAddSongsButton());
+
+        this.view.addtoplaylist.setOnAction(e -> this.model.handleAddToPlaylistButtion(this.view.getSelectedSongs()));
     }
 
 }
