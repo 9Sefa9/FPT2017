@@ -138,6 +138,7 @@ public class View extends BorderPane{
     }
 
     public ObservableList<Song> getSelectedSongs() {
+
         return listviewsong.getSelectionModel().getSelectedItems();
     }
 }

@@ -39,17 +39,26 @@ public class Controller{
         this.model = model;
         this.view = view;
 
+        //Lauscht und Updated regelmäßig die hinzugefügten Songs zum View.
         this.sl = new SongList();
         this.model.setAllsongs(this.sl);
         this.sl.addListener((ListChangeListener<? super Song>) c -> this.view.updateLVSong(this.sl));
 
+        //Lauscht und Updated regelmäßig die Playlist mit den zuvor "geaddeten" Songs.
         this.sl2 = new SongList();
         this.model.setPlaylist(this.sl2);
         this.sl2.addListener((ListChangeListener<? super Song>) c -> this.view.updateLVPlaylist(this.sl2));
 
+        //SetOnAction Methode für das auffinden/auswählen eines Musik Ordners
         this.view.getAddall().setOnAction(e -> this.model.handleAddSongsButton());
 
+        //SetOnAction Methode für das hinzufügen der selektiv ausgewählten Song´s in die Playlist View
         this.view.addtoplaylist.setOnAction(e -> this.model.handleAddToPlaylistButtion(this.view.getSelectedSongs()));
+
+        //Speichert die Playlist in eine *.ps Datei ab.(vorerst ohne ein Pfad.)
+        this.view.save.setOnAction(e -> this.model.handleSavePlaylist(this.model.playlist.list));
+
+
     }
 
 }

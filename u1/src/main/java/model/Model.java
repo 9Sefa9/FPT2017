@@ -8,15 +8,16 @@ import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ListView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class Model{
     public SongList allsongs,playlist;
@@ -35,6 +36,7 @@ public class Model{
         return this.playlist;
     }
 
+    //ermöglicht uns das auswählen eines Ordners mit Songs.
     public void handleAddSongsButton(){
         DirectoryChooser dirChooser = new DirectoryChooser();
         File file = dirChooser.showDialog(new Stage());
@@ -75,6 +77,21 @@ public class Model{
     public void handleAddToPlaylistButtion(ObservableList<Song> songs)
     {
         this.playlist.addAll(songs);
+    }
+
+    //songs<=>playlist. Es werden die PFade der Lieder im Playlist abgespeichert in eine Datei.
+    public void handleSavePlaylist(ArrayList<Song> songs){
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter("playlist.ps"))){
+
+            for(int i = 0; i<songs.size(); i++) {
+                bw.write(songs.get(i).getPath()+"\n");
+
+            }
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }
