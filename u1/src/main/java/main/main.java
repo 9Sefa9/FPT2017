@@ -1,8 +1,10 @@
 package main;
 
+import controller.Controller;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.Model;
 import view.View;
 
 public class main extends Application {
@@ -15,7 +17,13 @@ public class main extends Application {
     public void start(Stage primaryStage) throws Exception{
         View v = new View();
         Scene s = new Scene(v);
+        Model m = new Model();
 
+        Controller controller = new Controller();
+        controller.link(m, v);
+
+
+        primaryStage.setTitle("FTP Player v1.0");
         primaryStage.setScene(s);
         primaryStage.show();
     }

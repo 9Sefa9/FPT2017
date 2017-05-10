@@ -1,15 +1,15 @@
 
 package view;
-import interfaces.Song;
+import model.Song;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
+import model.SongList;
 
 public class View extends BorderPane{
     private ListView<Song> listviewsong,listviewplaylist;
@@ -24,8 +24,10 @@ public class View extends BorderPane{
         //instanziierungen
         choicebox = new ChoiceBox<>();
         listviewsong = new ListView<>();
+        listviewsong.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         listviewplaylist = new ListView<>();
         rightframe = new GridPane();
+
         upperframe = new GridPane();
         downframe = new GridPane();
 
@@ -109,4 +111,33 @@ public class View extends BorderPane{
 
     }
 
+    public Button getAddall() {
+        return addall;
+    }
+
+    public Button getLoad() {
+        return load;
+    }
+
+    public void updateLVSong(SongList sl)
+    {
+        listviewsong.getItems().removeAll(listviewsong.getItems());
+        for (Song s : sl)
+        {
+            listviewsong.getItems().add(s);
+        }
+    }
+
+    public void updateLVPlaylist(SongList sl)
+    {
+        listviewplaylist.getItems().removeAll(listviewplaylist.getItems());
+        for (Song s : sl)
+        {
+            listviewplaylist.getItems().add(s);
+        }
+    }
+
+    public ObservableList<Song> getSelectedSongs() {
+        return listviewsong.getSelectionModel().getSelectedItems();
+    }
 }
