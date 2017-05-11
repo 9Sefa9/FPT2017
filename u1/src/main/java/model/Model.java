@@ -28,6 +28,7 @@ public class Model{
     private Path dir;
     private DirectoryChooser dirChooser;
     private FileChooser fileChooser;
+    private ArrayList<Song> songFromPLFile;
 
     public void setAllsongs(SongList allsongs){
         this.allsongs = allsongs;
@@ -86,14 +87,15 @@ public class Model{
 
     public void handleAddToPlaylistButton(ObservableList<Song> songs)
     {
+
         this.playlist.addAll(songs);
+
     }
 
     //Die Pfade der Lieder im Playlist, werden in eine *.pl Datei abgespeichert.
     public void handleSavePlaylist(ArrayList<Song> songs){
         try{
             fileChooser = new FileChooser();
-            fileChooser.setTitle("Select directory with mp3 files..");
 
             //zeigt ein bevorzugtes format an , nähmlich *.pl
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("*.pl", ".pl");
@@ -101,12 +103,12 @@ public class Model{
 
             //zeigt den "save" Fenster
             File file = fileChooser.showSaveDialog(new Stage());
+            fileChooser.setTitle("Save Playlist in" +file.getPath());
 
             //solange fenster offen
             if(file!=null)
                 //speichere die Datei mit dem extension "*.pl"
                 save(songs,file.getPath());
-
         }
         catch(Exception e) {
             System.out.println("Exception in HATPB-METHOD");
@@ -114,6 +116,32 @@ public class Model{
         }
 
     }
+
+    public void handleLoadPlaylist(ArrayList<Song> songs){
+        try{
+            fileChooser = new FileChooser();
+
+
+            //zeigt ein bevorzugtes format an , nähmlich *.pl
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("*.pl", "*.pl");
+            fileChooser.getExtensionFilters().add(extFilter);
+
+            //zeigt den "save" Fenster
+            File file = fileChooser.showOpenDialog(new Stage());
+            fileChooser.setTitle("Load *.pl file from: "+file.getPath());
+
+            //solange fenster offen
+            if(file!=null)
+                //ladet die Datei mit dem extension "*.pl"
+                load(file.getPath());
+        }
+        catch(Exception e) {
+            System.out.println("Exception in HATPB-METHOD");
+            e.printStackTrace();
+        }
+
+    }
+
     //Die save Methode bekommt die Songs und einen pfad zum speichern einer "*.pl" datei.
     private void save(ArrayList<Song> songs,String path){
         try( BufferedWriter bw = new BufferedWriter(new FileWriter(path))){
@@ -126,10 +154,25 @@ public class Model{
             i.printStackTrace();
         }
     }
-    private void load(List<String> extension){
-        try(BufferedReader br = new BufferedReader(new FileReader(/*f.getCanonicalPath()+*/"playlist"+extension.get(0)))){
+    private void load(String path){
+        try(BufferedReader br = new BufferedReader(new FileReader(path))){
 
-            String temp ="";
+            songFromPLFile = new ArrayList<>();
+
+            Mp3File loadmp3 = null;
+            String loadsongpath ="";
+            String loadtrack="", loadinterpret="", loadalbum="", loadname="";
+
+            while((loadsongpath= br.readLine())!= null) {
+                loadmp3 = new Mp3File(loadsongpath);
+                loadname = loadsongpath;
+                loadtrack = loadsongpath.substring(0, loadsongpath.length() - 4);;//loadname.substring(0, loadname.length() - 4);
+                System.out.println(loadtrack);
+
+                songFromPLFile.add(new Song(loadsongpath, loadtrack, loadalbum, loadinterpret));
+            }
+
+            this.playlist.addAll(songFromPLFile);
 
          }catch(Exception e){
             e.printStackTrace();

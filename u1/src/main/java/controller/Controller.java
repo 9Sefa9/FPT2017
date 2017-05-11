@@ -56,8 +56,11 @@ public class Controller{
             //SetOnAction Methode für das hinzufügen der selektiv ausgewählten Song´s in die Playlist View
             this.view.addtoplaylist.setOnAction(e -> this.model.handleAddToPlaylistButton(this.view.getSelectedSongs()));
 
-            //Speichert die Playlist in eine *.ps Datei ab.(vorerst ohne ein Pfad.)
+            //Speichert die Playlist in eine *.ps Datei ab.
             this.view.save.setOnAction(e -> this.model.handleSavePlaylist(this.model.playlist.list));
+
+            //ladet die Playlist und packt es in die Playlist-View
+            this.view.load.setOnAction(e -> this.model.handleLoadPlaylist(this.model.playlist.list));
         }catch(Exception e){
             System.out.println("Exception in CONTROLLER-L-METHOD");
             e.printStackTrace();
