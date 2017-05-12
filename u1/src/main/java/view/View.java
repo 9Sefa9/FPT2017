@@ -13,7 +13,7 @@ import model.SongList;
 
 public class View extends BorderPane{
     public ListView<Song> listviewsong,listviewplaylist;
-    public Button addsongs,load,save,addtoplaylist,commit,play,pause;
+    public Button addsongs,load,save,addtoplaylist,commit,play,pause,next;
     private ChoiceBox<String> choicebox;
     private GridPane upperframe,downframe,rightframe;
     public TextField title,interpret,album;
@@ -67,17 +67,22 @@ public class View extends BorderPane{
         pause.setPadding(new Insets(10,20,10,20));
         rightframe.add(pause,1,9);
 
+        next = new Button("→");
+        next.setPadding(new Insets(10,20,10,20));
+        rightframe.add(next,0,10);
+
         addtoplaylist = new Button("Add to Playlist");
         addtoplaylist.setPadding(new Insets(10,20,10,20));
         rightframe.add(addtoplaylist,0,8);
 
 
+
         rightframe.setHgap(10);
         rightframe.setVgap(10);
 
-        //rightframe.setGridLinesVisible(false);
         rightframe.getColumnConstraints().add(new ColumnConstraints(125));
         setRight(rightframe);
+
 
 
         //Add All button

@@ -97,7 +97,7 @@ public class Model{
         try{
             fileChooser = new FileChooser();
 
-            //zeigt ein bevorzugtes format an , nähmlich *.pl
+            //zeigt ein bevorzugtes format an , nämlich *.pl
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("*.pl", ".pl");
             fileChooser.getExtensionFilters().add(extFilter);
 
@@ -120,7 +120,6 @@ public class Model{
     public void handleLoadPlaylist(ArrayList<Song> songs){
         try{
             fileChooser = new FileChooser();
-
 
             //zeigt ein bevorzugtes format an , nähmlich *.pl
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("*.pl", "*.pl");
@@ -154,6 +153,8 @@ public class Model{
             i.printStackTrace();
         }
     }
+
+    //Die load Methode ladet die Songs aus der Festplatte zum Programm.
     private void load(String path){
         try(BufferedReader br = new BufferedReader(new FileReader(path))){
 
@@ -166,7 +167,9 @@ public class Model{
             while((loadsongpath= br.readLine())!= null) {
                 loadmp3 = new Mp3File(loadsongpath);
                 loadname = loadsongpath;
-                loadtrack = loadsongpath.substring(0, loadsongpath.length() - 4);;//loadname.substring(0, loadname.length() - 4);
+                loadtrack = loadsongpath.substring(0, loadsongpath.length() - 4);//loadname.substring(0, loadname.length() - 4);
+                String[] name =loadtrack.split("\\.");
+                System.out.println(name[name.length-1]);
                 System.out.println(loadtrack);
 
                 songFromPLFile.add(new Song(loadsongpath, loadtrack, loadalbum, loadinterpret));
