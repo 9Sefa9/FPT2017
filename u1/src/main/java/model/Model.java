@@ -191,6 +191,7 @@ public class Model{
 
         if(listviewsong.getFocusModel().getFocusedIndex()>0 ){
                     //MUSS NOCH IMPLEMENTIERT WERDEN! EVENTUELL IST DIE IF BEDINGUNG FALSCH...
+            //Hakan: Wahrscheinliche ine if bedingung ?
         }
         Media m = new Media(new File(listviewsong.getSelectionModel().getSelectedItem().getPath()).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(m);
