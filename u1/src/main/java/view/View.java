@@ -12,6 +12,15 @@ import javafx.scene.text.Text;
 import model.SongList;
 
 public class View extends BorderPane{
+
+    //DAS
+    //ist
+    //ein
+    //TEEEEäst
+
+
+
+
     public ListView<Song> listviewsong,listviewplaylist;
     public Button addsongs,load,save,addtoplaylist,commit,play,pause,next;
     private ChoiceBox<String> choicebox;
