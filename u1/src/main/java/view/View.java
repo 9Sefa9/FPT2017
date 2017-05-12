@@ -16,7 +16,6 @@ public class View extends BorderPane{
     //DAS
     //ist
     //ein
-    //TEEEEäst
 
 
 
