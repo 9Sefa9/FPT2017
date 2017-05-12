@@ -8,6 +8,8 @@ import com.mpatric.mp3agic.Mp3File;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.geometry.Point3D;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.ListView;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
