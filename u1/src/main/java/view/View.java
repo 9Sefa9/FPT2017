@@ -59,17 +59,8 @@ public class View extends BorderPane{
         commit.setPadding(new Insets(10,10,10,10));
         rightframe.add(commit,0,7);
 
-        play = new Button("►");
-        play.setPadding(new Insets(10,20,10,20));
-        rightframe.add(play,0,9);
 
-        pause = new Button("||");
-        pause.setPadding(new Insets(10,20,10,20));
-        rightframe.add(pause,1,9);
 
-        next = new Button("→");
-        next.setPadding(new Insets(10,20,10,20));
-        rightframe.add(next,0,10);
 
         addtoplaylist = new Button("Add to Playlist");
         addtoplaylist.setPadding(new Insets(10,20,10,20));
@@ -84,30 +75,42 @@ public class View extends BorderPane{
         setRight(rightframe);
 
 
-
-        //Add All button
-        addsongs= new Button("Add Songs");
-        addsongs.setPadding(new Insets(10,10,10,10));
-        downframe.add(addsongs,0,0);
-
-        //Load button
+        //upperframe
         load = new Button("Load");
         load.setPadding(new Insets(10,10,10,10));
         upperframe.add(load,2,0);
 
-
-        //Save button
         save = new Button("Save");
         save.setPadding(new Insets(10,10,10,10));
         upperframe.add(save,3,0);
 
-
-        //Choicebox
         choicebox.setPadding(new Insets(5,5,5,160));
         choicebox.getItems().addAll("Example1","Example2","Example3");
         upperframe.add(choicebox,0,0);
         upperframe.setHgap(30);
         upperframe.setVgap(5);
+
+        //downframe
+    //    downframe.addColumn(2);
+        downframe.setVgap(30);
+        downframe.setHgap(30);
+
+        next = new Button("→");
+        next.setPadding(new Insets(10,20,10,20));
+        downframe.add(next,3,0);
+
+        play = new Button("►");
+        play.setPadding(new Insets(10,20,10,20));
+        downframe.add(play,5,0);
+
+        pause = new Button("||");
+        pause.setPadding(new Insets(10,20,10,20));
+        downframe.add(pause,7,0);
+
+        addsongs= new Button("Add Songs");
+        addsongs.setPadding(new Insets(10,10,10,10));
+        downframe.add(addsongs,0,0);
+
 
         setBottom(downframe);
         setTop(upperframe);

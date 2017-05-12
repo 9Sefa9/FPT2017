@@ -23,8 +23,6 @@ public class MainClass extends Application {
         Controller controller = new Controller();
         controller.link(m, v);
 
-
-        primaryStage.getIcons().add(new Image("https://material.io/icons/static/images/icons-180x180.png"));
         primaryStage.setTitle("FPT Player v1.0");
         primaryStage.setScene(s);
         primaryStage.show();

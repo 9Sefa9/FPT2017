@@ -3,28 +3,11 @@
  */
 package controller;
 
-import com.mpatric.mp3agic.ID3v2;
-import com.mpatric.mp3agic.InvalidDataException;
-import com.mpatric.mp3agic.Mp3File;
-import com.mpatric.mp3agic.UnsupportedTagException;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import model.Model;
 import model.Song;
 import model.SongList;
 import view.View;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Controller{
 
@@ -61,6 +44,10 @@ public class Controller{
 
             //ladet die Playlist und packt es in die Playlist-View
             this.view.load.setOnAction(e -> this.model.handleLoadPlaylist(this.model.playlist.list));
+
+            this.view.play.setOnAction(e -> this.model.playMp3(this.view.listviewsong, this.view.listviewplaylist));
+
+
         }catch(Exception e){
             System.out.println("Exception in CONTROLLER-L-METHOD");
             e.printStackTrace();

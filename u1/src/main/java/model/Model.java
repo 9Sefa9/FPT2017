@@ -4,11 +4,13 @@
 package model;
 
 import com.mpatric.mp3agic.ID3v2;
-import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
-import com.mpatric.mp3agic.UnsupportedTagException;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -18,9 +20,8 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.cert.Extension;
 import java.util.ArrayList;
-import java.util.List;
+import javafx.scene.media.Media;
 
 public class Model{
     public SongList allsongs,playlist,songList;
@@ -181,6 +182,20 @@ public class Model{
             e.printStackTrace();
 
         }
+    }
+
+    //abspielen der Mp3
+    public void playMp3(ListView<Song> listviewsong, ListView<Song> listviewplaylist ){
+
+        if(listviewsong.getFocusModel().getFocusedIndex()>0 ){
+                    //MUSS NOCH IMPLEMENTIERT WERDEN! EVENTUELL IST DIE IF BEDINGUNG FALSCH...
+        }
+        Media m = new Media(new File(listviewsong.getSelectionModel().getSelectedItem().getPath()).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(m);
+
+        mediaPlayer.play();
+
+
     }
 }
 
