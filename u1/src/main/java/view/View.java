@@ -117,6 +117,7 @@ public class View extends BorderPane{
         setCenter(listviewplaylist);
         setLeft(listviewsong);
 
+
     }
 
     public Button getAddall() {
