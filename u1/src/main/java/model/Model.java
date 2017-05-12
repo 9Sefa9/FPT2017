@@ -189,9 +189,8 @@ public class Model{
     //abspielen der Mp3
     public void playMp3(ListView<Song> listviewsong, ListView<Song> listviewplaylist ){
 
-        if(listviewsong.getFocusModel().getFocusedIndex()>0 ){
-                    //MUSS NOCH IMPLEMENTIERT WERDEN! EVENTUELL IST DIE IF BEDINGUNG FALSCH...
-            //Hakan: Wahrscheinliche ine if bedingung ?
+        if(listviewsong.getFocusModel().getFocusedIndex()>0) {
+            //MUSS NOCH IMPLEMENTIERT WERDEN! EVENTUELL IST DIE IF BEDINGUNG FALSCH...
         }
         Media m = new Media(new File(listviewsong.getSelectionModel().getSelectedItem().getPath()).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(m);
