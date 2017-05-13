@@ -8,14 +8,13 @@ import com.mpatric.mp3agic.Mp3File;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.geometry.Point3D;
-import javafx.scene.control.Accordion;
 import javafx.scene.control.ListView;
+import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.*;
 import java.nio.file.DirectoryStream;
@@ -23,7 +22,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import javafx.scene.media.Media;
 
 public class Model{
     public SongList allsongs,playlist,songList;
@@ -32,6 +30,8 @@ public class Model{
     private DirectoryChooser dirChooser;
     private FileChooser fileChooser;
     private ArrayList<Song> songFromPLFile;
+    private MediaPlayer mediaPlayer;
+    private Media m;
 
     public void setAllsongs(SongList allsongs){
         this.allsongs = allsongs;
@@ -187,30 +187,31 @@ public class Model{
     }
 
     //abspielen der Mp3
-    public void playMp3(ListView<Song> listviewsong, ListView<Song> listviewplaylist ) {
+    public void playMp3(ListView<Song> listviewsong, ListView<Song> listviewplaylist) {
 
-        Media m = new Media(new File(listviewsong.getSelectionModel().getSelectedItem().getPath()).toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(m);
+        m = new Media(new File(listviewsong.getSelectionModel().getSelectedItem().getPath()).toURI().toString());
+        mediaPlayer = new MediaPlayer(m);
 
-        MediaPlayer.Status status = mediaPlayer.getStatus();
+        mediaPlayer.statusProperty().addListener(new ChangeListener<MediaPlayer.Status>() {
+          @Override
+          public void changed(ObservableValue<? extends MediaPlayer.Status> observable, MediaPlayer.Status oldValue, MediaPlayer.Status newValue) {
+              mediaPlayer.play();
 
-        // mediaPlayer.play();
+          }
+      });
+        /*
 
         if (listviewsong.getFocusModel().getFocusedIndex() >= 0) {
-            mediaPlayer = new MediaPlayer(m);
 
-            if(mediaPlayer!=null)
-                mediaPlayer.stop();
-
+            mediaPlayer.stop();
             mediaPlayer.play();
 
         }
         if (listviewplaylist.getFocusModel().getFocusedIndex() >= 0) {
-            if(mediaPlayer!=null)
-                mediaPlayer.stop();
-
+            mediaPlayer.stop();
             mediaPlayer.play();
         }
+        */
     }
 
 }
