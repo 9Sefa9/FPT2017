@@ -187,17 +187,31 @@ public class Model{
     }
 
     //abspielen der Mp3
-    public void playMp3(ListView<Song> listviewsong, ListView<Song> listviewplaylist ){
+    public void playMp3(ListView<Song> listviewsong, ListView<Song> listviewplaylist ) {
 
-        if(listviewsong.getFocusModel().getFocusedIndex()>0) {
-            //MUSS NOCH IMPLEMENTIERT WERDEN! EVENTUELL IST DIE IF BEDINGUNG FALSCH...
-        }
         Media m = new Media(new File(listviewsong.getSelectionModel().getSelectedItem().getPath()).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(m);
 
-        mediaPlayer.play();
+        MediaPlayer.Status status = mediaPlayer.getStatus();
 
+        // mediaPlayer.play();
 
+        if (listviewsong.getFocusModel().getFocusedIndex() >= 0) {
+            mediaPlayer = new MediaPlayer(m);
+
+            if(mediaPlayer!=null)
+                mediaPlayer.stop();
+
+            mediaPlayer.play();
+
+        }
+        if (listviewplaylist.getFocusModel().getFocusedIndex() >= 0) {
+            if(mediaPlayer!=null)
+                mediaPlayer.stop();
+
+            mediaPlayer.play();
+        }
     }
+
 }
 
