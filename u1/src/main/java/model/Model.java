@@ -32,6 +32,7 @@ public class Model{
     private ArrayList<Song> songFromPLFile;
     private MediaPlayer mediaPlayer;
     private Media m;
+    private ArrayList<MediaPlayer> mp3listSong,mp3listPlaylist;
 
     public void setAllsongs(SongList allsongs){
         this.allsongs = allsongs;
@@ -49,6 +50,8 @@ public class Model{
 
     //ermöglicht uns das auswählen eines Ordners mit Songs.
     public void handleAddSongsButton(){
+        mp3listSong = new ArrayList<>();
+        mp3listPlaylist = new ArrayList<>();
         dirChooser = new DirectoryChooser ();
         dirChooser.setTitle("Select directory with mp3 files..");
 
@@ -78,6 +81,11 @@ public class Model{
                         if(id3v2.getAlbum() != null)
                             album = id3v2.getAlbum();
                     }
+                    m = new Media(new File(songPath).toURI().toString());
+                    mediaPlayer = new MediaPlayer(m);
+
+                    //speichert sowohl Song als auch die abspiel faehigkeit
+                    mp3listSong.add(mediaPlayer);
                     songList.add(new Song(songPath, track, album, interpret));
                 }
             }
@@ -90,6 +98,8 @@ public class Model{
 
     public void handleAddToPlaylistButton(ObservableList<Song> songs)
     {
+        for(int i = 0;i<songs.size();i++)
+            mp3listPlaylist.add(new MediaPlayer(new Media(new File(songs.get(i).getPath()).toURI().toString())));
 
         this.playlist.addAll(songs);
 
@@ -186,32 +196,52 @@ public class Model{
         }
     }
 
-    //abspielen der Mp3
+    //abspielen der Mp3. für linke und rechte seite werden jeweils listen erstellt.
+    //es wird abgespielt/gestoppt sofern die list nicht leer ist und umgekehrt.
     public void playMp3(ListView<Song> listviewsong, ListView<Song> listviewplaylist) {
 
-        m = new Media(new File(listviewsong.getSelectionModel().getSelectedItem().getPath()).toURI().toString());
-        mediaPlayer = new MediaPlayer(m);
-
-        mediaPlayer.statusProperty().addListener(new ChangeListener<MediaPlayer.Status>() {
-          @Override
-          public void changed(ObservableValue<? extends MediaPlayer.Status> observable, MediaPlayer.Status oldValue, MediaPlayer.Status newValue) {
-              mediaPlayer.play();
-
-          }
-      });
-        /*
 
         if (listviewsong.getFocusModel().getFocusedIndex() >= 0) {
 
-            mediaPlayer.stop();
-            mediaPlayer.play();
+           for(int i=0; i< songList.size(); i++){
+                if (listviewsong.getFocusModel().getFocusedItem().equals(songList.get(i))){
 
+                    mp3listSong.get(i).play();
+
+               }else{
+                      if(!mp3listSong.isEmpty())
+                        mp3listSong.get(i).stop();
+
+                      if(!mp3listPlaylist.isEmpty())
+                            for(int j = 0 ;j<playlist.list.size(); j++)
+                               mp3listPlaylist.get(j).stop();
+                }
+            }
         }
         if (listviewplaylist.getFocusModel().getFocusedIndex() >= 0) {
-            mediaPlayer.stop();
-            mediaPlayer.play();
+
+            for(int i=0; i< playlist.list.size(); i++){
+                if (listviewplaylist.getFocusModel().getFocusedItem().equals(playlist.list.get(i))){
+
+                    mp3listPlaylist.get(i).play();
+
+                }else {
+                    try {
+                        if(!mp3listPlaylist.isEmpty())
+                            mp3listPlaylist.get(i).stop();
+
+                        if(!mp3listSong.isEmpty())
+                            for (int j = 0;j<songList.size(); j++)
+                                mp3listSong.get(j).stop();
+
+
+                    }catch (Exception e){
+                        //mach gar nichts
+                    }
+                }
+            }
         }
-        */
+
     }
 
 }
