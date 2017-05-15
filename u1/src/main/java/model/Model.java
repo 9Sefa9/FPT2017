@@ -50,51 +50,60 @@ public class Model{
 
     //ermöglicht uns das auswählen eines Ordners mit Songs.
     public void handleAddSongsButton(){
-        mp3listSong = new ArrayList<>();
-        mp3listPlaylist = new ArrayList<>();
-        dirChooser = new DirectoryChooser ();
-        dirChooser.setTitle("Select directory with mp3 files..");
 
-        file = dirChooser.showDialog(new Stage());
-        dir = Paths.get(file.getPath());
-        songList  = new SongList();
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir))
-        {
-            for (Path p : stream)
-            {
-                String name = p.getFileName().toString();
-                if (name.endsWith(".mp3"))
-                {
-                    String track, interpret, album;
-                    interpret = "";
-                    album = "";
-                    String songPath = file.getPath() + "\\" + name;
-                    Mp3File song = new Mp3File(songPath);
-                    track = name.substring(0, name.length() - 4);
-                    if(song.hasId3v2Tag())
-                    {
-                        ID3v2 id3v2 = song.getId3v2Tag();
-                        if(id3v2.getTitle() != null)
-                            track = id3v2.getTitle();
-                        if(id3v2.getArtist() != null)
-                            interpret = id3v2.getArtist();
-                        if(id3v2.getAlbum() != null)
-                            album = id3v2.getAlbum();
+            mp3listSong = new ArrayList<>();
+            mp3listPlaylist = new ArrayList<>();
+            dirChooser = new DirectoryChooser();
+            dirChooser.setTitle("Select directory with mp3 files..");
+
+            try {
+                file = dirChooser.showDialog(new Stage());
+                dir = Paths.get(file.getPath());
+
+            songList = new SongList();
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
+                for (Path p : stream) {
+                    String name = p.getFileName().toString();
+                    if (name.endsWith(".mp3")) {
+                        String track, interpret, album;
+                        interpret = "";
+                        album = "";
+                        String songPath = file.getPath() + "\\" + name;
+                        Mp3File song = new Mp3File(songPath);
+                        track = name.substring(0, name.length() - 4);
+                        if (song.hasId3v2Tag()) {
+                            ID3v2 id3v2 = song.getId3v2Tag();
+                            if (id3v2.getTitle() != null)
+                                track = id3v2.getTitle();
+                            if (id3v2.getArtist() != null)
+                                interpret = id3v2.getArtist();
+                            if (id3v2.getAlbum() != null)
+                                album = id3v2.getAlbum();
+                        }
+                        m = new Media(new File(songPath).toURI().toString());
+                        mediaPlayer = new MediaPlayer(m);
+
+                        //speichert sowohl Song als auch die abspiel faehigkeit
+                        mp3listSong.add(mediaPlayer);
+                        songList.add(new Song(songPath, track, album, interpret));
                     }
-                    m = new Media(new File(songPath).toURI().toString());
-                    mediaPlayer = new MediaPlayer(m);
-
-                    //speichert sowohl Song als auch die abspiel faehigkeit
-                    mp3listSong.add(mediaPlayer);
-                    songList.add(new Song(songPath, track, album, interpret));
                 }
+                this.allsongs.setAll(songList);
+            } catch (Exception e) {
+                System.out.println("Exception in MODEL-HASB-METHOD");
+                e.printStackTrace();
             }
-            this.allsongs.setAll(songList);
-        } catch (Exception e) {
-            System.out.println("Exception in MODEL-HASB-METHOD");
-            e.printStackTrace();
+            }catch(Exception e)
+            {
+
+            }finally{
+                //falls kein Pfad ausgegeben wurde: setze es auf null
+                if(file!=null)
+                    file = null;
+                if(dir!=null)
+                    dir = null;
+            }
         }
-    }
 
     public void handleAddToPlaylistButton(ObservableList<Song> songs)
     {
@@ -200,9 +209,8 @@ public class Model{
     //es wird abgespielt/gestoppt sofern die list nicht leer ist und umgekehrt.
     public void playMp3(ListView<Song> listviewsong, ListView<Song> listviewplaylist) {
 
-
         if (listviewsong.getFocusModel().getFocusedIndex() >= 0) {
-
+            listviewplaylist.getSelectionModel().select(-1);
            for(int i=0; i< songList.size(); i++){
                 if (listviewsong.getFocusModel().getFocusedItem().equals(songList.get(i))){
 
@@ -218,8 +226,8 @@ public class Model{
                 }
             }
         }
-        if (listviewplaylist.getFocusModel().getFocusedIndex() >= 0) {
-
+        else if (listviewplaylist.getFocusModel().getFocusedIndex() >= 0) {
+            listviewsong.getSelectionModel().select(-1);
             for(int i=0; i< playlist.list.size(); i++){
                 if (listviewplaylist.getFocusModel().getFocusedItem().equals(playlist.list.get(i))){
 
