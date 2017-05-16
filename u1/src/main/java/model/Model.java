@@ -34,6 +34,7 @@ public class Model{
     private MediaPlayer mediaPlayer;
     private Media m;
     private ArrayList<MediaPlayer> mp3listSong,mp3listPlaylist;
+    private int indexForSongs;
 
     public void setAllsongs(SongList allsongs){
         this.allsongs = allsongs;
@@ -214,12 +215,11 @@ public class Model{
 
         if (listviewsong.getFocusModel().isFocused(listviewsong.getSelectionModel().getSelectedIndex())) {
 
-            //listviewplaylist.getFocusModel().focus(-1);
-
             for(int i=0; i< songList.size(); i++){
                 if (listviewsong.getFocusModel().getFocusedItem().equals(songList.get(i))){
 
                     mp3listSong.get(i).play();
+                    indexForSongs = listviewsong.getSelectionModel().getSelectedIndex();
                     System.out.println("listviewsong mp3");
                 }else {
                     try {
@@ -240,12 +240,12 @@ public class Model{
 
 
          if (listviewplaylist.getFocusModel().isFocused(listviewplaylist.getSelectionModel().getSelectedIndex())) {
-         //  listviewsong.getSelectionModel().select(-1);
-         //  listviewsong.getFocusModel().focus(-1);
+
             for(int i=0; i< playlist.list.size(); i++){
                 if (listviewplaylist.getFocusModel().getFocusedItem().equals(playlist.list.get(i))){
 
                     mp3listPlaylist.get(i).play();
+                    indexForSongs = listviewplaylist.getSelectionModel().getSelectedIndex();
                     System.out.println("listviewplaylist mp3");
                 }else {
                     try {
@@ -265,6 +265,12 @@ public class Model{
              listviewplaylist.getSelectionModel().select(-1);
           }
 
+    }
+    public void pauseMp3(){
+        if(!mp3listPlaylist.isEmpty() && !mp3listSong.isEmpty()) {
+            mp3listPlaylist.get(this.indexForSongs).stop();
+            mp3listSong.get(this.indexForSongs).stop();
+        }
     }
 
 }

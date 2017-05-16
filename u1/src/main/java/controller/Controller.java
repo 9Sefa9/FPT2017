@@ -47,6 +47,7 @@ public class Controller{
 
             this.view.play.setOnAction(e -> this.model.playMp3(this.view.listviewsong, this.view.listviewplaylist));
 
+            this.view.pause.setOnAction(e -> this.model.pauseMp3());
 
         }catch(Exception e){
             System.out.println("Exception in CONTROLLER-L-METHOD");

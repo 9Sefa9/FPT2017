@@ -118,6 +118,8 @@ public class View extends BorderPane{
 
     }
 
+    //vielleicht ist es garkeine funktionalität...
+
     public Button getAddall() {
         return addsongs;
     }
