@@ -211,50 +211,42 @@ public class Model{
     //es wird abgespielt/gestoppt sofern die list nicht leer ist und umgekehrt.
     public void playMp3(ListView<Song> listviewsong, ListView<Song> listviewplaylist) {
 
-        listviewsong.getSelectionModel().selectionModeProperty().addListener(new ChangeListener<SelectionMode>() {
-            @Override
-            public void changed(ObservableValue<? extends SelectionMode> observable, SelectionMode oldValue, SelectionMode newValue) {
-                if(listviewsong.getFocusModel().isFocused(listviewsong.getSelectionModel().getSelectedIndex()))
-                    listviewplaylist.getSelectionModel().select(-1);
-            }
-        });
-
-        listviewplaylist.getSelectionModel().selectionModeProperty().addListener(new ChangeListener<SelectionMode>() {
-            @Override
-            public void changed(ObservableValue<? extends SelectionMode> observable, SelectionMode oldValue, SelectionMode newValue) {
-                if(listviewplaylist.getFocusModel().isFocused(listviewsong.getSelectionModel().getSelectedIndex()))
-                    listviewsong.getSelectionModel().select(-1);
-            }
-        });
 
         if (listviewsong.getFocusModel().isFocused(listviewsong.getSelectionModel().getSelectedIndex())) {
-              // listviewplaylist.getSelectionModel().select(-1);
-            //  listviewplaylist.getFocusModel().focus(-1);
+
+            //listviewplaylist.getFocusModel().focus(-1);
+
             for(int i=0; i< songList.size(); i++){
                 if (listviewsong.getFocusModel().getFocusedItem().equals(songList.get(i))){
 
                     mp3listSong.get(i).play();
+                    System.out.println("listviewsong mp3");
+                }else {
+                    try {
+                        if (!mp3listSong.isEmpty())
+                            mp3listSong.get(i).stop();
 
-                }else{
-                    if(!mp3listSong.isEmpty())
-                        mp3listSong.get(i).stop();
+                        if (!mp3listPlaylist.isEmpty())
+                            for (int j = 0; j < playlist.list.size(); j++)
+                                mp3listPlaylist.get(j).stop();
 
-                    if(!mp3listPlaylist.isEmpty())
-                        for(int j = 0 ;j<playlist.list.size(); j++)
-                            mp3listPlaylist.get(j).stop();
+                    } catch (Exception e) {
+                        //mach gar nichts
+                    }
                 }
             }
+            listviewsong.getSelectionModel().select(-1);
         }
 
 
          if (listviewplaylist.getFocusModel().isFocused(listviewplaylist.getSelectionModel().getSelectedIndex())) {
-           // listviewsong.getSelectionModel().select(-1);
-           // listviewsong.getFocusModel().focus(-1);
+         //  listviewsong.getSelectionModel().select(-1);
+         //  listviewsong.getFocusModel().focus(-1);
             for(int i=0; i< playlist.list.size(); i++){
                 if (listviewplaylist.getFocusModel().getFocusedItem().equals(playlist.list.get(i))){
 
                     mp3listPlaylist.get(i).play();
-
+                    System.out.println("listviewplaylist mp3");
                 }else {
                     try {
                         if(!mp3listPlaylist.isEmpty())
@@ -266,10 +258,11 @@ public class Model{
 
 
                     }catch (Exception e){
-                        //mach gar nichts
+                        //mache gar nichts
                     }
                 }
             }
+             listviewplaylist.getSelectionModel().select(-1);
           }
 
     }
