@@ -9,6 +9,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.DirectoryChooser;
@@ -65,6 +66,7 @@ public class Model{
                 for (Path p : stream) {
                     String name = p.getFileName().toString();
                     if (name.endsWith(".mp3")) {
+                        //sollte vielleicht später public gemacht werden
                         String track, interpret, album;
                         interpret = "";
                         album = "";
@@ -209,25 +211,45 @@ public class Model{
     //es wird abgespielt/gestoppt sofern die list nicht leer ist und umgekehrt.
     public void playMp3(ListView<Song> listviewsong, ListView<Song> listviewplaylist) {
 
-        if (listviewsong.getFocusModel().getFocusedIndex() >= 0) {
-            listviewplaylist.getSelectionModel().select(-1);
-           for(int i=0; i< songList.size(); i++){
+        listviewsong.getSelectionModel().selectionModeProperty().addListener(new ChangeListener<SelectionMode>() {
+            @Override
+            public void changed(ObservableValue<? extends SelectionMode> observable, SelectionMode oldValue, SelectionMode newValue) {
+                if(listviewsong.getFocusModel().isFocused(listviewsong.getSelectionModel().getSelectedIndex()))
+                    listviewplaylist.getSelectionModel().select(-1);
+            }
+        });
+
+        listviewplaylist.getSelectionModel().selectionModeProperty().addListener(new ChangeListener<SelectionMode>() {
+            @Override
+            public void changed(ObservableValue<? extends SelectionMode> observable, SelectionMode oldValue, SelectionMode newValue) {
+                if(listviewplaylist.getFocusModel().isFocused(listviewsong.getSelectionModel().getSelectedIndex()))
+                    listviewsong.getSelectionModel().select(-1);
+            }
+        });
+
+        if (listviewsong.getFocusModel().isFocused(listviewsong.getSelectionModel().getSelectedIndex())) {
+              // listviewplaylist.getSelectionModel().select(-1);
+            //  listviewplaylist.getFocusModel().focus(-1);
+            for(int i=0; i< songList.size(); i++){
                 if (listviewsong.getFocusModel().getFocusedItem().equals(songList.get(i))){
 
                     mp3listSong.get(i).play();
 
-               }else{
-                      if(!mp3listSong.isEmpty())
+                }else{
+                    if(!mp3listSong.isEmpty())
                         mp3listSong.get(i).stop();
 
-                      if(!mp3listPlaylist.isEmpty())
-                            for(int j = 0 ;j<playlist.list.size(); j++)
-                               mp3listPlaylist.get(j).stop();
+                    if(!mp3listPlaylist.isEmpty())
+                        for(int j = 0 ;j<playlist.list.size(); j++)
+                            mp3listPlaylist.get(j).stop();
                 }
             }
         }
-        else if (listviewplaylist.getFocusModel().getFocusedIndex() >= 0) {
-            listviewsong.getSelectionModel().select(-1);
+
+
+         if (listviewplaylist.getFocusModel().isFocused(listviewplaylist.getSelectionModel().getSelectedIndex())) {
+           // listviewsong.getSelectionModel().select(-1);
+           // listviewsong.getFocusModel().focus(-1);
             for(int i=0; i< playlist.list.size(); i++){
                 if (listviewplaylist.getFocusModel().getFocusedItem().equals(playlist.list.get(i))){
 
@@ -248,7 +270,7 @@ public class Model{
                     }
                 }
             }
-        }
+          }
 
     }
 
