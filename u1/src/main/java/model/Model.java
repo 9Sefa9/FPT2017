@@ -3,8 +3,8 @@
  */
 package model;
 
-import com.mpatric.mp3agic.ID3v2;
-import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.*;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -24,17 +24,30 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import model.Song;
+
 public class Model{
-    public SongList allsongs,playlist,songList;
+    private SongList allsongs,playlist,songList;
     private File file;
     private Path dir;
     private DirectoryChooser dirChooser;
     private FileChooser fileChooser;
     private ArrayList<Song> songFromPLFile;
     private MediaPlayer mediaPlayer;
+    private double currentVolume = 1;
+    private int currentPlaylistSong = 0;
     private Media m;
-    private ArrayList<MediaPlayer> mp3listSong,mp3listPlaylist;
+    //private CurrentSong current;
+    private ObservableValue<Song> observer;
     private int indexForSongs;
+
+    public Model(){
+        //current = new CurrentSong();
+    }
+
+    public ObservableValue<Song> currentProperty(){
+        return observer;
+    }
 
     public void setAllsongs(SongList allsongs){
         this.allsongs = allsongs;
@@ -53,8 +66,8 @@ public class Model{
     //ermöglicht uns das auswählen eines Ordners mit Songs.
     public void handleAddSongsButton(){
 
-            mp3listSong = new ArrayList<>();
-            mp3listPlaylist = new ArrayList<>();
+           // mp3listSong = new ArrayList<>();
+           // mp3listPlaylist = new ArrayList<>();
             dirChooser = new DirectoryChooser();
             dirChooser.setTitle("Select directory with mp3 files..");
 
@@ -83,11 +96,11 @@ public class Model{
                             if (id3v2.getAlbum() != null)
                                 album = id3v2.getAlbum();
                         }
-                        m = new Media(new File(songPath).toURI().toString());
-                        mediaPlayer = new MediaPlayer(m);
+                        //m = new Media(new File(songPath).toURI().toString());
+                        //mediaPlayer = new MediaPlayer(m);
 
                         //speichert sowohl Song als auch die abspiel faehigkeit
-                        mp3listSong.add(mediaPlayer);
+                        //mp3listSong.add(mediaPlayer);
                         songList.add(new Song(songPath, track, album, interpret));
                     }
                 }
@@ -110,8 +123,6 @@ public class Model{
 
     public void handleAddToPlaylistButton(ObservableList<Song> songs)
     {
-        for(int i = 0;i<songs.size();i++)
-            mp3listPlaylist.add(new MediaPlayer(new Media(new File(songs.get(i).getPath()).toURI().toString())));
 
         this.playlist.addAll(songs);
 
@@ -169,8 +180,8 @@ public class Model{
     //Die save Methode bekommt die Songs und einen pfad zum speichern einer "*.pl" datei.
     private void save(ArrayList<Song> songs,String path){
         try( BufferedWriter bw = new BufferedWriter(new FileWriter(path))){
-            for(int i = 0; i<songs.size(); i++) {
-                bw.write(songs.get(i).getPath()+"\n");
+            for (Song song : songs) {
+                bw.write(song.getPath() + "\n");
             }
         }catch(IOException i){
             System.out.println(path);
@@ -193,11 +204,12 @@ public class Model{
                 loadmp3 = new Mp3File(loadsongpath);
                 loadname = loadsongpath;
                 loadtrack = loadsongpath.substring(0, loadsongpath.length() - 4);//loadname.substring(0, loadname.length() - 4);
-                String[] name =loadtrack.split("\\.");
+                String lt = loadtrack.replace("\\", "\\\\");
+                String[] name =lt.split("\\\\");
                 System.out.println(name[name.length-1]);
                 System.out.println(loadtrack);
 
-                songFromPLFile.add(new Song(loadsongpath, loadtrack, loadalbum, loadinterpret));
+                songFromPLFile.add(new Song(loadsongpath, name[name.length-1], loadalbum, loadinterpret));
             }
 
             this.playlist.addAll(songFromPLFile);
@@ -212,64 +224,116 @@ public class Model{
     //es wird abgespielt/gestoppt sofern die list nicht leer ist und umgekehrt.
     public void playMp3(ListView<Song> listviewsong, ListView<Song> listviewplaylist) {
 
-
-        if (listviewsong.getFocusModel().isFocused(listviewsong.getSelectionModel().getSelectedIndex())) {
-
-            for(int i=0; i< songList.size(); i++){
-                if (listviewsong.getFocusModel().getFocusedItem().equals(songList.get(i))){
-
-                    mp3listSong.get(i).play();
-                    indexForSongs = listviewsong.getSelectionModel().getSelectedIndex();
-                    System.out.println("listviewsong mp3");
-                }else {
-                    try {
-                        if (!mp3listSong.isEmpty())
-                            mp3listSong.get(i).stop();
-
-                        if (!mp3listPlaylist.isEmpty())
-                            for (int j = 0; j < playlist.list.size(); j++)
-                                mp3listPlaylist.get(j).stop();
-
-                    } catch (Exception e) {
-                        //mach gar nichts
-                    }
-                }
+        if(!this.playlist.isEmpty())
+        {
+            if(mediaPlayer != null)
+                System.out.println(mediaPlayer.getCurrentTime() + " " + mediaPlayer.getTotalDuration());
+            if(mediaPlayer == null || mediaPlayer.getCurrentTime().equals(mediaPlayer.getTotalDuration()) || mediaPlayer.getStatus().equals(MediaPlayer.Status.STOPPED)) {
+                if(this.playlist.size() <= this.currentPlaylistSong)
+                    this.currentPlaylistSong = 0;
+                //current = this.playlist.get(this.currentPlaylistSong);
+                //current.setTitle(this.playlist.get(this.currentPlaylistSong).getTitle());
+                mediaPlayer = new MediaPlayer(new Media(new File(this.playlist.get(this.currentPlaylistSong).getPath()).toURI().toString()));
+                mediaPlayer.setVolume(this.currentVolume);
+                mediaPlayer.setOnEndOfMedia(() -> {
+                    //playlist.remove(0);
+                    this.currentPlaylistSong++;
+                    playMp3(listviewsong, listviewplaylist);
+                });
+                System.out.println(this.currentPlaylistSong);
+                listviewplaylist.getSelectionModel().select(this.currentPlaylistSong);
+                mediaPlayer.play();
+            } else
+                if(mediaPlayer.getStatus().equals(MediaPlayer.Status.PAUSED))
+            {
+                mediaPlayer.play();
             }
-            listviewsong.getSelectionModel().select(-1);
+        } else
+            if (listviewsong != null && listviewsong.getFocusModel().isFocused(listviewsong.getSelectionModel().getSelectedIndex())) {
+                if(mediaPlayer == null || mediaPlayer.getCurrentTime().equals(mediaPlayer.getTotalDuration()) || mediaPlayer.getStatus().equals(MediaPlayer.Status.STOPPED)) {
+                    //current = this.songList.get(listviewsong.getSelectionModel().getSelectedIndex());
+                    mediaPlayer = new MediaPlayer(new Media(new File(this.songList.get(listviewsong.getSelectionModel().getSelectedIndex()).getPath()).toURI().toString()));
+                    mediaPlayer.setVolume(this.currentVolume);
+                    mediaPlayer.play();
+                } else
+                    if(mediaPlayer.getStatus().equals(MediaPlayer.Status.PAUSED))
+                {
+                    mediaPlayer.play();
+                }
         }
-
-
-         if (listviewplaylist.getFocusModel().isFocused(listviewplaylist.getSelectionModel().getSelectedIndex())) {
-
-            for(int i=0; i< playlist.list.size(); i++){
-                if (listviewplaylist.getFocusModel().getFocusedItem().equals(playlist.list.get(i))){
-
-                    mp3listPlaylist.get(i).play();
-                    indexForSongs = listviewplaylist.getSelectionModel().getSelectedIndex();
-                    System.out.println("listviewplaylist mp3");
-                }else {
-                    try {
-                        if(!mp3listPlaylist.isEmpty())
-                            mp3listPlaylist.get(i).stop();
-
-                        if(!mp3listSong.isEmpty())
-                            for (int j = 0;j<songList.size(); j++)
-                                mp3listSong.get(j).stop();
-
-
-                    }catch (Exception e){
-                        //mache gar nichts
-                    }
-                }
-            }
-             listviewplaylist.getSelectionModel().select(-1);
-          }
-
     }
+
     public void pauseMp3(){
-        if(!mp3listPlaylist.isEmpty() && !mp3listSong.isEmpty()) {
-            mp3listPlaylist.get(this.indexForSongs).stop();
-            mp3listSong.get(this.indexForSongs).stop();
+        if(mediaPlayer != null)
+            mediaPlayer.pause();
+    }
+
+   /* public CurrentSong getCurrent()
+    {
+        return current;
+    }*/
+
+    public void nextMP3(ListView<Song> listviewplaylist){
+        if(this.playlist.size() > 1)
+        {
+            if(mediaPlayer != null) {
+                this.mediaPlayer.stop();
+                this.mediaPlayer = null;
+                //this.playlist.remove(0);
+                this.currentPlaylistSong++;
+                this.playMp3(null, listviewplaylist);
+            }
+        }
+    }
+
+    public void setVolume(double volume)
+    {
+        this.currentVolume = volume;
+        if(this.mediaPlayer != null)
+        {
+            this.mediaPlayer.setVolume(volume);
+        }
+    }
+
+    public void commitSongDetails(Song old, String title, String interpret, String album)
+    {
+        if(old.getTitle().equalsIgnoreCase(title))
+            title = title + " (modified)";
+        try {
+            Mp3File mp3File = new Mp3File(old.getPath());
+            ID3v2 id3v2;
+            if(mp3File.hasId3v2Tag())
+            {
+                id3v2 = mp3File.getId3v2Tag();
+            } else {
+                id3v2 = new ID3v24Tag();
+            }
+            id3v2.setTitle(title);
+            id3v2.setArtist(interpret);
+            id3v2.setAlbum(album);
+            mp3File.setId3v2Tag(id3v2);
+            mp3File.save(old.getPath().replace(old.getTitle(), title));
+
+        } catch (IOException | InvalidDataException | UnsupportedTagException | NotSupportedException e) {
+            e.printStackTrace();
+        }
+        for(Song s : this.allsongs)
+        {
+            if (s.getId() == old.getId())
+            {
+                s.setTitle(title);
+                s.setInterpret(interpret);
+                s.setAlbum(album);
+            }
+        }
+        for(Song s : this.playlist)
+        {
+            if (s.getId() == old.getId())
+            {
+                s.setTitle(title);
+                s.setInterpret(interpret);
+                s.setAlbum(album);
+            }
         }
     }
 

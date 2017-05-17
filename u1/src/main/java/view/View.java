@@ -1,5 +1,8 @@
 
 package view;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import model.Song;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -13,10 +16,11 @@ import model.SongList;
 public class View extends BorderPane{
     public ListView<Song> listviewsong,listviewplaylist;
     public Button addsongs,load,save,addtoplaylist,commit,play,pause,next;
+    public Slider volumeSlider;
     private ChoiceBox<String> choicebox;
     private GridPane upperframe,downframe,rightframe;
     public TextField title,interpret,album;
-    private Text titleText, intepretText, albumText;
+    private Text titleText, intepretText, albumText, currentTitle, currentInterpret;
     public View(){
         setMaxSize(1024,1024);
 
@@ -65,7 +69,12 @@ public class View extends BorderPane{
         addtoplaylist.setPadding(new Insets(10,20,10,20));
         rightframe.add(addtoplaylist,0,8);
 
-
+        currentTitle = new Text("");
+        currentTitle.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 20));
+        rightframe.add(currentTitle, 0, 9);
+        currentInterpret = new Text("");
+        currentTitle.setFont(new Font(15));
+        rightframe.add(currentInterpret, 0, 10);
 
         rightframe.setHgap(10);
         rightframe.setVgap(10);
@@ -90,7 +99,7 @@ public class View extends BorderPane{
         upperframe.setVgap(5);
 
         //downframe
-    //    downframe.addColumn(2);
+        //downframe.addColumn(2);
         downframe.setVgap(30);
         downframe.setHgap(30);
 
@@ -109,6 +118,10 @@ public class View extends BorderPane{
         addsongs= new Button("Add Songs");
         addsongs.setPadding(new Insets(10,10,10,10));
         downframe.add(addsongs,0,0);
+
+        volumeSlider = new Slider(0, 100, 100);
+       // volumeSlider.setPrefWidth(200);
+        downframe.add(volumeSlider, 9, 0);
 
 
         setBottom(downframe);
@@ -149,5 +162,15 @@ public class View extends BorderPane{
     public ObservableList<Song> getSelectedSongs() {
 
         return listviewsong.getSelectionModel().getSelectedItems();
+    }
+
+    public void setCurrentTitle(String title)
+    {
+        this.currentTitle.setText(title);
+    }
+
+    public void setCurrentInterpret(String interpret)
+    {
+        this.currentInterpret.setText(interpret);
     }
 }
