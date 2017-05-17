@@ -34,6 +34,7 @@ public class Model{
     private FileChooser fileChooser;
     private ArrayList<Song> songFromPLFile;
     private MediaPlayer mediaPlayer;
+    private double currentVolume = 1;
     private Media m;
     //private ArrayList<MediaPlayer> mp3listSong,mp3listPlaylist;
     private int indexForSongs;
@@ -220,6 +221,7 @@ public class Model{
                 System.out.println(mediaPlayer.getCurrentTime() + " " + mediaPlayer.getTotalDuration());
             if(mediaPlayer == null || mediaPlayer.getCurrentTime().equals(mediaPlayer.getTotalDuration()) || mediaPlayer.getStatus().equals(MediaPlayer.Status.STOPPED)) {
                 mediaPlayer = new MediaPlayer(new Media(new File(this.playlist.get(0).getPath()).toURI().toString()));
+                mediaPlayer.setVolume(this.currentVolume);
                 mediaPlayer.setOnEndOfMedia(() -> {
                     playlist.remove(0);
                     playMp3(listviewsong, listviewplaylist);
@@ -234,6 +236,7 @@ public class Model{
             if (listviewsong != null && listviewsong.getFocusModel().isFocused(listviewsong.getSelectionModel().getSelectedIndex())) {
                 if(mediaPlayer == null || mediaPlayer.getCurrentTime().equals(mediaPlayer.getTotalDuration()) || mediaPlayer.getStatus().equals(MediaPlayer.Status.STOPPED)) {
                     mediaPlayer = new MediaPlayer(new Media(new File(this.songList.get(listviewsong.getSelectionModel().getSelectedIndex()).getPath()).toURI().toString()));
+                    mediaPlayer.setVolume(this.currentVolume);
                     mediaPlayer.play();
                 } else
                     if(mediaPlayer.getStatus().equals(MediaPlayer.Status.PAUSED))
@@ -309,6 +312,15 @@ public class Model{
                 this.playlist.remove(0);
                 this.playMp3(null, null);
             }
+        }
+    }
+
+    public void setVolume(double volume)
+    {
+        this.currentVolume = volume;
+        if(this.mediaPlayer != null)
+        {
+            this.mediaPlayer.setVolume(volume);
         }
     }
 

@@ -51,6 +51,8 @@ public class Controller{
 
             this.view.next.setOnAction(e -> this.model.nextMP3());
 
+            this.view.volumeSlider.valueProperty().addListener(e -> this.model.setVolume(this.view.volumeSlider.getValue() / 100));
+
         }catch(Exception e){
             System.out.println("Exception in CONTROLLER-L-METHOD");
             e.printStackTrace();
