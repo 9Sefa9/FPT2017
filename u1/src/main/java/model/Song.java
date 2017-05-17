@@ -7,9 +7,9 @@ import javafx.beans.value.ObservableValue;
 
 public class Song implements interfaces.Song{
 
-    public String path,title,album,interpreter;
+    private String path,title,album,interpreter;
 
-    public Song (String path, String title, String album, String interpreter)
+    public Song(String path, String title, String album, String interpreter)
     {
         this.path = path;
         this.title = title;

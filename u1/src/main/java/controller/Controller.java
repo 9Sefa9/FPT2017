@@ -40,10 +40,10 @@ public class Controller{
             this.view.addtoplaylist.setOnAction(e -> this.model.handleAddToPlaylistButton(this.view.getSelectedSongs()));
 
             //Speichert die Playlist in eine *.ps Datei ab.
-            this.view.save.setOnAction(e -> this.model.handleSavePlaylist(this.model.playlist.list));
+            this.view.save.setOnAction(e -> this.model.handleSavePlaylist(this.model.getPlaylist().list));
 
             //ladet die Playlist und packt es in die Playlist-View
-            this.view.load.setOnAction(e -> this.model.handleLoadPlaylist(this.model.playlist.list));
+            this.view.load.setOnAction(e -> this.model.handleLoadPlaylist(this.model.getPlaylist().list));
 
             this.view.play.setOnAction(e -> this.model.playMp3(this.view.listviewsong, this.view.listviewplaylist));
 

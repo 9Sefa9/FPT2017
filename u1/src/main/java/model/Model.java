@@ -24,8 +24,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import model.Song;
+
 public class Model{
-    public SongList allsongs,playlist,songList;
+    private SongList allsongs,playlist,songList;
     private File file;
     private Path dir;
     private DirectoryChooser dirChooser;
@@ -33,7 +35,7 @@ public class Model{
     private ArrayList<Song> songFromPLFile;
     private MediaPlayer mediaPlayer;
     private Media m;
-    private ArrayList<MediaPlayer> mp3listSong,mp3listPlaylist;
+    //private ArrayList<MediaPlayer> mp3listSong,mp3listPlaylist;
     private int indexForSongs;
 
     public void setAllsongs(SongList allsongs){
@@ -53,8 +55,8 @@ public class Model{
     //ermöglicht uns das auswählen eines Ordners mit Songs.
     public void handleAddSongsButton(){
 
-            mp3listSong = new ArrayList<>();
-            mp3listPlaylist = new ArrayList<>();
+           // mp3listSong = new ArrayList<>();
+           // mp3listPlaylist = new ArrayList<>();
             dirChooser = new DirectoryChooser();
             dirChooser.setTitle("Select directory with mp3 files..");
 
@@ -83,11 +85,11 @@ public class Model{
                             if (id3v2.getAlbum() != null)
                                 album = id3v2.getAlbum();
                         }
-                        m = new Media(new File(songPath).toURI().toString());
-                        mediaPlayer = new MediaPlayer(m);
+                        //m = new Media(new File(songPath).toURI().toString());
+                        //mediaPlayer = new MediaPlayer(m);
 
                         //speichert sowohl Song als auch die abspiel faehigkeit
-                        mp3listSong.add(mediaPlayer);
+                        //mp3listSong.add(mediaPlayer);
                         songList.add(new Song(songPath, track, album, interpret));
                     }
                 }
@@ -110,8 +112,8 @@ public class Model{
 
     public void handleAddToPlaylistButton(ObservableList<Song> songs)
     {
-        for(int i = 0;i<songs.size();i++)
-            mp3listPlaylist.add(new MediaPlayer(new Media(new File(songs.get(i).getPath()).toURI().toString())));
+        //for(int i = 0;i<songs.size();i++)
+          //  mp3listPlaylist.add(new MediaPlayer(new Media(new File(songs.get(i).getPath()).toURI().toString())));
 
         this.playlist.addAll(songs);
 
@@ -169,8 +171,8 @@ public class Model{
     //Die save Methode bekommt die Songs und einen pfad zum speichern einer "*.pl" datei.
     private void save(ArrayList<Song> songs,String path){
         try( BufferedWriter bw = new BufferedWriter(new FileWriter(path))){
-            for(int i = 0; i<songs.size(); i++) {
-                bw.write(songs.get(i).getPath()+"\n");
+            for (Song song : songs) {
+                bw.write(song.getPath() + "\n");
             }
         }catch(IOException i){
             System.out.println(path);
@@ -212,8 +214,35 @@ public class Model{
     //es wird abgespielt/gestoppt sofern die list nicht leer ist und umgekehrt.
     public void playMp3(ListView<Song> listviewsong, ListView<Song> listviewplaylist) {
 
+        if(!this.playlist.isEmpty())
+        {
+            if(mediaPlayer != null)
+                System.out.println(mediaPlayer.getCurrentTime() + " " + mediaPlayer.getTotalDuration());
+            if(mediaPlayer == null || mediaPlayer.getCurrentTime().equals(mediaPlayer.getTotalDuration())) {
+                mediaPlayer = new MediaPlayer(new Media(new File(this.playlist.get(0).getPath()).toURI().toString()));
+                mediaPlayer.setOnEndOfMedia(() -> {
+                    playlist.remove(0);
+                    playMp3(listviewsong, listviewplaylist);
+                });
+                mediaPlayer.play();
+            } else
+                if(mediaPlayer.getStatus().equals(MediaPlayer.Status.PAUSED))
+            {
+                mediaPlayer.play();
+            }
+        } else
+            if (listviewsong.getFocusModel().isFocused(listviewsong.getSelectionModel().getSelectedIndex())) {
+                if(mediaPlayer == null || mediaPlayer.getCurrentTime().equals(mediaPlayer.getTotalDuration())) {
+                    mediaPlayer = new MediaPlayer(new Media(new File(this.songList.get(listviewsong.getSelectionModel().getSelectedIndex()).getPath()).toURI().toString()));
+                    mediaPlayer.play();
+                } else
+                    if(mediaPlayer.getStatus().equals(MediaPlayer.Status.PAUSED))
+                {
+                    mediaPlayer.play();
+                }
+        }
 
-        if (listviewsong.getFocusModel().isFocused(listviewsong.getSelectionModel().getSelectedIndex())) {
+        /*if (listviewsong.getFocusModel().isFocused(listviewsong.getSelectionModel().getSelectedIndex())) {
 
             for(int i=0; i< songList.size(); i++){
                 if (listviewsong.getFocusModel().getFocusedItem().equals(songList.get(i))){
@@ -263,14 +292,12 @@ public class Model{
                 }
             }
              listviewplaylist.getSelectionModel().select(-1);
-          }
+          }*/
 
     }
     public void pauseMp3(){
-        if(!mp3listPlaylist.isEmpty() && !mp3listSong.isEmpty()) {
-            mp3listPlaylist.get(this.indexForSongs).stop();
-            mp3listSong.get(this.indexForSongs).stop();
-        }
+        if(mediaPlayer != null)
+            mediaPlayer.pause();
     }
 
 }

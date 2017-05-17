@@ -104,4 +104,9 @@ public class SongList extends ModifiableObservableListBase<Song> implements inte
         this.list.remove(index);
         return null;
     }
+
+    @Override
+    public String toString() {
+        return this.list.toString();
+    }
 }
