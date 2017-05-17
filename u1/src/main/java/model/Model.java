@@ -218,7 +218,7 @@ public class Model{
         {
             if(mediaPlayer != null)
                 System.out.println(mediaPlayer.getCurrentTime() + " " + mediaPlayer.getTotalDuration());
-            if(mediaPlayer == null || mediaPlayer.getCurrentTime().equals(mediaPlayer.getTotalDuration())) {
+            if(mediaPlayer == null || mediaPlayer.getCurrentTime().equals(mediaPlayer.getTotalDuration()) || mediaPlayer.getStatus().equals(MediaPlayer.Status.STOPPED)) {
                 mediaPlayer = new MediaPlayer(new Media(new File(this.playlist.get(0).getPath()).toURI().toString()));
                 mediaPlayer.setOnEndOfMedia(() -> {
                     playlist.remove(0);
@@ -231,8 +231,8 @@ public class Model{
                 mediaPlayer.play();
             }
         } else
-            if (listviewsong.getFocusModel().isFocused(listviewsong.getSelectionModel().getSelectedIndex())) {
-                if(mediaPlayer == null || mediaPlayer.getCurrentTime().equals(mediaPlayer.getTotalDuration())) {
+            if (listviewsong != null && listviewsong.getFocusModel().isFocused(listviewsong.getSelectionModel().getSelectedIndex())) {
+                if(mediaPlayer == null || mediaPlayer.getCurrentTime().equals(mediaPlayer.getTotalDuration()) || mediaPlayer.getStatus().equals(MediaPlayer.Status.STOPPED)) {
                     mediaPlayer = new MediaPlayer(new Media(new File(this.songList.get(listviewsong.getSelectionModel().getSelectedIndex()).getPath()).toURI().toString()));
                     mediaPlayer.play();
                 } else
@@ -298,6 +298,18 @@ public class Model{
     public void pauseMp3(){
         if(mediaPlayer != null)
             mediaPlayer.pause();
+    }
+
+    public void nextMP3(){
+        if(this.playlist.size() > 1)
+        {
+            if(mediaPlayer != null) {
+                this.mediaPlayer.stop();
+                this.mediaPlayer = null;
+                this.playlist.remove(0);
+                this.playMp3(null, null);
+            }
+        }
     }
 
 }
