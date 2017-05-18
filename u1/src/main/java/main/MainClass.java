@@ -26,6 +26,7 @@ public class MainClass extends Application {
         //primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("YinYang.png")));
         primaryStage.setTitle("FPT Player v1.0");
         primaryStage.setScene(s);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 }

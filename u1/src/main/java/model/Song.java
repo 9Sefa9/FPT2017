@@ -9,18 +9,26 @@ import javafx.beans.value.ObservableValue;
 
 public class Song implements interfaces.Song{
 
-    private String path,title,album,interpreter;
-    ObservableValue<String> pathp, albump, interpreterp;
+    private String path = "",title = "",album = "",interpreter = "";
+    private StringProperty pathp, albump, interpreterp;
 
     public Song(String path, String title, String album, String interpreter)
     {
         this.path = path;
-        this.pathp = new SimpleStringProperty(this.path);
         this.title = title;
         this.album = album;
-        this.albump = new SimpleStringProperty(this.album);
         this.interpreter = interpreter;
-        this.interpreterp = new SimpleStringProperty(this.interpreter);
+        this.setProps();
+    }
+
+    public Song(){
+        this.setProps();
+    }
+
+    private void setProps(){
+        this.pathp = new SimpleStringProperty(this, "pathp", this.title);
+        this.albump = new SimpleStringProperty(this, "albump", this.album);
+        this.interpreterp = new SimpleStringProperty(this, "interpreterp", this.interpreter);
     }
 
     @Override
@@ -31,6 +39,7 @@ public class Song implements interfaces.Song{
     @Override
     public void setAlbum(String album) {
         this.album = album;
+        this.albump.set(album);
     }
 
     @Override
@@ -41,6 +50,7 @@ public class Song implements interfaces.Song{
     @Override
     public void setInterpret(String interpret) {
         this.interpreter = interpret;
+        this.interpreterp.set(interpret);
     }
 
     @Override
@@ -63,6 +73,8 @@ public class Song implements interfaces.Song{
         String s = this.path.replace(this.title, title);
         this.setPath(s);
         this.title = title;
+        this.pathp.set(title);
+        //System.out.println(this.pathp.getValue());
     }
 
     @Override

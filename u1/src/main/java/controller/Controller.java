@@ -4,7 +4,8 @@
 package controller;
 
 import javafx.collections.ListChangeListener;
-import model.CurrentSong;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 import model.Model;
 import model.Song;
 import model.SongList;
@@ -12,10 +13,11 @@ import view.View;
 
 public class Controller{
 
-    public Model model;
-    public View view;
-    public SongList sl, sl2;
-    //public CurrentSong cs;
+    private Model model;
+    private View view;
+    private SongList sl, sl2;
+    private Song cs;
+    //private MediaPlayer mp;
 
     public Controller(){
 
@@ -24,7 +26,9 @@ public class Controller{
         try {
             this.model = model;
             this.view = view;
-            //this.cs = this.model.getCurrent();
+            this.cs = new Song();
+            this.model.setCurrent(cs);
+            //this.mp = this.model.getMediaPlayer();
 
             //Lauscht und Updated regelmäßig die hinzugefügten Songs zum View.
             this.sl = new SongList();
@@ -85,10 +89,16 @@ public class Controller{
                 }
             });
 
-           /* this.cs.addListener(e -> {
+            this.cs.pathProperty().addListener((v, oldV, newV) -> {
                 this.view.setCurrentTitle(this.model.getCurrent().getTitle());
-                this.view.setCurrentInterpret(this.model.getCurrent().getInterpret());
-            });*/
+                this.model.getMediaPlayer().currentTimeProperty().addListener((o, oldVa, newVa) -> this.view.getSongSlider().setValue((newVa.toSeconds()/this.model.getMediaPlayer().getTotalDuration().toSeconds())));
+            });
+
+            this.cs.interpretProperty().addListener((v, oldV, newV) -> this.view.setCurrentInterpret(this.model.getCurrent().getInterpret()));
+
+            //this.mp.currentTimeProperty().addListener((o, oldV, newV) -> this.view.getSongSlider().setValue((newV.toSeconds()/this.mp.getTotalDuration().toSeconds())));
+
+            this.view.getSongSlider().setOnMouseClicked(e -> this.model.getMediaPlayer().seek(new Duration(this.view.getSongSlider().getValue()*this.model.getMediaPlayer().getTotalDuration().toMillis())));
 
         }catch(Exception e){
             System.out.println("Exception in CONTROLLER-L-METHOD");
