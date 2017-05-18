@@ -1,22 +1,20 @@
 
 package view;
-import javafx.scene.layout.HBox;
+import javafx.geometry.Pos;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import model.Song;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import model.SongList;
 
 public class View extends BorderPane{
     public ListView<Song> listviewsong,listviewplaylist;
     public Button addsongs,load,save,addtoplaylist,commit,play,pause,next;
-    public Slider volumeSlider;
+    public Slider volumeSlider, songSlider;
     private ChoiceBox<String> choicebox;
     private GridPane upperframe,downframe,rightframe;
     public TextField title,interpret,album;
@@ -69,12 +67,23 @@ public class View extends BorderPane{
         addtoplaylist.setPadding(new Insets(10,20,10,20));
         rightframe.add(addtoplaylist,0,8);
 
+        VBox vBox = new VBox(5);
+        vBox.setMinWidth(200);
+
         currentTitle = new Text("");
         currentTitle.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 20));
-        rightframe.add(currentTitle, 0, 9);
+        //rightframe.add(currentTitle, 0, 9);
         currentInterpret = new Text("");
         currentTitle.setFont(new Font(15));
-        rightframe.add(currentInterpret, 0, 10);
+        //rightframe.add(currentInterpret, 0, 10);
+
+        songSlider = new Slider(0, 1, 0);
+        // songSlider.setVisible(false);
+
+        vBox.setPadding(new Insets(40, 0, 0, 0));
+        vBox.setAlignment(Pos.TOP_CENTER);
+        vBox.getChildren().addAll(currentTitle, currentInterpret, songSlider);
+        rightframe.add(vBox, 0, 9);
 
         rightframe.setHgap(10);
         rightframe.setVgap(10);
@@ -174,8 +183,12 @@ public class View extends BorderPane{
         this.currentInterpret.setText(interpret);
     }
 
-    public Text getCurrentTitle()
-    {
-        return this.currentTitle;
+    public void setSliderVisibility(Boolean value){
+        this.songSlider.setVisible(value);
     }
+
+    public Slider getSongSlider(){
+        return songSlider;
+    }
+
 }

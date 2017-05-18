@@ -42,11 +42,7 @@ public class Model{
     private int indexForSongs;
 
     public Model(){
-        //current = new CurrentSong();
-    }
-
-    public ObservableValue<Song> currentProperty(){
-        return observer;
+        //mediaPlayer = new MediaPlayer(new Media(""));
     }
 
     public void setAllsongs(SongList allsongs){
@@ -66,6 +62,11 @@ public class Model{
     public void setCurrent(Song cs)
     {
         this.current = cs;
+    }
+
+    public MediaPlayer getMediaPlayer()
+    {
+        return mediaPlayer;
     }
 
     //ermöglicht uns das auswählen eines Ordners mit Songs.
@@ -237,9 +238,9 @@ public class Model{
                 if(this.playlist.size() <= this.currentPlaylistSong)
                     this.currentPlaylistSong = 0;
                 //current = this.playlist.get(this.currentPlaylistSong);
+                mediaPlayer = new MediaPlayer(new Media(new File(this.playlist.get(this.currentPlaylistSong).getPath()).toURI().toString()));
                 current.setTitle(this.playlist.get(this.currentPlaylistSong).getTitle());
                 current.setInterpret(this.playlist.get(this.currentPlaylistSong).getInterpret());
-                mediaPlayer = new MediaPlayer(new Media(new File(this.playlist.get(this.currentPlaylistSong).getPath()).toURI().toString()));
                 mediaPlayer.setVolume(this.currentVolume);
                 mediaPlayer.setOnEndOfMedia(() -> {
                     //playlist.remove(0);
@@ -258,9 +259,9 @@ public class Model{
             if (listviewsong != null && listviewsong.getFocusModel().isFocused(listviewsong.getSelectionModel().getSelectedIndex())) {
                 if(mediaPlayer == null || mediaPlayer.getCurrentTime().equals(mediaPlayer.getTotalDuration()) || mediaPlayer.getStatus().equals(MediaPlayer.Status.STOPPED)) {
                     //current = this.songList.get(listviewsong.getSelectionModel().getSelectedIndex());
-                    current.setTitle(this.allsongs.get(listviewsong.getSelectionModel().getSelectedIndex()).getTitle());
-                    current.setTitle(this.allsongs.get(listviewsong.getSelectionModel().getSelectedIndex()).getInterpret());
                     mediaPlayer = new MediaPlayer(new Media(new File(this.allsongs.get(listviewsong.getSelectionModel().getSelectedIndex()).getPath()).toURI().toString()));
+                    current.setTitle(this.allsongs.get(listviewsong.getSelectionModel().getSelectedIndex()).getTitle());
+                    current.setInterpret(this.allsongs.get(listviewsong.getSelectionModel().getSelectedIndex()).getInterpret());
                     mediaPlayer.setVolume(this.currentVolume);
                     mediaPlayer.play();
                 } else
@@ -291,6 +292,9 @@ public class Model{
                 this.currentPlaylistSong++;
                 this.playMp3(null, listviewplaylist);
             }
+        } else if(playlist.size() < 2)
+        {
+            this.mediaPlayer.stop();
         }
     }
 
