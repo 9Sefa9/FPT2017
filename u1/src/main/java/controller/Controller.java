@@ -4,7 +4,6 @@
 package controller;
 
 import javafx.collections.ListChangeListener;
-import model.CurrentSong;
 import model.Model;
 import model.Song;
 import model.SongList;
@@ -12,10 +11,10 @@ import view.View;
 
 public class Controller{
 
-    public Model model;
-    public View view;
-    public SongList sl, sl2;
-    //public CurrentSong cs;
+    private Model model;
+    private View view;
+    private SongList sl, sl2;
+    private Song cs;
 
     public Controller(){
 
@@ -24,7 +23,8 @@ public class Controller{
         try {
             this.model = model;
             this.view = view;
-            //this.cs = this.model.getCurrent();
+            this.cs = new Song();
+            this.model.setCurrent(cs);
 
             //Lauscht und Updated regelmäßig die hinzugefügten Songs zum View.
             this.sl = new SongList();
@@ -85,10 +85,9 @@ public class Controller{
                 }
             });
 
-           /* this.cs.addListener(e -> {
-                this.view.setCurrentTitle(this.model.getCurrent().getTitle());
-                this.view.setCurrentInterpret(this.model.getCurrent().getInterpret());
-            });*/
+            this.cs.pathProperty().addListener((v, oldV, newV) -> this.view.setCurrentTitle(this.model.getCurrent().getTitle()));
+
+            this.cs.interpretProperty().addListener((v, oldV, newV) -> this.view.setCurrentInterpret(this.model.getCurrent().getInterpret()));
 
         }catch(Exception e){
             System.out.println("Exception in CONTROLLER-L-METHOD");

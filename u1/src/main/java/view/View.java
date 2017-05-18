@@ -173,4 +173,9 @@ public class View extends BorderPane{
     {
         this.currentInterpret.setText(interpret);
     }
+
+    public Text getCurrentTitle()
+    {
+        return this.currentTitle;
+    }
 }

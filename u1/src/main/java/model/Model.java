@@ -37,7 +37,7 @@ public class Model{
     private double currentVolume = 1;
     private int currentPlaylistSong = 0;
     private Media m;
-    //private CurrentSong current;
+    private Song current;
     private ObservableValue<Song> observer;
     private int indexForSongs;
 
@@ -61,6 +61,11 @@ public class Model{
     }
     public SongList getPlaylist(){
         return this.playlist;
+    }
+
+    public void setCurrent(Song cs)
+    {
+        this.current = cs;
     }
 
     //ermöglicht uns das auswählen eines Ordners mit Songs.
@@ -232,7 +237,8 @@ public class Model{
                 if(this.playlist.size() <= this.currentPlaylistSong)
                     this.currentPlaylistSong = 0;
                 //current = this.playlist.get(this.currentPlaylistSong);
-                //current.setTitle(this.playlist.get(this.currentPlaylistSong).getTitle());
+                current.setTitle(this.playlist.get(this.currentPlaylistSong).getTitle());
+                current.setInterpret(this.playlist.get(this.currentPlaylistSong).getInterpret());
                 mediaPlayer = new MediaPlayer(new Media(new File(this.playlist.get(this.currentPlaylistSong).getPath()).toURI().toString()));
                 mediaPlayer.setVolume(this.currentVolume);
                 mediaPlayer.setOnEndOfMedia(() -> {
@@ -240,7 +246,7 @@ public class Model{
                     this.currentPlaylistSong++;
                     playMp3(listviewsong, listviewplaylist);
                 });
-                System.out.println(this.currentPlaylistSong);
+                //System.out.println(this.currentPlaylistSong);
                 listviewplaylist.getSelectionModel().select(this.currentPlaylistSong);
                 mediaPlayer.play();
             } else
@@ -252,7 +258,9 @@ public class Model{
             if (listviewsong != null && listviewsong.getFocusModel().isFocused(listviewsong.getSelectionModel().getSelectedIndex())) {
                 if(mediaPlayer == null || mediaPlayer.getCurrentTime().equals(mediaPlayer.getTotalDuration()) || mediaPlayer.getStatus().equals(MediaPlayer.Status.STOPPED)) {
                     //current = this.songList.get(listviewsong.getSelectionModel().getSelectedIndex());
-                    mediaPlayer = new MediaPlayer(new Media(new File(this.songList.get(listviewsong.getSelectionModel().getSelectedIndex()).getPath()).toURI().toString()));
+                    current.setTitle(this.allsongs.get(listviewsong.getSelectionModel().getSelectedIndex()).getTitle());
+                    current.setTitle(this.allsongs.get(listviewsong.getSelectionModel().getSelectedIndex()).getInterpret());
+                    mediaPlayer = new MediaPlayer(new Media(new File(this.allsongs.get(listviewsong.getSelectionModel().getSelectedIndex()).getPath()).toURI().toString()));
                     mediaPlayer.setVolume(this.currentVolume);
                     mediaPlayer.play();
                 } else
@@ -268,10 +276,10 @@ public class Model{
             mediaPlayer.pause();
     }
 
-   /* public CurrentSong getCurrent()
+    public Song getCurrent()
     {
         return current;
-    }*/
+    }
 
     public void nextMP3(ListView<Song> listviewplaylist){
         if(this.playlist.size() > 1)
