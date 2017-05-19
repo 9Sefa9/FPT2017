@@ -288,7 +288,6 @@ public class Model{
             if(mediaPlayer != null) {
                 this.mediaPlayer.stop();
                 this.mediaPlayer = null;
-                //this.playlist.remove(0);
                 this.currentPlaylistSong++;
                 this.playMp3(null, listviewplaylist);
             }
