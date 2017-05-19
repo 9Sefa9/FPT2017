@@ -61,8 +61,6 @@ public class View extends BorderPane{
         rightframe.add(commit,0,7);
 
 
-
-
         addtoplaylist = new Button("Add to Playlist");
         addtoplaylist.setPadding(new Insets(10,20,10,20));
         rightframe.add(addtoplaylist,0,8);
