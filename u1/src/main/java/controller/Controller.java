@@ -62,11 +62,7 @@ public class Controller{
             //ladet die Playlist und packt es in die Playlist-View
             this.view.load.setOnAction(e -> this.model.handleLoadPlaylist(this.model.getPlaylist().list));
 
-            this.view.play.setOnAction(e -> {
-                this.model.playMp3(this.view.listviewsong, this.view.listviewplaylist);
-                //this.view.setCurrentTitle(this.model.getCurrent().getTitle());
-                //this.view.setCurrentInterpret(this.model.getCurrent().getInterpret());
-            });
+            this.view.play.setOnAction(e -> {this.model.playMp3(this.view.listviewsong, this.view.listviewplaylist);});
 
             this.view.pause.setOnAction(e -> this.model.pauseMp3());
 

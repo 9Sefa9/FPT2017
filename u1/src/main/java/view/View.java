@@ -107,10 +107,8 @@ public class View extends BorderPane{
         choicebox.getItems().addAll("Example1","Example2","Example3");
         upperframe.add(choicebox,0,0);
         upperframe.setHgap(30);
-        upperframe.setVgap(5);
 
         //downframe
-        //downframe.addColumn(2);
         downframe.setVgap(30);
         downframe.setHgap(30);
 
