@@ -14,12 +14,11 @@ import model.SongList;
 public class View extends BorderPane{
 
     public ListView<Song> listviewsong,listviewplaylist;
-    public Button addsongs,load,save,addtoplaylist,commit,play,pause,next;
+    public Button addsongs,load,save,addtoplaylist,deletesong,commit,play,pause,next;
     public ChoiceBox<String> choicebox;
     private GridPane upperframe,downframe,rightframe;
     public TextField title,interpret,album;
     private Text titleText, intepretText, albumText;
-    public ProgressBar p;
     public View(){
         setMaxSize(1024,1024);
 
@@ -65,6 +64,9 @@ public class View extends BorderPane{
         addtoplaylist.setPadding(new Insets(10,20,10,20));
         rightframe.add(addtoplaylist,0,8);
 
+        deletesong = new Button("Delete Song");
+        deletesong.setPadding(new Insets(10,20,10,20));
+        rightframe.add(deletesong,0,9);
 
 
         rightframe.setHgap(10);
