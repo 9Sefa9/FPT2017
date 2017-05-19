@@ -36,10 +36,7 @@ public class Model{
     private MediaPlayer mediaPlayer;
     private double currentVolume = 1;
     private int currentPlaylistSong = 0;
-    private Media m;
     private Song current;
-    private ObservableValue<Song> observer;
-    private int indexForSongs;
 
     public Model(){
         //mediaPlayer = new MediaPlayer(new Media(""));
@@ -133,6 +130,17 @@ public class Model{
         this.playlist.addAll(songs);
 
     }
+
+
+
+
+    public void deletesongFromPlaylist(ListView<Song> listviewplaylist){
+        if(listviewplaylist.getSelectionModel().isSelected(listviewplaylist.getSelectionModel().getSelectedIndex()))
+            this.playlist.remove(currentPlaylistSong);
+    }
+
+
+
 
     //Die Pfade der Lieder im Playlist, werden in eine *.pl Datei abgespeichert.
     public void handleSavePlaylist(ArrayList<Song> songs){

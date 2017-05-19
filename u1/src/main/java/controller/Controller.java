@@ -55,6 +55,7 @@ public class Controller{
             //SetOnAction Methode für das hinzufügen der selektiv ausgewählten Song´s in die Playlist View
             this.view.addtoplaylist.setOnAction(e -> this.model.handleAddToPlaylistButton(this.view.getSelectedSongs()));
 
+            this.view.deletesong.setOnAction(e -> this.model.deletesongFromPlaylist(this.view.listviewplaylist));
             //Speichert die Playlist in eine *.ps Datei ab.
             this.view.save.setOnAction(e -> this.model.handleSavePlaylist(this.model.getPlaylist().list));
 
@@ -99,6 +100,7 @@ public class Controller{
             //this.mp.currentTimeProperty().addListener((o, oldV, newV) -> this.view.getSongSlider().setValue((newV.toSeconds()/this.mp.getTotalDuration().toSeconds())));
 
             this.view.getSongSlider().setOnMouseClicked(e -> this.model.getMediaPlayer().seek(new Duration(this.view.getSongSlider().getValue()*this.model.getMediaPlayer().getTotalDuration().toMillis())));
+
 
         }catch(Exception e){
             System.out.println("Exception in CONTROLLER-L-METHOD");

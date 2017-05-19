@@ -67,7 +67,7 @@ public class View extends BorderPane{
 
         deletesong = new Button("Delete Song");
         deletesong.setPadding(new Insets(10,20,10,20));
-        rightframe.add(deletesong,0,9);
+        rightframe.add(deletesong,0,11);
 
         VBox vBox = new VBox(5);
         vBox.setMinWidth(200);
