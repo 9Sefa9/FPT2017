@@ -68,12 +68,10 @@ public class View extends BorderPane{
         deletesong.setPadding(new Insets(10,20,10,20));
         rightframe.add(deletesong,0,9);
 
-
         rightframe.setHgap(10);
         rightframe.setVgap(10);
 
         rightframe.getColumnConstraints().add(new ColumnConstraints(125));
-
 
 
         //upperframe
