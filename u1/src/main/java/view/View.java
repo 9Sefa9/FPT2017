@@ -12,16 +12,16 @@ import javafx.scene.text.Text;
 import model.SongList;
 
 public class View extends BorderPane{
-    public ListView<Song> listviewsong,listviewplaylist;
-    public Button addsongs,load,save,addtoplaylist,deletesong,commit,play,pause,next;
-    public Slider volumeSlider, songSlider;
+    private ListView<Song> listviewsong,listviewplaylist;
+    private Button addsongs,load,save,addtoplaylist,deletesong,commit,play,pause,next;
+    private Slider volumeSlider, songSlider;
     private ChoiceBox<String> choicebox;
     private GridPane upperframe,downframe,rightframe;
-    public TextField title,interpret,album;
+    private TextField title,interpret,album;
     private Text titleText, intepretText, albumText, currentTitle, currentInterpret;
+
     public View(){
         setMaxSize(1024,1024);
-
         //instanziierungen
         choicebox = new ChoiceBox<>();
         listviewsong = new ListView<>();
@@ -31,6 +31,44 @@ public class View extends BorderPane{
 
         upperframe = new GridPane();
         downframe = new GridPane();
+
+        //downframe
+        downframe.setVgap(30);
+        downframe.setHgap(30);
+
+        next = new Button("→");
+        next.setPadding(new Insets(10,20,10,20));
+        downframe.add(next,3,0);
+
+        play = new Button("►");
+        play.setPadding(new Insets(10,20,10,20));
+        downframe.add(play,5,0);
+
+        pause = new Button("||");
+        pause.setPadding(new Insets(10,20,10,20));
+        downframe.add(pause,7,0);
+
+        addsongs= new Button("Add Songs");
+        addsongs.setPadding(new Insets(10,10,10,10));
+        downframe.add(addsongs,0,0);
+
+        volumeSlider = new Slider(0, 100, 100);
+
+        downframe.add(volumeSlider, 9, 0);
+
+        //upperframe
+        load = new Button("Load");
+        load.setPadding(new Insets(10,10,10,10));
+        upperframe.add(load,2,0);
+
+        save = new Button("Save");
+        save.setPadding(new Insets(10,10,10,10));
+        upperframe.add(save,3,0);
+
+        choicebox.setPadding(new Insets(5,5,5,160));
+        choicebox.getItems().addAll("Example1","Example2","Example3");
+        upperframe.add(choicebox,0,0);
+        upperframe.setHgap(30);
 
         //rightframe
         rightframe.setMinSize(200,500);
@@ -74,13 +112,10 @@ public class View extends BorderPane{
 
         currentTitle = new Text("");
         currentTitle.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 20));
-        //rightframe.add(currentTitle, 0, 9);
         currentInterpret = new Text("");
         currentTitle.setFont(new Font(15));
-        //rightframe.add(currentInterpret, 0, 10);
 
         songSlider = new Slider(0, 1, 0);
-        // songSlider.setVisible(false);
 
         vBox.setPadding(new Insets(40, 0, 0, 0));
         vBox.setAlignment(Pos.TOP_CENTER);
@@ -93,46 +128,7 @@ public class View extends BorderPane{
         rightframe.getColumnConstraints().add(new ColumnConstraints(125));
         setRight(rightframe);
 
-
-        //upperframe
-        load = new Button("Load");
-        load.setPadding(new Insets(10,10,10,10));
-        upperframe.add(load,2,0);
-
-        save = new Button("Save");
-        save.setPadding(new Insets(10,10,10,10));
-        upperframe.add(save,3,0);
-
-        choicebox.setPadding(new Insets(5,5,5,160));
-        choicebox.getItems().addAll("Example1","Example2","Example3");
-        upperframe.add(choicebox,0,0);
-        upperframe.setHgap(30);
-
-        //downframe
-        downframe.setVgap(30);
-        downframe.setHgap(30);
-
-        next = new Button("→");
-        next.setPadding(new Insets(10,20,10,20));
-        downframe.add(next,3,0);
-
-        play = new Button("►");
-        play.setPadding(new Insets(10,20,10,20));
-        downframe.add(play,5,0);
-
-        pause = new Button("||");
-        pause.setPadding(new Insets(10,20,10,20));
-        downframe.add(pause,7,0);
-
-        addsongs= new Button("Add Songs");
-        addsongs.setPadding(new Insets(10,10,10,10));
-        downframe.add(addsongs,0,0);
-
-        volumeSlider = new Slider(0, 100, 100);
-       // volumeSlider.setPrefWidth(200);
-        downframe.add(volumeSlider, 9, 0);
-
-
+        //Alignment
         setBottom(downframe);
         setTop(upperframe);
         setCenter(listviewplaylist);
@@ -140,55 +136,50 @@ public class View extends BorderPane{
 
     }
 
-    //vielleicht ist es garkeine funktionalität...
-
+    //getter
     public Button getAddall() {
         return addsongs;
     }
-
     public Button getLoad() {
         return load;
     }
-
-    public void updateLVSong(SongList sl)
-    {
-        listviewsong.getItems().removeAll(listviewsong.getItems());
-        for (Song s : sl)
-        {
-            listviewsong.getItems().add(s);
-        }
-    }
-
-    public void updateLVPlaylist(SongList sl)
-    {
-        listviewplaylist.getItems().removeAll(listviewplaylist.getItems());
-        for (Song s : sl)
-        {
-            listviewplaylist.getItems().add(s);
-        }
-    }
-
+    public Button getAddsongs(){return addsongs;}
+    public Button getDeletesong(){return deletesong;}
+    public Button getSave(){return save;}
+    public Button getAddtoplaylist(){return addtoplaylist;}
+    public Button getCommit(){return commit;}
+    public Button getPlay(){return play;}
+    public Button getPause(){return pause;}
+    public Button getNext(){return next;}
+    public ListView<Song> getListviewsong(){return listviewsong;}
+    public ListView<Song> getListviewplaylist(){return listviewplaylist;}
+    public Slider getVolumeSlider(){return volumeSlider;}
+    public Slider getSlider(){return songSlider;}
+    public ChoiceBox<String> getChoicebox(){return choicebox;}
+    public TextField getTitle(){return title;}
+    public TextField getInterpret(){return interpret;}
+    public TextField getAlbum(){return album;}
     public ObservableList<Song> getSelectedSongs() {
 
         return listviewsong.getSelectionModel().getSelectedItems();
     }
+    public Slider getSongSlider(){
+        return songSlider;
+    }
 
+    //setter
     public void setCurrentTitle(String title)
     {
         this.currentTitle.setText(title);
     }
-
     public void setCurrentInterpret(String interpret)
     {
         this.currentInterpret.setText(interpret);
     }
-
     public void setSliderVisibility(Boolean value){
         this.songSlider.setVisible(value);
     }
 
-    public Slider getSongSlider(){
-        return songSlider;
-    }
+
 
 }

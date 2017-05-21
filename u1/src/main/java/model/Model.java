@@ -1,22 +1,13 @@
-/**
- * Created by Sefa on 05.05.2017.
- */
 package model;
 
 import com.mpatric.mp3agic.*;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-
 import java.io.*;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -24,7 +15,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import model.Song;
 
 public class Model{
     private SongList allsongs,playlist,songList;
@@ -38,39 +28,48 @@ public class Model{
     private int currentPlaylistSong = 0;
     private Song current;
 
-    public Model(){
-        //mediaPlayer = new MediaPlayer(new Media(""));
-    }
-
+    //setter
     public void setAllsongs(SongList allsongs){
         this.allsongs = allsongs;
 
     }
-    public SongList getAllsongs(){
-        return this.allsongs;
-    }
     public void setPlaylist(SongList playlist){
         this.playlist = playlist;
     }
-    public SongList getPlaylist(){
-        return this.playlist;
-    }
-
     public void setCurrent(Song cs)
     {
         this.current = cs;
     }
 
+    //getter
+    public SongList getAllsongs(){
+        return this.allsongs;
+    }
+    public SongList getPlaylist(){
+        return this.playlist;
+    }
     public MediaPlayer getMediaPlayer()
     {
         return mediaPlayer;
     }
 
+    public void updateLVSong(SongList sl,ListView<Song> listviewsong,ListView<Song> listviewplaylist)
+    {
+        listviewsong.getItems().removeAll(listviewsong.getItems());
+        for (Song s : sl)
+            listviewsong.getItems().add(s);
+    }
+
+    public void updateLVPlaylist(SongList sl,ListView<Song> listviewsong,ListView<Song> listviewplaylist)
+    {
+        listviewplaylist.getItems().removeAll(listviewplaylist.getItems());
+        for (Song s : sl)
+            listviewplaylist.getItems().add(s);
+    }
+
     //ermöglicht uns das auswählen eines Ordners mit Songs.
     public void handleAddSongsButton(){
 
-           // mp3listSong = new ArrayList<>();
-           // mp3listPlaylist = new ArrayList<>();
             dirChooser = new DirectoryChooser();
             dirChooser.setTitle("Select directory with mp3 files..");
 
@@ -83,7 +82,7 @@ public class Model{
                 for (Path p : stream) {
                     String name = p.getFileName().toString();
                     if (name.endsWith(".mp3")) {
-                        //sollte vielleicht später public gemacht werden
+
                         String track, interpret, album;
                         interpret = "";
                         album = "";
@@ -99,11 +98,7 @@ public class Model{
                             if (id3v2.getAlbum() != null)
                                 album = id3v2.getAlbum();
                         }
-                        //m = new Media(new File(songPath).toURI().toString());
-                        //mediaPlayer = new MediaPlayer(m);
 
-                        //speichert sowohl Song als auch die abspiel faehigkeit
-                        //mp3listSong.add(mediaPlayer);
                         songList.add(new Song(songPath, track, album, interpret));
                     }
                 }
@@ -210,13 +205,11 @@ public class Model{
 
             songFromPLFile = new ArrayList<>();
 
-            Mp3File loadmp3 = null;
             String loadsongpath ="";
-            String loadtrack="", loadinterpret="", loadalbum="", loadname="";
+            String loadtrack="", loadinterpret="", loadalbum="";
 
             while((loadsongpath= br.readLine())!= null) {
-                loadmp3 = new Mp3File(loadsongpath);
-                loadname = loadsongpath;
+
                 loadtrack = loadsongpath.substring(0, loadsongpath.length() - 4);//loadname.substring(0, loadname.length() - 4);
                 String lt = loadtrack.replace("\\", "\\\\");
                 String[] name =lt.split("\\\\");
@@ -245,17 +238,17 @@ public class Model{
             if(mediaPlayer == null || mediaPlayer.getCurrentTime().equals(mediaPlayer.getTotalDuration()) || mediaPlayer.getStatus().equals(MediaPlayer.Status.STOPPED)) {
                 if(this.playlist.size() <= this.currentPlaylistSong)
                     this.currentPlaylistSong = 0;
-                //current = this.playlist.get(this.currentPlaylistSong);
+
                 mediaPlayer = new MediaPlayer(new Media(new File(this.playlist.get(this.currentPlaylistSong).getPath()).toURI().toString()));
                 current.setTitle(this.playlist.get(this.currentPlaylistSong).getTitle());
                 current.setInterpret(this.playlist.get(this.currentPlaylistSong).getInterpret());
                 mediaPlayer.setVolume(this.currentVolume);
                 mediaPlayer.setOnEndOfMedia(() -> {
-                    //playlist.remove(0);
+
                     this.currentPlaylistSong++;
                     playMp3(listviewsong, listviewplaylist);
                 });
-                //System.out.println(this.currentPlaylistSong);
+
                 listviewplaylist.getSelectionModel().select(this.currentPlaylistSong);
                 mediaPlayer.play();
             } else
@@ -266,7 +259,6 @@ public class Model{
         } else
             if (listviewsong != null && listviewsong.getFocusModel().isFocused(listviewsong.getSelectionModel().getSelectedIndex())) {
                 if(mediaPlayer == null || mediaPlayer.getCurrentTime().equals(mediaPlayer.getTotalDuration()) || mediaPlayer.getStatus().equals(MediaPlayer.Status.STOPPED)) {
-                    //current = this.songList.get(listviewsong.getSelectionModel().getSelectedIndex());
                     mediaPlayer = new MediaPlayer(new Media(new File(this.allsongs.get(listviewsong.getSelectionModel().getSelectedIndex()).getPath()).toURI().toString()));
                     current.setTitle(this.allsongs.get(listviewsong.getSelectionModel().getSelectedIndex()).getTitle());
                     current.setInterpret(this.allsongs.get(listviewsong.getSelectionModel().getSelectedIndex()).getInterpret());

@@ -74,7 +74,6 @@ public class Song implements interfaces.Song{
         this.setPath(s);
         this.title = title;
         this.pathp.set(title);
-        //System.out.println(this.pathp.getValue());
     }
 
     @Override
