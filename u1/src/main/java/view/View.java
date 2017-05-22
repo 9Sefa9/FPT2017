@@ -18,7 +18,13 @@ public class View extends BorderPane{
     private ChoiceBox<String> choicebox;
     private GridPane upperframe,downframe,rightframe;
     private TextField title,interpret,album;
-    private Text titleText, intepretText, albumText, currentTitle, currentInterpret;
+    private Text titleText;
+    private Text intepretText;
+    private Text albumText;
+    private Text currentTitle;
+    private Text currentInterpret;
+    private Text songTime;
+    private Text songDuration;
 
     public View(){
         setMaxSize(1024,1024);
@@ -117,9 +123,16 @@ public class View extends BorderPane{
 
         songSlider = new Slider(0, 1, 0);
 
+        HBox hBox = new HBox(150);
+
+        songTime = new Text("0:00");
+        songDuration = new Text("0:00");
+        //hBox.setAlignment(P);
+        hBox.getChildren().addAll(songTime, songDuration);
+
         vBox.setPadding(new Insets(40, 0, 0, 0));
         vBox.setAlignment(Pos.TOP_CENTER);
-        vBox.getChildren().addAll(currentTitle, currentInterpret, songSlider);
+        vBox.getChildren().addAll(currentTitle, currentInterpret, songSlider, hBox);
         rightframe.add(vBox, 0, 9);
 
         rightframe.setHgap(10);
@@ -178,6 +191,21 @@ public class View extends BorderPane{
     }
     public void setSliderVisibility(Boolean value){
         this.songSlider.setVisible(value);
+    }
+    public Text getSongTime() {
+        return songTime;
+    }
+
+    public void setSongTime(Text songTime) {
+        this.songTime = songTime;
+    }
+
+    public Text getSongDuration() {
+        return songDuration;
+    }
+
+    public void setSongDuration(Text songDuration) {
+        this.songDuration = songDuration;
     }
 
 

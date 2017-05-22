@@ -83,7 +83,12 @@ public class Controller{
             //song slider
             this.cs.pathProperty().addListener((v, oldV, newV) -> {
                 this.view.setCurrentTitle(this.model.getCurrent().getTitle());
-                this.model.getMediaPlayer().currentTimeProperty().addListener((o, oldVa, newVa) -> this.view.getSongSlider().setValue((newVa.toSeconds()/this.model.getMediaPlayer().getTotalDuration().toSeconds())));
+                //System.out.println(this.model.getMediaPlayer().get);
+                this.model.getMediaPlayer().currentTimeProperty().addListener((o, oldVa, newVa) -> {
+                    this.view.getSongSlider().setValue((newVa.toSeconds()/this.model.getMediaPlayer().getTotalDuration().toSeconds()));
+                    this.view.getSongTime().setText((int)newVa.toMinutes() + ":" + this.songDurationToSecString(newVa));
+                    this.view.getSongDuration().setText((int)this.model.getMediaPlayer().getTotalDuration().toMinutes() + ":" + this.songDurationToSecString(this.model.getMediaPlayer().getTotalDuration()));
+                });
             });
 
             //interpreter setten
@@ -98,6 +103,25 @@ public class Controller{
             e.printStackTrace();
         }
 
+    }
+
+    public String songDurationToSecString(Duration dur)
+    {
+        int secs = (int)dur.toSeconds();
+        String sec;
+        while(secs > 59)
+        {
+            secs = secs - 60;
+        }
+        if(secs < 10)
+        {
+            sec = "0" + Integer.toString(secs);
+        }
+        else
+        {
+            sec = Integer.toString(secs);
+        }
+        return sec;
     }
 
 }
