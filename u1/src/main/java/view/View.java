@@ -9,13 +9,11 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
-import model.SongList;
 
 public class View extends BorderPane{
     private ListView<Song> listviewsong,listviewplaylist;
     private Button addsongs,load,save,addtoplaylist,deletesong,commit,play,pause,next;
     private Slider volumeSlider, songSlider;
-    private ChoiceBox<String> choicebox;
     private GridPane upperframe,downframe,rightframe;
     private TextField title,interpret,album;
     private Text titleText;
@@ -29,7 +27,6 @@ public class View extends BorderPane{
     public View(){
         setMaxSize(1024,1024);
         //instanziierungen
-        choicebox = new ChoiceBox<>();
         listviewsong = new ListView<>();
         listviewsong.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         listviewplaylist = new ListView<>();
@@ -71,10 +68,10 @@ public class View extends BorderPane{
         save.setPadding(new Insets(10,10,10,10));
         upperframe.add(save,3,0);
 
-        choicebox.setPadding(new Insets(5,5,5,160));
-        choicebox.getItems().addAll("Example1","Example2","Example3");
-        upperframe.add(choicebox,0,0);
-        upperframe.setHgap(30);
+      //  choicebox.setPadding(new Insets(5,5,5,160));
+       // choicebox.getItems().addAll("Example1","Example2","Example3");
+       // upperframe.add(choicebox,0,0);
+        upperframe.setHgap(25);
 
         //rightframe
         rightframe.setMinSize(200,500);
@@ -125,9 +122,9 @@ public class View extends BorderPane{
 
         HBox hBox = new HBox(150);
 
+        //Song durations
         songTime = new Text("0:00");
         songDuration = new Text("0:00");
-        //hBox.setAlignment(P);
         hBox.getChildren().addAll(songTime, songDuration);
 
         vBox.setPadding(new Insets(40, 0, 0, 0));
@@ -139,9 +136,10 @@ public class View extends BorderPane{
         rightframe.setVgap(10);
 
         rightframe.getColumnConstraints().add(new ColumnConstraints(125));
-        setRight(rightframe);
 
-        //Alignment
+
+        //Alignments
+        setRight(rightframe);
         setBottom(downframe);
         setTop(upperframe);
         setCenter(listviewplaylist);
@@ -168,7 +166,6 @@ public class View extends BorderPane{
     public ListView<Song> getListviewplaylist(){return listviewplaylist;}
     public Slider getVolumeSlider(){return volumeSlider;}
     public Slider getSlider(){return songSlider;}
-    public ChoiceBox<String> getChoicebox(){return choicebox;}
     public TextField getTitle(){return title;}
     public TextField getInterpret(){return interpret;}
     public TextField getAlbum(){return album;}
@@ -195,15 +192,12 @@ public class View extends BorderPane{
     public Text getSongTime() {
         return songTime;
     }
-
     public void setSongTime(Text songTime) {
         this.songTime = songTime;
     }
-
     public Text getSongDuration() {
         return songDuration;
     }
-
     public void setSongDuration(Text songDuration) {
         this.songDuration = songDuration;
     }

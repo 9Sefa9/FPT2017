@@ -80,7 +80,7 @@ public class Controller{
                 }
             });
 
-            //song slider
+            //song slider und Minuten/Sekunden anzeiger
             this.cs.pathProperty().addListener((v, oldV, newV) -> {
                 this.view.setCurrentTitle(this.model.getCurrent().getTitle());
                 //System.out.println(this.model.getMediaPlayer().get);
