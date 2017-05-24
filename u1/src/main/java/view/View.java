@@ -16,6 +16,7 @@ public class View extends BorderPane{
     private Slider volumeSlider, songSlider;
     private GridPane upperframe,downframe,rightframe;
     private TextField title,interpret,album;
+    private Text playlistText;
     private Text titleText;
     private Text intepretText;
     private Text albumText;
@@ -71,6 +72,9 @@ public class View extends BorderPane{
       //  choicebox.setPadding(new Insets(5,5,5,160));
        // choicebox.getItems().addAll("Example1","Example2","Example3");
        // upperframe.add(choicebox,0,0);
+        playlistText = new Text("Playlist");
+        playlistText.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+        upperframe.add(playlistText,9,0);
         upperframe.setHgap(25);
 
         //rightframe
