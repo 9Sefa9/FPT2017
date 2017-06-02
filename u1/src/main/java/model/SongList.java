@@ -109,4 +109,13 @@ public class SongList extends ModifiableObservableListBase<Song> implements inte
     public String toString() {
         return this.list.toString();
     }
+
+    public Song findSongByID(long id){
+        for(Song u: list){
+            if(u.getUniqueID() == id){
+                return u;
+            }
+        }
+        return null;
+    }
 }
