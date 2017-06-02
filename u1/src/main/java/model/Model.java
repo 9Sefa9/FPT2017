@@ -8,6 +8,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import strategyPattern.BinaryStrategy;
 import strategyPattern.IDGenerator;
 import strategyPattern.IDOverFlowException;
 
@@ -221,6 +222,22 @@ public class Model{
 
     //Die save Methode bekommt die Songs und einen pfad zum speichern einer "*.pl" datei.
     private void save(ArrayList<Song> songs,String path){
+
+        BinaryStrategy bs = null;
+        try{
+                bs = new BinaryStrategy();
+                for(Song i: playlist){
+                bs.writeSong(i);
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+
+
+
+        /*
         try( BufferedWriter bw = new BufferedWriter(new FileWriter(path))){
             for (Song song : songs) {
                 bw.write(song.getPath() + "\n");
@@ -230,6 +247,7 @@ public class Model{
             System.out.println("Exception in MODEL-S-METHOD");
             i.printStackTrace();
         }
+        */
     }
 
     //Die load Methode ladet die Songs aus der Festplatte zum Programm.

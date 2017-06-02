@@ -7,7 +7,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 
-public class Song implements interfaces.Song{
+import java.io.*;
+
+public class Song implements interfaces.Song, Externalizable {
 
     private String path = "",title = "",album = "",interpreter = "";
     private StringProperty pathp, albump, interpreterp;
@@ -115,5 +117,15 @@ public class Song implements interfaces.Song{
         if (this.album != null && !this.album.equals(""))
             output = output + " (" + this.album + ")";
         return output;
+    }
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+
     }
 }
