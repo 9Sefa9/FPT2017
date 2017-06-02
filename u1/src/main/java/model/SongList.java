@@ -93,6 +93,7 @@ public class SongList extends ModifiableObservableListBase<Song> implements inte
         this.list.add(index, element);
     }
 
+
     @Override
     protected Song doSet(int index, Song element) {
         this.list.set(index, element);
