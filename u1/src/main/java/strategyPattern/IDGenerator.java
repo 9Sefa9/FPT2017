@@ -1,9 +1,5 @@
 package strategyPattern;
 
-import model.SongList;
-
-import java.util.Random;
-
 public class IDGenerator {
     
     private static int id;
