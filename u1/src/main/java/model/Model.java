@@ -8,6 +8,9 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import strategyPattern.IDGenerator;
+import strategyPattern.IDOverFlowException;
+
 import java.io.*;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -68,6 +71,7 @@ public class Model{
     }
 
     //ermöglicht uns das auswählen eines Ordners mit Songs.
+    //Jeder Song hat eine Unique-ID, beim überschreiten gibt es ein Exception.
     public void handleAddSongsButton(){
 
             dirChooser = new DirectoryChooser();
@@ -99,16 +103,45 @@ public class Model{
                                 album = id3v2.getAlbum();
                         }
 
-                        songList.add(new Song(songPath, track, album, interpret));
+                        try{
+                            Song test = new Song(songPath, track, album, interpret, IDGenerator.getNextID());
+                           System.out.println(test.getUniqueID());
+
+                            songList.add(test);
+                        } catch(IDOverFlowException e){
+
+                            ArrayList<Long> intArr = new ArrayList<>();
+                            for (int k = 1; k<=9999; k++)
+                            {
+                                intArr.add((long)k);
+                            }
+                            for(int i = 0; i<=songList.size();i++)
+                            {
+                                if(intArr.size() == 0)
+                                    break;
+
+                                if(intArr.contains(songList.get(i).getUniqueID())){
+                                    intArr.remove(songList.get(i).getUniqueID());
+                                }
+                            }
+
+                            if(!intArr.isEmpty())
+                            {
+                                songList.add(new Song(songPath, track, album, interpret, intArr.get(0)));
+                            }
+                            else
+                                System.out.println("");
+
+                            e.printStackTrace();
+                        }
                     }
                 }
                 this.allsongs.setAll(songList);
-            } catch (Exception e) {
+            }
+            catch (Exception e ) {
                 System.out.println("Exception in MODEL-HASB-METHOD");
                 e.printStackTrace();
             }
-            }catch(Exception e)
-            {
 
             }finally{
                 //falls kein Pfad ausgegeben wurde: setze es auf null
@@ -216,7 +249,8 @@ public class Model{
                 System.out.println(name[name.length-1]);
                 System.out.println(loadtrack);
 
-                songFromPLFile.add(new Song(loadsongpath, name[name.length-1], loadalbum, loadinterpret));
+                //vorerst, new Id
+                songFromPLFile.add(new Song(loadsongpath, name[name.length-1], loadalbum, loadinterpret,IDGenerator.getNextID()));
             }
 
             this.playlist.addAll(songFromPLFile);

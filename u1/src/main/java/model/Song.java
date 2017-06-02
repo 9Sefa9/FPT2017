@@ -11,13 +11,15 @@ public class Song implements interfaces.Song{
 
     private String path = "",title = "",album = "",interpreter = "";
     private StringProperty pathp, albump, interpreterp;
+    private long id;
 
-    public Song(String path, String title, String album, String interpreter)
+    public Song(String path, String title, String album, String interpreter,long id)
     {
         this.path = path;
         this.title = title;
         this.album = album;
         this.interpreter = interpreter;
+        this.id = id;
         this.setProps();
     }
 
@@ -29,6 +31,10 @@ public class Song implements interfaces.Song{
         this.pathp = new SimpleStringProperty(this, "pathp", this.title);
         this.albump = new SimpleStringProperty(this, "albump", this.album);
         this.interpreterp = new SimpleStringProperty(this, "interpreterp", this.interpreter);
+    }
+
+    public Long getUniqueID(){
+        return this.id;
     }
 
     @Override
