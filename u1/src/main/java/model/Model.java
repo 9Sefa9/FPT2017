@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class Model{
     private SongList allsongs,playlist,songList;
-    private File file;
+    private File file,fileSave,fileLoad;
     private Path dir;
     private DirectoryChooser dirChooser;
     private FileChooser fileChooser;
@@ -181,13 +181,13 @@ public class Model{
             fileChooser.getExtensionFilters().add(extFilter);
 
             //zeigt den "save" Fenster
-            File file = fileChooser.showSaveDialog(new Stage());
-            fileChooser.setTitle("Save Playlist in" +file.getPath());
+            fileSave = fileChooser.showSaveDialog(new Stage());
+            fileChooser.setTitle("Save Playlist in" +fileSave.getPath());
 
             //solange fenster offen
-            if(file!=null)
+            if(fileSave!=null)
                 //speichere die Datei mit dem extension "*.pl"
-                save(songs,file.getPath());
+                save(songs,fileSave.getPath());
         }
         catch(Exception e) {
             System.out.println("Exception in HATPB-METHOD");
@@ -195,7 +195,6 @@ public class Model{
         }
 
     }
-
     public void handleLoadPlaylist(ArrayList<Song> songs){
         try{
             fileChooser = new FileChooser();
@@ -205,13 +204,13 @@ public class Model{
             fileChooser.getExtensionFilters().add(extFilter);
 
             //zeigt den "save" Fenster
-            File file = fileChooser.showOpenDialog(new Stage());
-            fileChooser.setTitle("Load *.pl file from: "+file.getPath());
+            fileLoad = fileChooser.showOpenDialog(new Stage());
+            fileChooser.setTitle("Load *.pl file from: "+fileLoad.getPath());
 
             //solange fenster offen
-            if(file!=null)
+            if(fileLoad!=null)
                 //ladet die Datei mit dem extension "*.pl"
-                load(file.getPath());
+                load(fileLoad.getPath());
         }
         catch(Exception e) {
             System.out.println("Exception in HATPB-METHOD");
@@ -225,7 +224,8 @@ public class Model{
 
         BinaryStrategy bs = null;
         try{
-                bs = new BinaryStrategy();
+            //arbeiten mit konstruktor ?
+                bs = new BinaryStrategy(path);
                 for(Song i: playlist){
                 bs.writeSong(i);
             }
@@ -233,9 +233,6 @@ public class Model{
         catch(Exception e){
             e.printStackTrace();
         }
-
-
-
 
         /*
         try( BufferedWriter bw = new BufferedWriter(new FileWriter(path))){
