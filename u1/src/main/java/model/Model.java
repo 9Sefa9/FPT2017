@@ -224,7 +224,6 @@ public class Model{
 
         BinaryStrategy bs = null;
         try{
-            //arbeiten mit konstruktor ?
                 bs = new BinaryStrategy(path);
                 for(Song i: playlist){
                 bs.writeSong(i);
@@ -249,6 +248,19 @@ public class Model{
 
     //Die load Methode ladet die Songs aus der Festplatte zum Programm.
     private void load(String path){
+
+      BinaryStrategy bs = null;
+      try{
+          bs = new BinaryStrategy(path);
+          playlist = null;
+          //problem
+          playlist.add(bs.readSong());
+
+
+      }catch(Exception e){
+          e.printStackTrace();
+      }
+        /*
         try(BufferedReader br = new BufferedReader(new FileReader(path))){
 
             songFromPLFile = new ArrayList<>();
@@ -274,6 +286,7 @@ public class Model{
             e.printStackTrace();
 
         }
+        */
     }
 
     //abspielen der Mp3. für linke und rechte seite werden jeweils listen erstellt.

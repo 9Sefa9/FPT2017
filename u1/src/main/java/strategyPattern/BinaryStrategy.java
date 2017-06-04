@@ -48,7 +48,15 @@ public class BinaryStrategy implements SerializableStrategy, Externalizable{
 
     @Override
     public Song readSong() throws IOException, ClassNotFoundException {
-        return null;
+        Song readObject = null;
+        try(FileInputStream fi = new FileInputStream (this.path);
+        ObjectInputStream is = new ObjectInputStream (fi)) {
+            readObject = (Song) is.readObject();
+
+        }catch( ClassNotFoundException | IOException e ) {
+            e . printStackTrace ( ) ;
+        }
+        return readObject;
     }
 
     @Override
