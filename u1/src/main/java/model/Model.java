@@ -225,9 +225,9 @@ public class Model{
         BinaryStrategy bs = null;
         try{
                 bs = new BinaryStrategy(path);
-                for(Song i: playlist){
-                bs.writeSong(i);
-            }
+                //for(Song i: songs){
+               bs.writeSong(songs);
+
         }
         catch(Exception e){
             e.printStackTrace();
@@ -252,9 +252,15 @@ public class Model{
       BinaryStrategy bs = null;
       try{
           bs = new BinaryStrategy(path);
-          playlist = null;
-          //problem
-          playlist.add(bs.readSong());
+          Song newSong = (Song)bs.readSong();
+
+          String title = newSong.getTitle();
+          String pathh = newSong.getPath();
+          String album = newSong.getAlbum();
+          String interpret = newSong.getInterpret();
+          Long id = newSong.getUniqueID();
+
+          playlist.list.add(new Song(pathh, title, album, interpret,id));
 
 
       }catch(Exception e){

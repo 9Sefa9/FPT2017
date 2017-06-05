@@ -34,7 +34,6 @@ public class BinaryStrategy implements SerializableStrategy, Externalizable{
     @Override
     public void writeSong(Song s) throws IOException {
 
-
        try(FileOutputStream fos = new FileOutputStream(this.path);
            ObjectOutputStream oos = new ObjectOutputStream(fos)){
 
@@ -43,9 +42,7 @@ public class BinaryStrategy implements SerializableStrategy, Externalizable{
        }catch(Exception e){
            e.printStackTrace();
        }
-
     }
-
     @Override
     public Song readSong() throws IOException, ClassNotFoundException {
         Song readObject = null;
