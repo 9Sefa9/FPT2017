@@ -220,19 +220,19 @@ public class Model{
     }
 
     //Die save Methode bekommt die Songs und einen pfad zum speichern einer "*.pl" datei.
-    private void save(ArrayList<Song> songs,String path){
+    private void save(ArrayList<Song> songs,String path) {
 
         BinaryStrategy bs = null;
-        try{
-                bs = new BinaryStrategy(path);
-                //for(Song i: songs){
-               bs.writeSong(songs);
+        try {
+            bs = new BinaryStrategy(path);
+                bs.writeSong(songList);
 
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
+            }
+             catch(IOException e){
+                e.printStackTrace();
 
+            }
+        }
         /*
         try( BufferedWriter bw = new BufferedWriter(new FileWriter(path))){
             for (Song song : songs) {
@@ -244,7 +244,8 @@ public class Model{
             i.printStackTrace();
         }
         */
-    }
+
+
 
     //Die load Methode ladet die Songs aus der Festplatte zum Programm.
     private void load(String path){
@@ -252,15 +253,16 @@ public class Model{
       BinaryStrategy bs = null;
       try{
           bs = new BinaryStrategy(path);
-          Song newSong = (Song)bs.readSong();
 
+          SongList readSonglist = (SongList)bs.readSong();
+        /*
           String title = newSong.getTitle();
           String pathh = newSong.getPath();
           String album = newSong.getAlbum();
           String interpret = newSong.getInterpret();
           Long id = newSong.getUniqueID();
-
-          playlist.list.add(new Song(pathh, title, album, interpret,id));
+        */
+          this.songList = readSonglist;
 
 
       }catch(Exception e){
