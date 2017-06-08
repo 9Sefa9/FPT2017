@@ -106,7 +106,6 @@ public class Model{
 
                         try{
                             Song test = new Song(songPath, track, album, interpret, IDGenerator.getNextID());
-                           System.out.println(test.getUniqueID());
 
                             songList.add(test);
                         } catch(IDOverFlowException e){
@@ -224,13 +223,18 @@ public class Model{
 
         BinaryStrategy bs = null;
         try {
-            bs = new BinaryStrategy(path);
-                bs.writeSong(songList);
+            bs = new BinaryStrategy(path,songs);
+
+            bs.openWriteableSongs();
+            for(Song i : songs){
+                bs.writeSong(i);
+            }
+
+            bs.closeWriteable();
 
             }
              catch(IOException e){
                 e.printStackTrace();
-
             }
         }
         /*
@@ -254,7 +258,8 @@ public class Model{
       try{
           bs = new BinaryStrategy(path);
 
-          SongList readSonglist = (SongList)bs.readSong();
+          bs.openReadableSongs();
+          bs.closeReadable();
         /*
           String title = newSong.getTitle();
           String pathh = newSong.getPath();
@@ -262,8 +267,6 @@ public class Model{
           String interpret = newSong.getInterpret();
           Long id = newSong.getUniqueID();
         */
-          this.songList = readSonglist;
-
 
       }catch(Exception e){
           e.printStackTrace();
