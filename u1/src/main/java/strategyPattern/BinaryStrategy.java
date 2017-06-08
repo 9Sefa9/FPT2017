@@ -30,12 +30,17 @@ public class BinaryStrategy implements SerializableStrategy, Externalizable{
         fos = new FileOutputStream(savepath);
         oos = new ObjectOutputStream(fos);
 
+        for(Song i : songArray){
+            writeSong(i);
+        }
     }
 
     @Override
     public void openReadableSongs() throws IOException {
         fis = new FileInputStream(loadpath);
         ois = new ObjectInputStream(fis);
+        // vielleicht eine array rein packen
+
     }
 
     @Override
@@ -50,9 +55,7 @@ public class BinaryStrategy implements SerializableStrategy, Externalizable{
 
     @Override
     public void writeSong(Song s) throws IOException {
-
             oos.writeObject(s);
-            oos.flush();
     }
     @Override
     public Song readSong() throws IOException, ClassNotFoundException {
@@ -77,6 +80,7 @@ public class BinaryStrategy implements SerializableStrategy, Externalizable{
     @Override
     public void closeWriteable() {
             try{
+                    oos.flush();
                     fos.close();
                     oos.close();
             }catch(IOException e){

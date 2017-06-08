@@ -226,9 +226,6 @@ public class Model{
             bs = new BinaryStrategy(path,songs);
 
             bs.openWriteableSongs();
-            for(Song i : songs){
-                bs.writeSong(i);
-            }
 
             bs.closeWriteable();
 
@@ -249,8 +246,6 @@ public class Model{
         }
         */
 
-
-
     //Die load Methode ladet die Songs aus der Festplatte zum Programm.
     private void load(String path){
 
@@ -259,6 +254,9 @@ public class Model{
           bs = new BinaryStrategy(path);
 
           bs.openReadableSongs();
+
+          Song test = (Song)bs.readSong();
+          this.songList.add(test);
           bs.closeReadable();
         /*
           String title = newSong.getTitle();
