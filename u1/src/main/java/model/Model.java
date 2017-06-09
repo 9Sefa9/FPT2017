@@ -300,6 +300,7 @@ public class Model{
                     this.currentPlaylistSong = 0;
 
                 mediaPlayer = new MediaPlayer(new Media(new File(this.playlist.get(this.currentPlaylistSong).getPath()).toURI().toString()));
+                System.out.println(current);
                 current.setTitle(this.playlist.get(this.currentPlaylistSong).getTitle());
                 current.setInterpret(this.playlist.get(this.currentPlaylistSong).getInterpret());
                 mediaPlayer.setVolume(this.currentVolume);

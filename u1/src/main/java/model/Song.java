@@ -26,11 +26,15 @@ public class Song implements interfaces.Song, Externalizable {
         this.id = id;
        // this.setProps();
     }
-    /*
-    public Song(){
-        this.setProps();
-    }
 
+
+    public Song(){
+        this.title.set("");
+        this.path.set("");
+        this.album.set("");
+        this.interpreter.set("");
+    }
+    /*
     private void setProps(){
         this.pathp = new SimpleStringProperty(this, "pathp", this.title);
         this.albump = new SimpleStringProperty(this, "albump", this.album);
@@ -113,10 +117,10 @@ public class Song implements interfaces.Song, Externalizable {
     @Override
     public String toString() {
         String output = this.title.get();
-        if (this.interpreter != null && !this.interpreter.equals(""))
-            output = output  + " by " + this.interpreter;
-        if (this.album != null && !this.album.equals(""))
-            output = output + " (" + this.album + ")";
+        if (this.interpreter.get() != null && !this.interpreter.get().equals(""))
+            output = output  + " by " + this.interpreter.get();
+        if (this.album.get() != null && !this.album.get().equals(""))
+            output = output + " (" + this.album.get() + ")";
         return output;
     }
 
