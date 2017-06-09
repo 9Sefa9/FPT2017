@@ -227,6 +227,10 @@ public class Model{
 
             bs.openWriteableSongs();
 
+            for(Song i : songs) {
+                bs.writeSong(i);
+            }
+
             bs.closeWriteable();
 
             }
@@ -234,17 +238,6 @@ public class Model{
                 e.printStackTrace();
             }
         }
-        /*
-        try( BufferedWriter bw = new BufferedWriter(new FileWriter(path))){
-            for (Song song : songs) {
-                bw.write(song.getPath() + "\n");
-            }
-        }catch(IOException i){
-            System.out.println(path);
-            System.out.println("Exception in MODEL-S-METHOD");
-            i.printStackTrace();
-        }
-        */
 
     //Die load Methode ladet die Songs aus der Festplatte zum Programm.
     private void load(String path){
@@ -254,17 +247,13 @@ public class Model{
           bs = new BinaryStrategy(path);
 
           bs.openReadableSongs();
-
-          Song test = (Song)bs.readSong();
-          this.songList.add(test);
+          Song s;
+          while((s = (Song)bs.readSong()) != null)
+          {
+              songList.add(s);
+          }
           bs.closeReadable();
-        /*
-          String title = newSong.getTitle();
-          String pathh = newSong.getPath();
-          String album = newSong.getAlbum();
-          String interpret = newSong.getInterpret();
-          Long id = newSong.getUniqueID();
-        */
+
 
       }catch(Exception e){
           e.printStackTrace();
