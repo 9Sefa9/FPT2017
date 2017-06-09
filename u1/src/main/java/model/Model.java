@@ -154,7 +154,6 @@ public class Model{
 
     public void handleAddToPlaylistButton(ObservableList<Song> songs)
     {
-
         this.playlist.addAll(songs);
 
     }
@@ -166,8 +165,6 @@ public class Model{
         if(listviewplaylist.getSelectionModel().isSelected(listviewplaylist.getSelectionModel().getSelectedIndex()))
             this.playlist.remove(currentPlaylistSong);
     }
-
-
 
 
     //Die Pfade der Lieder im Playlist, werden in eine *.pl Datei abgespeichert.
@@ -231,8 +228,6 @@ public class Model{
                 bs.writeSong(i);
             }
 
-         //   bs.closeWriteable();
-
             }
              catch(IOException e){
                 e.printStackTrace();
@@ -258,33 +253,6 @@ public class Model{
       }catch(Exception e){
           e.printStackTrace();
       }
-        /*
-        try(BufferedReader br = new BufferedReader(new FileReader(path))){
-
-            songFromPLFile = new ArrayList<>();
-
-            String loadsongpath ="";
-            String loadtrack="", loadinterpret="", loadalbum="";
-
-            while((loadsongpath= br.readLine())!= null) {
-
-                loadtrack = loadsongpath.substring(0, loadsongpath.length() - 4);//loadname.substring(0, loadname.length() - 4);
-                String lt = loadtrack.replace("\\", "\\\\");
-                String[] name =lt.split("\\\\");
-                System.out.println(name[name.length-1]);
-                System.out.println(loadtrack);
-
-                //vorerst, new Id
-                songFromPLFile.add(new Song(loadsongpath, name[name.length-1], loadalbum, loadinterpret,IDGenerator.getNextID()));
-            }
-
-            this.playlist.addAll(songFromPLFile);
-
-         }catch(Exception e){
-            e.printStackTrace();
-
-        }
-        */
     }
 
     //abspielen der Mp3. für linke und rechte seite werden jeweils listen erstellt.
