@@ -218,14 +218,14 @@ public class Model{
 
     }
 
-    //Die save Methode bekommt die Songs und einen pfad zum speichern einer "*.pl" datei.
+    //Die save Methode bekommt die playlistSongs und einen pfad zum speichern einer "*.pl" datei.
     private void save(ArrayList<Song> songs,String path) {
 
         BinaryStrategy bs = null;
         try {
             bs = new BinaryStrategy(path,songs);
 
-            bs.openWriteableSongs();
+            bs.openWriteablePlaylist();
 
             for(Song i : songs) {
                 bs.writeSong(i);
@@ -239,18 +239,18 @@ public class Model{
             }
         }
 
-    //Die load Methode ladet die Songs aus der Festplatte zum Programm.
+    //Die load Methode ladet die playlistSongs aus der Festplatte zum Programm.
     private void load(String path){
 
       BinaryStrategy bs = null;
       try{
           bs = new BinaryStrategy(path);
 
-          bs.openReadableSongs();
+          bs.openReadablePlaylist();
           Song s;
           while((s = (Song)bs.readSong()) != null)
           {
-              songList.add(s);
+              this.playlist.add(s);
           }
           bs.closeReadable();
 

@@ -21,7 +21,8 @@ public class Controller{
         try {
             this.model = model;
             this.view = view;
-            this.cs = new Song();
+            //FEHLER!, sollte nicht leer sein.. wie zur hölle, sollen wir das machen ?
+            this.cs = new Song("","","","",-1);
             this.model.setCurrent(cs);
 
             //Lauscht und Updated regelmäßig die hinzugefügten Songs zum View.
@@ -65,9 +66,16 @@ public class Controller{
             //meta daten auslesen
             this.view.getListviewsong().setOnMouseClicked(e -> {
                 Song s = this.model.getAllsongs().get(this.view.getListviewsong().getSelectionModel().getSelectedIndex());
+                //EXPERIMENT
+                this.cs.setPath(s.getPath());
+                this.cs.setTitle(s.getTitle());
+                this.cs.setInterpret(s.getInterpret());
+                this.cs.setAlbum(s.getAlbum());
+
                 this.view.getTitle().setText(s.getTitle());
                 this.view.getInterpret().setText(s.getInterpret());
                 this.view.getAlbum().setText(s.getAlbum());
+
             });
 
             //commiten der Meta daten
@@ -83,7 +91,6 @@ public class Controller{
             //song slider und Minuten/Sekunden anzeiger
             this.cs.pathProperty().addListener((v, oldV, newV) -> {
                 this.view.setCurrentTitle(this.model.getCurrent().getTitle());
-                //System.out.println(this.model.getMediaPlayer().get);
                 this.model.getMediaPlayer().currentTimeProperty().addListener((o, oldVa, newVa) -> {
                     this.view.getSongSlider().setValue((newVa.toSeconds()/this.model.getMediaPlayer().getTotalDuration().toSeconds()));
                     this.view.getSongTime().setText((int)newVa.toMinutes() + ":" + this.songDurationToSecString(newVa));

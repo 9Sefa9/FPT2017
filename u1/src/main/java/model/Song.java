@@ -11,20 +11,22 @@ import java.io.*;
 
 public class Song implements interfaces.Song, Externalizable {
 
-    private String path = "",title = "",album = "",interpreter = "";
-    private StringProperty pathp, albump, interpreterp;
+    private StringProperty path = new SimpleStringProperty();
+    private StringProperty album = new SimpleStringProperty();
+    private StringProperty title = new SimpleStringProperty();
+    private StringProperty interpreter = new SimpleStringProperty();
     private long id;
 
     public Song(String path, String title, String album, String interpreter,long id)
     {
-        this.path = path;
-        this.title = title;
-        this.album = album;
-        this.interpreter = interpreter;
+        this.path.set(path);
+        this.title.set(title);
+        this.album.set(album);
+        this.interpreter.set(interpreter);
         this.id = id;
-        this.setProps();
+       // this.setProps();
     }
-
+    /*
     public Song(){
         this.setProps();
     }
@@ -34,6 +36,7 @@ public class Song implements interfaces.Song, Externalizable {
         this.albump = new SimpleStringProperty(this, "albump", this.album);
         this.interpreterp = new SimpleStringProperty(this, "interpreterp", this.interpreter);
     }
+    */
 
     public Long getUniqueID(){
         return this.id;
@@ -41,47 +44,45 @@ public class Song implements interfaces.Song, Externalizable {
 
     @Override
     public String getAlbum() {
-        return this.album;
+        return this.album.get();
     }
 
     @Override
     public void setAlbum(String album) {
-        this.album = album;
-        this.albump.set(album);
+        this.album.set(album);
     }
 
     @Override
     public String getInterpret() {
-        return this.interpreter;
+        return this.interpreter.get();
     }
 
     @Override
     public void setInterpret(String interpret) {
-        this.interpreter = interpret;
-        this.interpreterp.set(interpret);
+        this.interpreter.set(interpret);
     }
 
     @Override
     public String getPath() {
-        return this.path;
+        return this.path.get();
     }
 
     @Override
     public void setPath(String path) {
-        this.path = path;
+        this.path.set(path);
     }
 
     @Override
     public String getTitle() {
-        return this.title;
+        return this.title.get();
     }
 
     @Override
     public void setTitle(String title) {
-        String s = this.path.replace(this.title, title);
+        String s = this.path.get().replace(this.title.get(), this.title.get());
         this.setPath(s);
-        this.title = title;
-        this.pathp.set(title);
+        this.title.set(title);
+        this.path.set(title);
     }
 
     @Override
@@ -96,22 +97,22 @@ public class Song implements interfaces.Song, Externalizable {
 
     @Override
     public ObservableValue<String> pathProperty() {
-        return this.pathp;
+        return this.path;
     }
 
     @Override
     public ObservableValue<String> albumProperty() {
-        return this.albump;
+        return this.album;
     }
 
     @Override
     public ObservableValue<String> interpretProperty() {
-        return this.interpreterp;
+        return this.interpreter;
     }
 
     @Override
     public String toString() {
-        String output = this.title;
+        String output = this.title.get();
         if (this.interpreter != null && !this.interpreter.equals(""))
             output = output  + " by " + this.interpreter;
         if (this.album != null && !this.album.equals(""))
@@ -123,10 +124,21 @@ public class Song implements interfaces.Song, Externalizable {
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
             //alle metadaten schreiben mit utf
+        out.writeUTF(path.get());
+        out.writeUTF(title.get());
+        out.writeUTF(album.get());
+        out.writeUTF(interpreter.get());
+        out.writeLong(id);
+        out.close();
     }
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-
+        path.set(in.readUTF());
+        title.set(in.readUTF());
+        album.set(in.readUTF());
+        interpreter.set(in.readUTF());
+        id = in.readLong();
+        in.close();
     }
 }

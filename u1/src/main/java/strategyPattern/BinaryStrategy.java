@@ -25,24 +25,22 @@ public class BinaryStrategy implements SerializableStrategy{
     public BinaryStrategy(String loadpath){
         this.loadpath = loadpath;
     }
-    @Override
-    public void openWriteableSongs() throws IOException {
+
+    public void openWriteablePlaylist() throws IOException {
         fos = new FileOutputStream(savepath);
         oos = new ObjectOutputStream(fos);
-
     }
 
     @Override
-    public void openReadableSongs() throws IOException {
+    public void openReadablePlaylist() throws IOException {
         fis = new FileInputStream(loadpath);
         ois = new ObjectInputStream(fis);
-
     }
 
     @Override
     public void writeSong(Song s) throws IOException {
             oos.writeObject(s);
-
+            oos.flush();
     }
     @Override
     public Song readSong() throws IOException, ClassNotFoundException {
@@ -68,7 +66,6 @@ public class BinaryStrategy implements SerializableStrategy{
     @Override
     public void closeWriteable() {
             try{
-                    oos.flush();
                     oos.close();
                     fos.close();
             }catch(IOException e){
@@ -76,13 +73,16 @@ public class BinaryStrategy implements SerializableStrategy{
             }
     }
     @Override
-    public void openWriteablePlaylist() throws IOException {
+    public void openWriteableSongs() throws IOException {
+
 
     }
 
     @Override
-    public void openReadablePlaylist() throws IOException {
+    public void openReadableSongs() throws IOException {
+
 
     }
+
 
 }
