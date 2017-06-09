@@ -122,7 +122,7 @@ public class Song implements interfaces.Song, Externalizable {
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
-
+            //alle metadaten schreiben mit utf
     }
 
     @Override

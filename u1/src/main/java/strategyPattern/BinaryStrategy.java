@@ -6,7 +6,7 @@ import interfaces.Song;
 import java.io.*;
 import java.util.ArrayList;
 
-public class BinaryStrategy implements SerializableStrategy, Externalizable{
+public class BinaryStrategy implements SerializableStrategy{
 
     private String savepath,loadpath;
     private ArrayList<model.Song> songArray;
@@ -85,14 +85,4 @@ public class BinaryStrategy implements SerializableStrategy, Externalizable{
 
     }
 
-
-    @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-
-    }
-
-    @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-
-    }
 }
