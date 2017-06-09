@@ -8,6 +8,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import strategyPattern.BinaryStrategy;
 import strategyPattern.IDGenerator;
 import strategyPattern.IDOverFlowException;
 
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 
 public class Model{
     private SongList allsongs,playlist,songList;
-    private File file;
+    private File file,fileSave,fileLoad;
     private Path dir;
     private DirectoryChooser dirChooser;
     private FileChooser fileChooser;
@@ -105,7 +106,6 @@ public class Model{
 
                         try{
                             Song test = new Song(songPath, track, album, interpret, IDGenerator.getNextID());
-                           System.out.println(test.getUniqueID());
 
                             songList.add(test);
                         } catch(IDOverFlowException e){
@@ -180,13 +180,13 @@ public class Model{
             fileChooser.getExtensionFilters().add(extFilter);
 
             //zeigt den "save" Fenster
-            File file = fileChooser.showSaveDialog(new Stage());
-            fileChooser.setTitle("Save Playlist in" +file.getPath());
+            fileSave = fileChooser.showSaveDialog(new Stage());
+            fileChooser.setTitle("Save Playlist in" +fileSave.getPath());
 
             //solange fenster offen
-            if(file!=null)
+            if(fileSave!=null)
                 //speichere die Datei mit dem extension "*.pl"
-                save(songs,file.getPath());
+                save(songs,fileSave.getPath());
         }
         catch(Exception e) {
             System.out.println("Exception in HATPB-METHOD");
@@ -194,7 +194,6 @@ public class Model{
         }
 
     }
-
     public void handleLoadPlaylist(ArrayList<Song> songs){
         try{
             fileChooser = new FileChooser();
@@ -204,13 +203,13 @@ public class Model{
             fileChooser.getExtensionFilters().add(extFilter);
 
             //zeigt den "save" Fenster
-            File file = fileChooser.showOpenDialog(new Stage());
-            fileChooser.setTitle("Load *.pl file from: "+file.getPath());
+            fileLoad = fileChooser.showOpenDialog(new Stage());
+            fileChooser.setTitle("Load *.pl file from: "+fileLoad.getPath());
 
             //solange fenster offen
-            if(file!=null)
+            if(fileLoad!=null)
                 //ladet die Datei mit dem extension "*.pl"
-                load(file.getPath());
+                load(fileLoad.getPath());
         }
         catch(Exception e) {
             System.out.println("Exception in HATPB-METHOD");
@@ -219,21 +218,47 @@ public class Model{
 
     }
 
-    //Die save Methode bekommt die Songs und einen pfad zum speichern einer "*.pl" datei.
-    private void save(ArrayList<Song> songs,String path){
-        try( BufferedWriter bw = new BufferedWriter(new FileWriter(path))){
-            for (Song song : songs) {
-                bw.write(song.getPath() + "\n");
-            }
-        }catch(IOException i){
-            System.out.println(path);
-            System.out.println("Exception in MODEL-S-METHOD");
-            i.printStackTrace();
-        }
-    }
+    //Die save Methode bekommt die playlistSongs und einen pfad zum speichern einer "*.pl" datei.
+    private void save(ArrayList<Song> songs,String path) {
 
-    //Die load Methode ladet die Songs aus der Festplatte zum Programm.
+        BinaryStrategy bs = null;
+        try {
+            bs = new BinaryStrategy(path);
+
+            bs.openWriteablePlaylist();
+
+            for(Song i : songs) {
+                bs.writeSong(i);
+            }
+
+         //   bs.closeWriteable();
+
+            }
+             catch(IOException e){
+                e.printStackTrace();
+            }
+        }
+
+    //Die load Methode ladet die playlistSongs aus der Festplatte zum Programm.
     private void load(String path){
+
+      BinaryStrategy bs = null;
+      try{
+          bs = new BinaryStrategy(path);
+
+          bs.openReadablePlaylist();
+          Song s = null;
+          while((s = (Song)bs.readSong()) != null)
+          {
+              this.playlist.add(s);
+          }
+          bs.closeReadable();
+
+
+      }catch(Exception e){
+          e.printStackTrace();
+      }
+        /*
         try(BufferedReader br = new BufferedReader(new FileReader(path))){
 
             songFromPLFile = new ArrayList<>();
@@ -259,6 +284,7 @@ public class Model{
             e.printStackTrace();
 
         }
+        */
     }
 
     //abspielen der Mp3. für linke und rechte seite werden jeweils listen erstellt.
@@ -274,6 +300,7 @@ public class Model{
                     this.currentPlaylistSong = 0;
 
                 mediaPlayer = new MediaPlayer(new Media(new File(this.playlist.get(this.currentPlaylistSong).getPath()).toURI().toString()));
+                System.out.println(current);
                 current.setTitle(this.playlist.get(this.currentPlaylistSong).getTitle());
                 current.setInterpret(this.playlist.get(this.currentPlaylistSong).getInterpret());
                 mediaPlayer.setVolume(this.currentVolume);
