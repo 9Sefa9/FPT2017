@@ -68,13 +68,6 @@ public class Controller{
             this.view.getListviewsong().setOnMouseClicked(e -> {
                 Song s = this.model.getAllsongs().get(this.view.getListviewsong().getSelectionModel().getSelectedIndex());
 
-                //EXPERIMENT
-                /*
-                this.cs.setPath(s.getPath());
-                this.cs.setTitle(s.getTitle());
-                this.cs.setInterpret(s.getInterpret());
-                this.cs.setAlbum(s.getAlbum());
-                */
                 this.view.getTitle().setText(s.getTitle());
                 this.view.getInterpret().setText(s.getInterpret());
                 this.view.getAlbum().setText(s.getAlbum());

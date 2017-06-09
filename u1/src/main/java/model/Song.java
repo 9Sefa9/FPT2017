@@ -133,7 +133,7 @@ public class Song implements interfaces.Song, Externalizable {
         out.writeUTF(album.get());
         out.writeUTF(interpreter.get());
         out.writeLong(id);
-        out.close();
+
     }
 
     @Override
@@ -143,6 +143,6 @@ public class Song implements interfaces.Song, Externalizable {
         album.set(in.readUTF());
         interpreter.set(in.readUTF());
         id = in.readLong();
-        in.close();
+
     }
 }

@@ -4,36 +4,28 @@ import interfaces.SerializableStrategy;
 import interfaces.Song;
 
 import java.io.*;
-import java.util.ArrayList;
 
 public class BinaryStrategy implements SerializableStrategy{
 
-    private String savepath,loadpath;
-    private ArrayList<model.Song> songArray;
+    private String path;
+
     private FileOutputStream fos;
     private FileInputStream fis;
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
 
-    //für save
-    public BinaryStrategy(String savepath, ArrayList<model.Song> songArray) throws IOException{
-        this.savepath = savepath;
-        this.songArray = songArray;
+    public BinaryStrategy(String path){
+        this.path = path;
 
     }
-    //für load
-    public BinaryStrategy(String loadpath){
-        this.loadpath = loadpath;
-    }
-
     public void openWriteablePlaylist() throws IOException {
-        fos = new FileOutputStream(savepath);
+        fos = new FileOutputStream(path);
         oos = new ObjectOutputStream(fos);
     }
 
     @Override
     public void openReadablePlaylist() throws IOException {
-        fis = new FileInputStream(loadpath);
+        fis = new FileInputStream(path);
         ois = new ObjectInputStream(fis);
     }
 

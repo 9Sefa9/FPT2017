@@ -223,7 +223,7 @@ public class Model{
 
         BinaryStrategy bs = null;
         try {
-            bs = new BinaryStrategy(path,songs);
+            bs = new BinaryStrategy(path);
 
             bs.openWriteablePlaylist();
 
@@ -231,7 +231,7 @@ public class Model{
                 bs.writeSong(i);
             }
 
-            bs.closeWriteable();
+         //   bs.closeWriteable();
 
             }
              catch(IOException e){
@@ -247,7 +247,7 @@ public class Model{
           bs = new BinaryStrategy(path);
 
           bs.openReadablePlaylist();
-          Song s;
+          Song s = null;
           while((s = (Song)bs.readSong()) != null)
           {
               this.playlist.add(s);
