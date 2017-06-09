@@ -159,8 +159,6 @@ public class Model{
     }
 
 
-
-
     public void deletesongFromPlaylist(ListView<Song> listviewplaylist){
         if(listviewplaylist.getSelectionModel().isSelected(listviewplaylist.getSelectionModel().getSelectedIndex()))
             this.playlist.remove(currentPlaylistSong);
