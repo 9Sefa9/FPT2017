@@ -216,6 +216,7 @@ public class Model{
     //Die save Methode bekommt die playlistSongs und einen pfad zum speichern einer "*.pl" datei.
     private void save(ArrayList<Song> songs,String path) {
 
+
         BinaryStrategy bs = null;
         try {
             bs = new BinaryStrategy(path);
