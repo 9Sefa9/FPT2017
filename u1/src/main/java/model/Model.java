@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import strategyPattern.BinaryStrategy;
 import strategyPattern.IDGenerator;
 import strategyPattern.IDOverFlowException;
+import strategyPattern.XMLStrategy;
 
 import java.io.*;
 import java.nio.file.DirectoryStream;
@@ -22,17 +23,40 @@ import java.util.ArrayList;
 
 public class Model{
     private SongList allsongs,playlist,songList;
+    private Song current;
     private File file,fileSave,fileLoad;
+    private MediaPlayer mediaPlayer;
+
     private Path dir;
     private DirectoryChooser dirChooser;
     private FileChooser fileChooser;
     private ArrayList<Song> songFromPLFile;
-    private MediaPlayer mediaPlayer;
     private double currentVolume = 1;
     private int currentPlaylistSong = 0;
-    private Song current;
 
-    //setter
+
+    public Model(){
+
+    }
+    //SETTER
+    public void setDir(Path dir) {
+        this.dir = dir;
+    }
+    public void setSongFromPLFile(ArrayList<Song> songFromPLFile) {
+        this.songFromPLFile = songFromPLFile;
+    }
+    public void setFileChooser(FileChooser fileChooser) {
+        this.fileChooser = fileChooser;
+    }
+    public void setDirChooser(DirectoryChooser dirChooser) {
+        this.dirChooser = dirChooser;
+    }
+    public void setCurrentVolume(double currentVolume) {
+        this.currentVolume = currentVolume;
+    }
+    public void setCurrentPlaylistSong(int currentPlaylistSong) {
+        this.currentPlaylistSong = currentPlaylistSong;
+    }
     public void setAllsongs(SongList allsongs){
         this.allsongs = allsongs;
 
@@ -44,18 +68,66 @@ public class Model{
     {
         this.current = cs;
     }
-
-    //getter
+    public void setSongList(SongList songList){
+        this.songList = songList;
+    }
+    public void setFile(File file){
+        this.file = file;
+    }
+    public void setFileSave(File fileSave){
+        this.fileSave = fileSave;
+    }
+    public void setFileLoad(File fileLoad){
+        this.fileLoad = fileLoad;
+    }
+    public void setMediaPlayer(MediaPlayer mediaplayer){
+        this.mediaPlayer = mediaplayer;
+    }
+    //GETTER
+    public File getFile(){
+        return this.file;
+    }
+    public File getFileSave(){
+        return this.fileSave;
+    }
+    public File getFileLoad(){
+        return this.fileLoad;
+    }
     public SongList getAllsongs(){
         return this.allsongs;
     }
     public SongList getPlaylist(){
         return this.playlist;
     }
+    public SongList getSongList(){
+        return this.songList;
+    }
+    public Song getCurrent(){
+        return this.current;
+    }
     public MediaPlayer getMediaPlayer()
     {
         return mediaPlayer;
     }
+    public FileChooser getFileChooser() {
+        return fileChooser;
+    }
+    public Path getDir() {
+        return dir;
+    }
+    public DirectoryChooser getDirChooser() {
+        return dirChooser;
+    }
+    public ArrayList<Song> getSongFromPLFile() {
+        return songFromPLFile;
+    }
+    public double getCurrentVolume() {
+        return currentVolume;
+    }
+    public int getCurrentPlaylistSong() {
+        return currentPlaylistSong;
+    }
+
 
     public void updateLVSong(SongList sl,ListView<Song> listviewsong,ListView<Song> listviewplaylist)
     {
@@ -75,15 +147,15 @@ public class Model{
     //Jeder Song hat eine Unique-ID, beim überschreiten gibt es ein Exception.
     public void handleAddSongsButton(){
 
-            dirChooser = new DirectoryChooser();
-            dirChooser.setTitle("Select directory with mp3 files..");
+            setDirChooser(new DirectoryChooser());
+            getDirChooser().setTitle("Select directory with mp3 files..");
 
             try {
-                file = dirChooser.showDialog(new Stage());
-                dir = Paths.get(file.getPath());
+                file = getDirChooser().showDialog(new Stage());
+                setDir(Paths.get(file.getPath()));
 
             songList = new SongList();
-            try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(getDir())) {
                 for (Path p : stream) {
                     String name = p.getFileName().toString();
                     if (name.endsWith(".mp3")) {
@@ -147,8 +219,8 @@ public class Model{
                 //falls kein Pfad ausgegeben wurde: setze es auf null
                 if(file!=null)
                     file = null;
-                if(dir!=null)
-                    dir = null;
+                if(getDir() !=null)
+                    setDir(null);
             }
         }
 
@@ -161,22 +233,22 @@ public class Model{
 
     public void deletesongFromPlaylist(ListView<Song> listviewplaylist){
         if(listviewplaylist.getSelectionModel().isSelected(listviewplaylist.getSelectionModel().getSelectedIndex()))
-            this.playlist.remove(currentPlaylistSong);
+            this.playlist.remove(getCurrentPlaylistSong());
     }
 
 
     //Die Pfade der Lieder im Playlist, werden in eine *.pl Datei abgespeichert.
     public void handleSavePlaylist(ArrayList<Song> songs){
         try{
-            fileChooser = new FileChooser();
+            setFileChooser(new FileChooser());
 
             //zeigt ein bevorzugtes format an , nämlich *.pl
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("*.pl", ".pl");
-            fileChooser.getExtensionFilters().add(extFilter);
+            getFileChooser().getExtensionFilters().add(extFilter);
 
             //zeigt den "save" Fenster
-            fileSave = fileChooser.showSaveDialog(new Stage());
-            fileChooser.setTitle("Save Playlist in" +fileSave.getPath());
+            fileSave = getFileChooser().showSaveDialog(new Stage());
+            getFileChooser().setTitle("Save Playlist in" +fileSave.getPath());
 
             //solange fenster offen
             if(fileSave!=null)
@@ -191,15 +263,15 @@ public class Model{
     }
     public void handleLoadPlaylist(ArrayList<Song> songs){
         try{
-            fileChooser = new FileChooser();
+            setFileChooser(new FileChooser());
 
             //zeigt ein bevorzugtes format an , nähmlich *.pl
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("*.pl", "*.pl");
-            fileChooser.getExtensionFilters().add(extFilter);
+            getFileChooser().getExtensionFilters().add(extFilter);
 
             //zeigt den "save" Fenster
-            fileLoad = fileChooser.showOpenDialog(new Stage());
-            fileChooser.setTitle("Load *.pl file from: "+fileLoad.getPath());
+            fileLoad = getFileChooser().showOpenDialog(new Stage());
+            getFileChooser().setTitle("Load *.pl file from: "+fileLoad.getPath());
 
             //solange fenster offen
             if(fileLoad!=null)
@@ -217,20 +289,25 @@ public class Model{
     private void save(ArrayList<Song> songs,String path) {
 
 
+        //Binary Serialization
         BinaryStrategy bs = null;
+
         try {
             bs = new BinaryStrategy(path);
 
             bs.openWriteablePlaylist();
 
-            for(Song i : songs) {
+            for(Song i : songs)
                 bs.writeSong(i);
-            }
-
             }
              catch(IOException e){
                 e.printStackTrace();
             }
+
+        //XML Serialization
+
+
+
         }
 
     //Die load Methode ladet die playlistSongs aus der Festplatte zum Programm.
@@ -263,21 +340,21 @@ public class Model{
             if(mediaPlayer != null)
                 System.out.println(mediaPlayer.getCurrentTime() + " " + mediaPlayer.getTotalDuration());
             if(mediaPlayer == null || mediaPlayer.getCurrentTime().equals(mediaPlayer.getTotalDuration()) || mediaPlayer.getStatus().equals(MediaPlayer.Status.STOPPED)) {
-                if(this.playlist.size() <= this.currentPlaylistSong)
-                    this.currentPlaylistSong = 0;
+                if(this.playlist.size() <= this.getCurrentPlaylistSong())
+                    this.setCurrentPlaylistSong(0);
 
-                mediaPlayer = new MediaPlayer(new Media(new File(this.playlist.get(this.currentPlaylistSong).getPath()).toURI().toString()));
+                mediaPlayer = new MediaPlayer(new Media(new File(this.playlist.get(this.getCurrentPlaylistSong()).getPath()).toURI().toString()));
                 System.out.println(current);
-                current.setTitle(this.playlist.get(this.currentPlaylistSong).getTitle());
-                current.setInterpret(this.playlist.get(this.currentPlaylistSong).getInterpret());
-                mediaPlayer.setVolume(this.currentVolume);
+                current.setTitle(this.playlist.get(this.getCurrentPlaylistSong()).getTitle());
+                current.setInterpret(this.playlist.get(this.getCurrentPlaylistSong()).getInterpret());
+                mediaPlayer.setVolume(this.getCurrentVolume());
                 mediaPlayer.setOnEndOfMedia(() -> {
 
-                    this.currentPlaylistSong++;
+                    this.setCurrentPlaylistSong(this.getCurrentPlaylistSong() + 1);
                     playMp3(listviewsong, listviewplaylist);
                 });
 
-                listviewplaylist.getSelectionModel().select(this.currentPlaylistSong);
+                listviewplaylist.getSelectionModel().select(this.getCurrentPlaylistSong());
                 mediaPlayer.play();
             } else
                 if(mediaPlayer.getStatus().equals(MediaPlayer.Status.PAUSED))
@@ -290,7 +367,7 @@ public class Model{
                     mediaPlayer = new MediaPlayer(new Media(new File(this.allsongs.get(listviewsong.getSelectionModel().getSelectedIndex()).getPath()).toURI().toString()));
                     current.setTitle(this.allsongs.get(listviewsong.getSelectionModel().getSelectedIndex()).getTitle());
                     current.setInterpret(this.allsongs.get(listviewsong.getSelectionModel().getSelectedIndex()).getInterpret());
-                    mediaPlayer.setVolume(this.currentVolume);
+                    mediaPlayer.setVolume(this.getCurrentVolume());
                     mediaPlayer.play();
                 } else
                     if(mediaPlayer.getStatus().equals(MediaPlayer.Status.PAUSED))
@@ -305,18 +382,13 @@ public class Model{
             mediaPlayer.pause();
     }
 
-    public Song getCurrent()
-    {
-        return current;
-    }
-
     public void nextMP3(ListView<Song> listviewplaylist){
         if(this.playlist.size() > 1)
         {
             if(mediaPlayer != null) {
                 this.mediaPlayer.stop();
                 this.mediaPlayer = null;
-                this.currentPlaylistSong++;
+                this.setCurrentPlaylistSong(this.getCurrentPlaylistSong() + 1);
                 this.playMp3(null, listviewplaylist);
             }
         } else if(playlist.size() < 2)
@@ -327,7 +399,7 @@ public class Model{
 
     public void setVolume(double volume)
     {
-        this.currentVolume = volume;
+        this.setCurrentVolume(volume);
         if(this.mediaPlayer != null)
         {
             this.mediaPlayer.setVolume(volume);
@@ -375,6 +447,7 @@ public class Model{
             }
         }
     }
+
 
 }
 
