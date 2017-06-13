@@ -289,7 +289,7 @@ public class Model{
     private void save(ArrayList<Song> songs,String path) {
 
 
-        //Binary Serialization
+        //Binary Serialization, only Playlist
         BinaryStrategy bs = null;
 
         try {
@@ -300,12 +300,22 @@ public class Model{
             for(Song i : songs)
                 bs.writeSong(i);
             }
-             catch(IOException e){
+             catch(Exception e){
                 e.printStackTrace();
             }
 
-        //XML Serialization
+        //XML Serialization , only Songlist
+        XMLStrategy xml = null;
+             try{
+                 xml = new XMLStrategy(path);
 
+                 xml.openWriteableSongs();
+                 for(Song i : this.allsongs)
+                     xml.writeSong(i);
+
+             }catch(Exception e){
+                 e.printStackTrace();
+             }
 
 
         }

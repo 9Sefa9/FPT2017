@@ -7,7 +7,11 @@ import interfaces.Song;
 import java.io.IOException;
 
 public class XMLStrategy implements SerializableStrategy {
+    private String path;
 
+    public XMLStrategy(String path){
+        this.path = path;
+    }
     @Override
     public void openWriteableSongs() throws IOException {
 
