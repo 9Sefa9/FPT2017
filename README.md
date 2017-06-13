@@ -1,10 +1,9 @@
-# Fortgeschrittene Programmiertechniken 2017
+﻿# Fortgeschrittene Programmiertechniken 2017
 
 Folgende Gruppenmitglieder sind an der Übung beteiligt:
 
   - Sefa Gövercin, 3030095
   - Hakan Akcit, 723480
-  - Patrick Weis, 3002107
   - Leon Koth,3037720
 
 # Übung-01-Verzeichnis
