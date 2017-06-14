@@ -12,7 +12,7 @@ import javafx.scene.text.Text;
 
 public class View extends BorderPane{
     private ListView<Song> listviewsong,listviewplaylist;
-    private Button addsongs,load,save,addtoplaylist,deletesong,commit,play,pause,next;
+    private Button addsongs, loadPlaylist, loadSonglist, savePlaylist, saveSonglist,addtoplaylist,deletesong,commit,play,pause,next;
     private Slider volumeSlider, songSlider;
     private GridPane upperframe,downframe,rightframe;
     private TextField title,interpret,album;
@@ -61,20 +61,22 @@ public class View extends BorderPane{
         downframe.add(volumeSlider, 9, 0);
 
         //upperframe
-        load = new Button("Load");
-        load.setPadding(new Insets(10,10,10,10));
-        upperframe.add(load,2,0);
+        loadPlaylist = new Button("Load");
+        loadPlaylist.setPadding(new Insets(10,10,10,10));
+        upperframe.add(loadPlaylist,2,0);
 
-        save = new Button("Save");
-        save.setPadding(new Insets(10,10,10,10));
-        upperframe.add(save,3,0);
+        savePlaylist = new Button("Save");
+        savePlaylist.setPadding(new Insets(10,10,10,10));
+        upperframe.add(savePlaylist,3,0);
 
-      //  choicebox.setPadding(new Insets(5,5,5,160));
-       // choicebox.getItems().addAll("Example1","Example2","Example3");
-       // upperframe.add(choicebox,0,0);
-        playlistText = new Text("Playlist");
-        playlistText.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
-        upperframe.add(playlistText,9,0);
+        saveSonglist = new Button("Save");
+        saveSonglist.setPadding(new Insets(10,10,10,10));
+        upperframe.add(saveSonglist,9,0);
+
+        loadSonglist = new Button("Load");
+        loadSonglist.setPadding(new Insets(10,10,10,10));
+        upperframe.add(loadSonglist,10,0);
+
         upperframe.setHgap(25);
 
         //rightframe
@@ -155,12 +157,14 @@ public class View extends BorderPane{
     public Button getAddall() {
         return addsongs;
     }
-    public Button getLoad() {
-        return load;
+    public Button getLoadPlaylist() {
+        return loadPlaylist;
     }
+    public Button getLoadSonglist(){return loadSonglist;}
     public Button getAddsongs(){return addsongs;}
     public Button getDeletesong(){return deletesong;}
-    public Button getSave(){return save;}
+    public Button getSavePlaylist(){return savePlaylist;}
+    public Button getSaveSonglist(){return saveSonglist;}
     public Button getAddtoplaylist(){return addtoplaylist;}
     public Button getCommit(){return commit;}
     public Button getPlay(){return play;}
