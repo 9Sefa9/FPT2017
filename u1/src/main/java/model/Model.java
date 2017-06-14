@@ -14,6 +14,7 @@ import strategyPattern.IDOverFlowException;
 import strategyPattern.XMLStrategy;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -253,7 +254,7 @@ public class Model{
             //solange fenster offen
             if(fileSave!=null)
                 //speichere die Datei mit dem extension "*.pl"
-                save(songs,fileSave.getPath());
+                savePlaylist(songs,fileSave.getPath());
         }
         catch(Exception e) {
             System.out.println("Exception in HATPB-METHOD");
@@ -261,6 +262,7 @@ public class Model{
         }
 
     }
+
     public void handleLoadPlaylist(ArrayList<Song> songs){
         try{
             setFileChooser(new FileChooser());
@@ -271,12 +273,12 @@ public class Model{
 
             //zeigt den "save" Fenster
             fileLoad = getFileChooser().showOpenDialog(new Stage());
-            getFileChooser().setTitle("Load *.pl file from: "+fileLoad.getPath());
+            getFileChooser().setTitle("Load Playlist *.pl file from: "+fileLoad.getPath());
 
             //solange fenster offen
             if(fileLoad!=null)
                 //ladet die Datei mit dem extension "*.pl"
-                load(fileLoad.getPath());
+                loadPlaylist(fileLoad.getPath());
         }
         catch(Exception e) {
             System.out.println("Exception in HATPB-METHOD");
@@ -285,9 +287,54 @@ public class Model{
 
     }
 
-    //Die save Methode bekommt die playlistSongs und einen pfad zum speichern einer "*.pl" datei.
-    private void save(ArrayList<Song> songs,String path) {
+    public void handleSaveSonglist(ArrayList<Song> songs){
+        try{
+            setFileChooser(new FileChooser());
 
+            //zeigt ein bevorzugtes format an , nämlich *.xml
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("*.xml", ".xml");
+            getFileChooser().getExtensionFilters().add(extFilter);
+
+            //zeigt den "save" Fenster
+            fileSave = getFileChooser().showSaveDialog(new Stage());
+            getFileChooser().setTitle("Save Songlist in" +fileSave.getPath());
+
+            //solange fenster offen
+            if(fileSave!=null)
+                //speichere die Datei mit dem extension "*.pl"
+                saveSonglist(fileSave.getPath());
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void handleLoadSonglist(ArrayList<Song> songs){
+        try{
+            setFileChooser(new FileChooser());
+
+            //zeigt ein bevorzugtes format an , nähmlich *.xml
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("*.xml", "*.xml");
+            getFileChooser().getExtensionFilters().add(extFilter);
+
+            //zeigt den "save" Fenster
+            fileLoad = getFileChooser().showOpenDialog(new Stage());
+            getFileChooser().setTitle("Load Songlist *.xml file from: "+fileLoad.getPath());
+
+            //solange fenster offen
+            if(fileLoad!=null)
+                //ladet die Datei mit dem extension "*.pl"
+                loadSonglist(fileLoad.getPath());
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    //Die save Methode bekommt die playlistSongs und einen pfad zum speichern einer "*.pl" datei.
+    private void savePlaylist(ArrayList<Song> songs,String path) {
 
         //Binary Serialization, only Playlist
         BinaryStrategy bs = null;
@@ -304,13 +351,37 @@ public class Model{
                 e.printStackTrace();
             }
 
-        //XML Serialization , only Songlist
+        }
+
+    //Die load Methode ladet die playlistSongs aus der Festplatte zum Programm.
+    private void loadPlaylist(String path){
+
+      //BinaryStrategy, load only playlist
+      BinaryStrategy bs = null;
+      try{
+          bs = new BinaryStrategy(path);
+
+          bs.openReadablePlaylist();
+          Song songbs = null;
+          while((songbs = (Song)bs.readSong()) != null)
+          {
+              this.playlist.add(songbs);
+          }
+          bs.closeReadable();
+      }catch(Exception e){
+          e.printStackTrace();
+      }
+    }
+    //XML Serialization , only Songlist
+    public void saveSonglist(String path){
+
+
         XMLStrategy xml = null;
              try{
                  xml = new XMLStrategy(path);
 
                  xml.openWriteableSongs();
-                 for(Song i : this.allsongs)
+                 for(Song i : this.songList)
                      xml.writeSong(i);
 
              }catch(Exception e){
@@ -318,27 +389,24 @@ public class Model{
              }
 
 
+    }
+    //XML Serialization, only Songlist
+    public void loadSonglist(String path){
+
+        XMLStrategy xml = null;
+        try{
+            xml = new XMLStrategy(path);
+            xml.openReadableSongs();
+
+            Song songxml = null;
+            while((songxml = (Song)xml.readSong())!= null)
+                this.songList.add(songxml);
+
+            xml.closeReadable();
+        }catch(Exception e){
+            e.printStackTrace();
         }
 
-    //Die load Methode ladet die playlistSongs aus der Festplatte zum Programm.
-    private void load(String path){
-
-      BinaryStrategy bs = null;
-      try{
-          bs = new BinaryStrategy(path);
-
-          bs.openReadablePlaylist();
-          Song s = null;
-          while((s = (Song)bs.readSong()) != null)
-          {
-              this.playlist.add(s);
-          }
-          bs.closeReadable();
-
-
-      }catch(Exception e){
-          e.printStackTrace();
-      }
     }
 
     //abspielen der Mp3. für linke und rechte seite werden jeweils listen erstellt.
