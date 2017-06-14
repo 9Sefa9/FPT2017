@@ -21,7 +21,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-
 public class Model{
     private SongList allsongs,playlist,songList;
     private Song current;
@@ -231,7 +230,6 @@ public class Model{
 
     }
 
-
     public void deletesongFromPlaylist(ListView<Song> listviewplaylist){
         if(listviewplaylist.getSelectionModel().isSelected(listviewplaylist.getSelectionModel().getSelectedIndex()))
             this.playlist.remove(getCurrentPlaylistSong());
@@ -381,7 +379,7 @@ public class Model{
                  xml = new XMLStrategy(path);
 
                  xml.openWriteableSongs();
-                 for(Song i : this.songList)
+                 for(Song i : this.getAllsongs())
                      xml.writeSong(i);
 
              }catch(Exception e){
@@ -400,11 +398,11 @@ public class Model{
 
             Song songxml = null;
             while((songxml = (Song)xml.readSong())!= null)
-                this.songList.add(songxml);
+                this.getAllsongs().add(songxml);
 
             xml.closeReadable();
         }catch(Exception e){
-            e.printStackTrace();
+
         }
 
     }
