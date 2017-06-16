@@ -14,8 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.*;
 @Entity()
-@Table(name = "Library")
-public class Song implements interfaces.Song, Externalizable {
+@Table(name = "Playlist")
+public class SongCopy implements interfaces.Song, Externalizable {
 
     @Persistent
     @Strategy("StringPropertyValueHandler")
@@ -41,7 +41,7 @@ public class Song implements interfaces.Song, Externalizable {
         this.album.set(album);
         this.interpreter.set(interpreter);
         this.id = id;
-       // this.setProps();
+        // this.setProps();
     }
 
 
@@ -145,7 +145,7 @@ public class Song implements interfaces.Song, Externalizable {
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
-            //alle metadaten schreiben mit utf
+        //alle metadaten schreiben mit utf
         out.writeUTF(path.get());
         out.writeUTF(title.get());
         out.writeUTF(album.get());
