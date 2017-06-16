@@ -1,6 +1,7 @@
 package model;
 
 import com.mpatric.mp3agic.*;
+import com.sun.javafx.applet.ExperimentalExtensions;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.media.Media;
@@ -8,10 +9,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import strategyPattern.BinaryStrategy;
-import strategyPattern.IDGenerator;
-import strategyPattern.IDOverFlowException;
-import strategyPattern.XMLStrategy;
+import strategyPattern.*;
 
 import java.io.*;
 import java.lang.reflect.Array;
@@ -19,6 +17,8 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.JDBCType;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Model{
@@ -526,6 +526,40 @@ public class Model{
         }
     }
 
+    public void saveDBSonglist() {
+        JDBCStrategy j = null;
+        try {
+
+            j = new JDBCStrategy();
+            j.openWriteableSongs();
+
+            for (Song i : this.allsongs)
+                j.writeSong(i);
+
+            j.closeWriteable();
+
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
+    }
+    public void loadDBSonglist() {
+        JDBCStrategy j = null;
+        try{
+            j = new JDBCStrategy();
+            j.openReadableSongs();
+
+            Song temp = null;
+            while((temp = (Song)j.readSong())!= null){
+                this.allsongs.add(temp);
+            }
+
+            j.closeReadable();
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
 
 }
 
