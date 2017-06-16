@@ -192,8 +192,8 @@ public class Model{
                                 if(intArr.size() == 0)
                                     break;
 
-                                if(intArr.contains(songList.get(i).getUniqueID())){
-                                    intArr.remove(songList.get(i).getUniqueID());
+                                if(intArr.contains(songList.get(i).getId())){
+                                    intArr.remove(songList.get(i).getId());
                                 }
                             }
 

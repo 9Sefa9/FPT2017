@@ -34,7 +34,7 @@ public class SongCopy implements interfaces.Song, Externalizable {
     private StringProperty interpreter = new SimpleStringProperty();
     private long id;
 
-    public Song(String path, String title, String album, String interpreter,long id)
+    public SongCopy(String path, String title, String album, String interpreter,long id)
     {
         this.path.set(path);
         this.title.set(title);
@@ -45,7 +45,7 @@ public class SongCopy implements interfaces.Song, Externalizable {
     }
 
 
-    public Song(){
+    public SongCopy(){
         this.title.set("");
         this.path.set("");
         this.album.set("");
@@ -58,9 +58,7 @@ public class SongCopy implements interfaces.Song, Externalizable {
         this.interpreterp = new SimpleStringProperty(this, "interpreterp", this.interpreter);
     }
     */
-    public Long getUniqueID(){
-        return this.id;
-    }
+
 
     @Override
     public String getAlbum() {

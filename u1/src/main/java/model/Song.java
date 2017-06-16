@@ -18,20 +18,22 @@ import java.io.*;
 public class Song implements interfaces.Song, Externalizable {
 
     @Persistent
-    @Strategy("StringPropertyValueHandler")
+    @Strategy("ValueHandler.StringPropertyValueHandler")
     private StringProperty path = new SimpleStringProperty();
 
     @Persistent
-    @Strategy("StringPropertyValueHandler")
+    @Strategy("ValueHandler.StringPropertyValueHandler")
     private StringProperty album = new SimpleStringProperty();
 
     @Persistent
-    @Strategy("StringPropertyValueHandler")
+    @Strategy("ValueHandler.StringPropertyValueHandler")
     private StringProperty title = new SimpleStringProperty();
 
     @Persistent
-    @Strategy("StringPropertyValueHandler")
+    @Strategy("ValueHandler.StringPropertyValueHandler")
     private StringProperty interpreter = new SimpleStringProperty();
+
+    @Id
     private long id;
 
     public Song(String path, String title, String album, String interpreter,long id)
@@ -58,9 +60,6 @@ public class Song implements interfaces.Song, Externalizable {
         this.interpreterp = new SimpleStringProperty(this, "interpreterp", this.interpreter);
     }
     */
-    public Long getUniqueID(){
-        return this.id;
-    }
 
     @Override
     public String getAlbum() {
@@ -117,7 +116,6 @@ public class Song implements interfaces.Song, Externalizable {
     }
 
     @Override
-
     public ObservableValue<String> pathProperty() {
         return this.path;
     }

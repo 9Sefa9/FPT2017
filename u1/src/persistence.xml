@@ -1,5 +1,0 @@
-<class>
-    Library
-</class>
-<property name="openjpa.ConnectionDriverName" value = "org.postgresql.Driver" />
-<property name="openjpa.ConnectionURL" value = "jdbc:sqlite:C:\Users\Sefa\Desktop\SQLite\Library.db" />
