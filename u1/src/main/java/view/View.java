@@ -63,20 +63,19 @@ public class View extends BorderPane{
         //upperframe
         loadPlaylist = new Button("Load");
         loadPlaylist.setPadding(new Insets(10,10,10,10));
-        upperframe.add(loadPlaylist,2,0);
+        upperframe.add(loadPlaylist,10,0);
 
         savePlaylist = new Button("Save");
         savePlaylist.setPadding(new Insets(10,10,10,10));
-        upperframe.add(savePlaylist,3,0);
-
-        saveSonglist = new Button("Save");
-        saveSonglist.setPadding(new Insets(10,10,10,10));
-        upperframe.add(saveSonglist,9,0);
+        upperframe.add(savePlaylist,9,0);
 
         loadSonglist = new Button("Load");
         loadSonglist.setPadding(new Insets(10,10,10,10));
-        upperframe.add(loadSonglist,10,0);
+        upperframe.add(loadSonglist,3,0);
 
+        saveSonglist = new Button("Save");
+        saveSonglist.setPadding(new Insets(10,10,10,10));
+        upperframe.add(saveSonglist,2,0);
         upperframe.setHgap(25);
 
         //rightframe

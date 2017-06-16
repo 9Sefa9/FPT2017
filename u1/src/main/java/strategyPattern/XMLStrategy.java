@@ -7,6 +7,7 @@ import interfaces.Song;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.*;
+import java.util.Optional;
 
 public class XMLStrategy implements SerializableStrategy {
     private String path;
@@ -23,7 +24,7 @@ public class XMLStrategy implements SerializableStrategy {
     public void openWriteableSongs() throws IOException {
             fos = new FileOutputStream(this.path);
             xmle = new XMLEncoder(fos);
-    }
+}
 
     @Override
     public void openReadableSongs() throws IOException {
@@ -34,19 +35,22 @@ public class XMLStrategy implements SerializableStrategy {
     @Override
     public void writeSong(Song s) throws IOException {
             xmle.writeObject(s);
-            xmle.flush();
     }
 
     @Override
     public Song readSong() throws IOException, ClassNotFoundException {
-        return (Song)xmlde.readObject();
+        try{
+            return (Song)xmlde.readObject();
+        }catch(IndexOutOfBoundsException e){
+            return null;
+        }
     }
 
     @Override
     public void closeReadable() {
             try{
-                xmlde.close();
                 fis.close();
+                xmlde.close();
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -55,9 +59,9 @@ public class XMLStrategy implements SerializableStrategy {
     @Override
     public void closeWriteable() {
             try{
+                fos.flush();
                 xmle.close();
                 fos.close();
-
             }catch(Exception e){
                 e.printStackTrace();
             }

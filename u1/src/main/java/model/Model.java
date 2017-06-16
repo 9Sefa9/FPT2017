@@ -379,14 +379,14 @@ public class Model{
                  xml = new XMLStrategy(path);
 
                  xml.openWriteableSongs();
-                 for(Song i : this.getAllsongs())
+                 for(Song i : this.getAllsongs()) {
                      xml.writeSong(i);
+                 }
+                 xml.closeWriteable();
 
              }catch(Exception e){
                  e.printStackTrace();
              }
-
-
     }
     //XML Serialization, only Songlist
     public void loadSonglist(String path){
@@ -396,13 +396,15 @@ public class Model{
             xml = new XMLStrategy(path);
             xml.openReadableSongs();
 
-            Song songxml = null;
-            while((songxml = (Song)xml.readSong())!= null)
+            Song songxml = (Song)xml.readSong();
+            while((songxml != null)) {
                 this.getAllsongs().add(songxml);
+                songxml = (Song)xml.readSong();
 
+            }
             xml.closeReadable();
         }catch(Exception e){
-
+            e.printStackTrace();
         }
 
     }
