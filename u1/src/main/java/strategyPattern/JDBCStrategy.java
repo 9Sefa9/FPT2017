@@ -25,7 +25,7 @@ public class JDBCStrategy implements SerializableStrategy{
     public void openWriteableSongs() throws IOException {
         try{
             con = DriverManager.getConnection("" +
-                "jdbc:sqlite:C:\\Users\\Sefa\\Desktop\\SQLite\\Library.db");
+                "jdbc:sqlite:C:\\Users\\Leon\\Documents\\SQLite\\SongDB.db");
 
         }catch (SQLException s){
             s.printStackTrace();
@@ -46,7 +46,7 @@ public class JDBCStrategy implements SerializableStrategy{
     @Override
     public void openReadableSongs() throws IOException {
         try{
-            con = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Sefa\\Desktop\\SQLite\\Library.db");
+            con = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Leon\\Documents\\SQLite\\SongDB.db");
 
             st = con.createStatement();
             rs = st.executeQuery("SELECT id, title, artist, album, path "+

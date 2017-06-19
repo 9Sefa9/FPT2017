@@ -54,7 +54,7 @@ public class Controller{
             this.view.getLoadPlaylist().setOnAction(e -> this.model.handleLoadPlaylist(this.model.getPlaylist().list));
 
             //speichert die Songlist in eine *.xml datei
-            this.view.getLoadSonglist().setOnAction(e -> this.model.handleLoadSonglist(this.model.getAllsongs().list));
+            this.view.getLoadSonglist().setOnAction(e -> this.model.loadJPASonglist());
 
             //laded die Songlist in die Library
             this.view.getSaveSonglist().setOnAction(e -> this.model.saveJPASonglist());
