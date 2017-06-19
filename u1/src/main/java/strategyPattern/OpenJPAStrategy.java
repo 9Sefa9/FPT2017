@@ -9,6 +9,7 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 
 public class OpenJPAStrategy implements SerializableStrategy{
 
@@ -25,7 +26,13 @@ public class OpenJPAStrategy implements SerializableStrategy{
     @Override
     public void openReadableSongs() throws IOException {
         emf = Persistence.createEntityManagerFactory("perUnit", System.getProperties());
-        em = emf.createEntityManager();
+        Properties properties = new Properties();
+        properties.put("openjpa.MetaDataFactory", "jpa(Types=" + model.Song.class.getName() + ")");
+        properties.put("openjpa.ConnectionDriverName", "org.postgresql.Driver");
+        properties.put("openjpa.ConnectionURL", "jdbc:sqlite:C:\\Users\\Leon\\Documents\\SQLite\\SongDB.db");
+        properties.put("openjpa.RuntimeUnenhancedClasses", "supported");
+        properties.put("openjpa.jdbc.SynchronizeMappings", "false");
+        em = emf.createEntityManager(properties);
     }
 
     @Override
@@ -43,6 +50,11 @@ public class OpenJPAStrategy implements SerializableStrategy{
         em.getTransaction().begin();
         em.persist(s);
         em.getTransaction().commit();
+    }
+
+    public void deleteContent(){
+        Query q = em.createQuery("DELETE FROM Song");
+        q.executeUpdate();
     }
 
     @Override
@@ -74,4 +86,7 @@ public class OpenJPAStrategy implements SerializableStrategy{
         em.close();
         emf.close();
     }
+
+
+
 }

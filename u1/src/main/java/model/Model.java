@@ -565,6 +565,7 @@ public class Model{
         OpenJPAStrategy o = new OpenJPAStrategy();
         try {
             o.openWriteableSongs();
+            //o.deleteContent();
             for(Song s : this.allsongs)
             {
                 o.writeSong(s);

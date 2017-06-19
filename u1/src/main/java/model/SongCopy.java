@@ -9,6 +9,7 @@ import javafx.beans.value.ObservableValue;
 import org.apache.openjpa.persistence.Persistent;
 import org.apache.openjpa.persistence.jdbc.Strategy;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -18,20 +19,26 @@ import java.io.*;
 public class SongCopy implements interfaces.Song, Externalizable {
 
     @Persistent
-    @Strategy("StringPropertyValueHandler")
+    @Strategy("ValueHandler.StringPropertyValueHandler")
+    @Column(name = "path")
     private StringProperty path = new SimpleStringProperty();
 
     @Persistent
-    @Strategy("StringPropertyValueHandler")
+    @Strategy("ValueHandler.StringPropertyValueHandler")
+    @Column(name = "album")
     private StringProperty album = new SimpleStringProperty();
 
     @Persistent
-    @Strategy("StringPropertyValueHandler")
+    @Strategy("ValueHandler.StringPropertyValueHandler")
+    @Column(name = "title")
     private StringProperty title = new SimpleStringProperty();
 
     @Persistent
-    @Strategy("StringPropertyValueHandler")
+    @Strategy("ValueHandler.StringPropertyValueHandler")
+    @Column(name = "artist")
     private StringProperty interpreter = new SimpleStringProperty();
+
+    @Id
     private long id;
 
     public SongCopy(String path, String title, String album, String interpreter,long id)
@@ -58,7 +65,6 @@ public class SongCopy implements interfaces.Song, Externalizable {
         this.interpreterp = new SimpleStringProperty(this, "interpreterp", this.interpreter);
     }
     */
-
 
     @Override
     public String getAlbum() {
@@ -104,7 +110,6 @@ public class SongCopy implements interfaces.Song, Externalizable {
     }
 
     @Override
-    @Id
     public long getId() {
         return this.id;
     }
@@ -115,7 +120,6 @@ public class SongCopy implements interfaces.Song, Externalizable {
     }
 
     @Override
-
     public ObservableValue<String> pathProperty() {
         return this.path;
     }
