@@ -16,7 +16,7 @@ public class JDBCStrategy implements SerializableStrategy{
     private ResultSet rs;
     public JDBCStrategy(){
         try {
-            Class.forName("org.postgresql.Driver");
+            Class.forName("org.sqlite.JDBC");
         } catch( ClassNotFoundException e ) {
             e.printStackTrace();
         }
@@ -25,8 +25,7 @@ public class JDBCStrategy implements SerializableStrategy{
     public void openWriteableSongs() throws IOException {
         try{
             con = DriverManager.getConnection("" +
-                "jdbc:sqlite:C:\\Users\\Sefa\\Desktop\\SQLite\\Library.db" +
-                "");
+                "jdbc:sqlite:C:\\Users\\Sefa\\Desktop\\SQLite\\Library.db");
 
         }catch (SQLException s){
             s.printStackTrace();
@@ -47,9 +46,7 @@ public class JDBCStrategy implements SerializableStrategy{
     @Override
     public void openReadableSongs() throws IOException {
         try{
-            con = DriverManager.getConnection("" +
-                    "jdbc:sqlite:C:\\Users\\Sefa\\Desktop\\SQLite\\Library.db" +
-                    "");
+            con = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Sefa\\Desktop\\SQLite\\Library.db");
 
             st = con.createStatement();
             rs = st.executeQuery("SELECT id, title, artist, album, path "+

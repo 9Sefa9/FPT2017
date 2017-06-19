@@ -561,5 +561,21 @@ public class Model{
 
     }
 
+    public void saveJPASonglist(){
+        OpenJPAStrategy o = new OpenJPAStrategy();
+        try {
+            o.openWriteableSongs();
+            System.out.println("hallo");
+            for(Song s : this.allsongs)
+            {
+                o.writeSong(s);
+                System.out.println(s);
+            }
+            o.closeWriteable();
+        } catch (Exception e){
+
+        }
+    }
+
 }
 

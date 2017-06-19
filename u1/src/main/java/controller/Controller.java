@@ -57,7 +57,7 @@ public class Controller{
             this.view.getLoadSonglist().setOnAction(e -> this.model.handleLoadSonglist(this.model.getAllsongs().list));
 
             //laded die Songlist in die Library
-            this.view.getSaveSonglist().setOnAction(e -> this.model.handleSaveSonglist(this.model.getAllsongs().list));
+            this.view.getSaveSonglist().setOnAction(e -> this.model.saveJPASonglist());
 
             //abspielen eines MP3 files
             this.view.getPlay().setOnAction(e -> {this.model.playMp3(this.view.getListviewsong(), this.view.getListviewplaylist());});
