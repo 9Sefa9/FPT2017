@@ -1,6 +1,7 @@
 package model;
 
 import com.mpatric.mp3agic.*;
+import com.sun.javafx.applet.ExperimentalExtensions;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.media.Media;
@@ -8,10 +9,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import strategyPattern.BinaryStrategy;
-import strategyPattern.IDGenerator;
-import strategyPattern.IDOverFlowException;
-import strategyPattern.XMLStrategy;
+import strategyPattern.*;
 
 import java.io.*;
 import java.lang.reflect.Array;
@@ -19,6 +17,8 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.JDBCType;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Model{
@@ -33,10 +33,11 @@ public class Model{
     private ArrayList<Song> songFromPLFile;
     private double currentVolume = 1;
     private int currentPlaylistSong = 0;
+    private OpenJPAStrategy o;
 
 
     public Model(){
-
+        o = new OpenJPAStrategy();
     }
     //SETTER
     public void setDir(Path dir) {
@@ -192,8 +193,8 @@ public class Model{
                                 if(intArr.size() == 0)
                                     break;
 
-                                if(intArr.contains(songList.get(i).getUniqueID())){
-                                    intArr.remove(songList.get(i).getUniqueID());
+                                if(intArr.contains(songList.get(i).getId())){
+                                    intArr.remove(songList.get(i).getId());
                                 }
                             }
 
@@ -526,6 +527,110 @@ public class Model{
         }
     }
 
+    public void saveDBSonglist() {
+        JDBCStrategy j = null;
+        try {
+
+            j = new JDBCStrategy();
+            j.openWriteableSongs();
+            j.deleteLibraryContent();
+
+            for (Song i : this.allsongs)
+                j.writeSong(i);
+
+            j.closeWriteable();
+
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
+    }
+    public void loadDBSonglist() {
+        JDBCStrategy j = null;
+        try{
+            j = new JDBCStrategy();
+            j.openReadableSongs();
+
+            Song temp = null;
+            while((temp = (Song)j.readSong())!= null){
+                this.allsongs.add(temp);
+            }
+
+            j.closeReadable();
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void saveDBPlaylist() {
+        JDBCStrategy j = null;
+        try {
+
+            j = new JDBCStrategy();
+            j.openWriteablePlaylist();
+
+            for (Song i : this.playlist)
+                j.writePLSong(i);
+
+            j.closeWriteable();
+
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
+    }
+    public void loadDBPlaylist() {
+        JDBCStrategy j = null;
+        try{
+            j = new JDBCStrategy();
+            j.openReadablePlaylist();
+
+            Song temp;
+            while((temp = (Song)j.readSong())!= null){
+                this.playlist.add(temp);
+            }
+
+            j.closeReadable();
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void saveJPASonglist(){
+        //OpenJPAStrategy o = new OpenJPAStrategy();
+        try {
+            o.openWriteableSongs();
+            o.deleteContent();
+            for(Song s : this.allsongs)
+            {
+                o.writeSong(s);
+                System.out.println(s);
+            }
+            o.closeWriteable();
+        } catch (Exception e){
+
+        }
+    }
+
+    public void loadJPASonglist(){
+        //OpenJPAStrategy o = new OpenJPAStrategy();
+        try {
+            o.openReadableSongs();
+            //o.readSongs();
+           /* Song s = new Song("","","","",0);
+            while((s = (Song) o.readSong()) != null)
+            {
+                this.allsongs.add(s);
+                System.out.println(s);
+            }*/
+            this.allsongs.setAll(o.readSongs());
+            o.closeWriteable();
+        } catch (Exception e){
+
+        }
+    }
 
 }
 

@@ -54,10 +54,10 @@ public class Controller{
             this.view.getLoadPlaylist().setOnAction(e -> this.model.handleLoadPlaylist(this.model.getPlaylist().list));
 
             //speichert die Songlist in eine *.xml datei
-            this.view.getLoadSonglist().setOnAction(e -> this.model.handleLoadSonglist(this.model.getAllsongs().list));
+            this.view.getLoadSonglist().setOnAction(e -> this.model.loadJPASonglist());
 
             //laded die Songlist in die Library
-            this.view.getSaveSonglist().setOnAction(e -> this.model.handleSaveSonglist(this.model.getAllsongs().list));
+            this.view.getSaveSonglist().setOnAction(e -> this.model.saveJPASonglist());
 
             //abspielen eines MP3 files
             this.view.getPlay().setOnAction(e -> {this.model.playMp3(this.view.getListviewsong(), this.view.getListviewplaylist());});

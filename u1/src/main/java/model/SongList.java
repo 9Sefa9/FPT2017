@@ -113,7 +113,7 @@ public class SongList extends ModifiableObservableListBase<Song> implements inte
 
     public Song findSongByID(long id){
         for(Song u: list){
-            if(u.getUniqueID() == id){
+            if(u.getId() == id){
                 return u;
             }
         }
