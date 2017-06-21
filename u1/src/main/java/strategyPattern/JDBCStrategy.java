@@ -35,12 +35,26 @@ public class JDBCStrategy implements SerializableStrategy{
 
     @Override
     public void openWriteablePlaylist() throws IOException {
+        try{
+            con = DriverManager.getConnection("" +
+                    "jdbc:sqlite:C:\\Users\\Leon\\Documents\\SQLite\\SongDB.db");
 
+        }catch (SQLException s){
+            s.printStackTrace();
+        }
     }
 
     @Override
     public void openReadablePlaylist() throws IOException {
+        try{
+            con = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Leon\\Documents\\SQLite\\SongDB.db");
 
+            st = con.createStatement();
+            rs = st.executeQuery("SELECT id, title, artist, album, path "+
+                    "FROM Playlist");
+        }catch (SQLException s){
+            s.printStackTrace();
+        }
     }
 
     @Override
@@ -59,12 +73,45 @@ public class JDBCStrategy implements SerializableStrategy{
     public void writeSong(Song s) throws IOException {
         try(PreparedStatement ps = con.prepareStatement("INSERT INTO Library" +
                 "(id, title, artist, album, path) VALUES(?,?,?,?,?)")){
-        ps.setLong(1,s.getId());
-        ps.setString(2,s.getTitle());
-        ps.setString(3,s.getInterpret());
-        ps.setString(4,s.getAlbum());
-        ps.setString(5,s.getPath());
-        ps.executeUpdate();
+            ps.setLong(1,s.getId());
+            ps.setString(2,s.getTitle());
+            ps.setString(3,s.getInterpret());
+            ps.setString(4,s.getAlbum());
+            ps.setString(5,s.getPath());
+            ps.executeUpdate();
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void writePLSong(Song s) throws IOException {
+        try(PreparedStatement ps = con.prepareStatement("INSERT INTO Playlist" +
+                "(id, title, artist, album, path) VALUES(?,?,?,?,?)")){
+            ps.setLong(1,s.getId());
+            ps.setString(2,s.getTitle());
+            ps.setString(3,s.getInterpret());
+            ps.setString(4,s.getAlbum());
+            ps.setString(5,s.getPath());
+            ps.executeUpdate();
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteLibraryContent(){
+        try(PreparedStatement ps = con.prepareStatement("DELETE FROM Library")){
+            ps.executeUpdate();
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void deletePlaylistContent(){
+        try(PreparedStatement ps = con.prepareStatement("DELETE FROM Playlist")){
+            ps.executeUpdate();
 
         }catch(SQLException e){
             e.printStackTrace();
@@ -115,4 +162,5 @@ public class JDBCStrategy implements SerializableStrategy{
             s.printStackTrace();
         }
     }
+
 }

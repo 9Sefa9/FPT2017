@@ -33,10 +33,11 @@ public class Model{
     private ArrayList<Song> songFromPLFile;
     private double currentVolume = 1;
     private int currentPlaylistSong = 0;
+    private OpenJPAStrategy o;
 
 
     public Model(){
-
+        o = new OpenJPAStrategy();
     }
     //SETTER
     public void setDir(Path dir) {
@@ -532,6 +533,7 @@ public class Model{
 
             j = new JDBCStrategy();
             j.openWriteableSongs();
+            j.deleteLibraryContent();
 
             for (Song i : this.allsongs)
                 j.writeSong(i);
@@ -561,11 +563,46 @@ public class Model{
 
     }
 
+    public void saveDBPlaylist() {
+        JDBCStrategy j = null;
+        try {
+
+            j = new JDBCStrategy();
+            j.openWriteablePlaylist();
+
+            for (Song i : this.playlist)
+                j.writePLSong(i);
+
+            j.closeWriteable();
+
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
+    }
+    public void loadDBPlaylist() {
+        JDBCStrategy j = null;
+        try{
+            j = new JDBCStrategy();
+            j.openReadablePlaylist();
+
+            Song temp;
+            while((temp = (Song)j.readSong())!= null){
+                this.playlist.add(temp);
+            }
+
+            j.closeReadable();
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
     public void saveJPASonglist(){
-        OpenJPAStrategy o = new OpenJPAStrategy();
+        //OpenJPAStrategy o = new OpenJPAStrategy();
         try {
             o.openWriteableSongs();
-            //o.deleteContent();
+            o.deleteContent();
             for(Song s : this.allsongs)
             {
                 o.writeSong(s);
@@ -578,7 +615,7 @@ public class Model{
     }
 
     public void loadJPASonglist(){
-        OpenJPAStrategy o = new OpenJPAStrategy();
+        //OpenJPAStrategy o = new OpenJPAStrategy();
         try {
             o.openReadableSongs();
             //o.readSongs();

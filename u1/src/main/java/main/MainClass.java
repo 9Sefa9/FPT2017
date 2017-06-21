@@ -20,9 +20,9 @@ public class MainClass extends Application {
         Scene s = new Scene(v);
         Model m = new Model();
 
-        OpenJPAStrategy o = new OpenJPAStrategy();
-        o.openWriteableSongs();
-        o.closeWriteable();
+        //OpenJPAStrategy o = new OpenJPAStrategy();
+        //o.openWriteableSongs();
+        //o.closeWriteable();
 
         Controller controller = new Controller();
         controller.link(m, v);

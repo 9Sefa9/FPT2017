@@ -17,15 +17,22 @@ public class OpenJPAStrategy implements SerializableStrategy{
     private EntityManager em;
     List<model.Song> songs;
 
-    @Override
-    public void openWriteableSongs() throws IOException {
+    public OpenJPAStrategy(){
         emf = Persistence.createEntityManagerFactory("perUnit", System.getProperties());
         em = emf.createEntityManager();
     }
 
     @Override
+    public void openWriteableSongs() throws IOException {
+        em.getTransaction().begin();
+    }
+
+    @Override
     public void openReadableSongs() throws IOException {
-        emf = Persistence.createEntityManagerFactory("perUnit", System.getProperties());
+        em.getTransaction().begin();
+    }
+
+    public void setProperties(){
         Properties properties = new Properties();
         properties.put("openjpa.MetaDataFactory", "jpa(Types=" + model.Song.class.getName() + ")");
         properties.put("openjpa.ConnectionDriverName", "org.postgresql.Driver");
@@ -47,9 +54,7 @@ public class OpenJPAStrategy implements SerializableStrategy{
 
     @Override
     public void writeSong(Song s) throws IOException {
-        em.getTransaction().begin();
         em.persist(s);
-        em.getTransaction().commit();
     }
 
     public void deleteContent(){
@@ -77,12 +82,14 @@ public class OpenJPAStrategy implements SerializableStrategy{
 
     @Override
     public void closeReadable() {
+        em.getTransaction().commit();
         em.close();
         emf.close();
     }
 
     @Override
     public void closeWriteable() {
+        em.getTransaction().commit();
         em.close();
         emf.close();
     }
