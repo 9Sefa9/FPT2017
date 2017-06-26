@@ -2,6 +2,7 @@ package model;
 
 import com.mpatric.mp3agic.*;
 import com.sun.javafx.applet.ExperimentalExtensions;
+import interfaces.SerializableStrategy;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.media.Media;
@@ -336,10 +337,10 @@ public class Model{
     private void savePlaylist(ArrayList<Song> songs,String path) {
 
         //Binary Serialization, only Playlist
-        BinaryStrategy bs = null;
+        SerializableStrategy bs = null;
 
         try {
-            bs = new BinaryStrategy(path);
+            bs= new BinaryStrategy(path);
 
             bs.openWriteablePlaylist();
 
@@ -356,10 +357,9 @@ public class Model{
     private void loadPlaylist(String path){
 
       //BinaryStrategy, load only playlist
-      BinaryStrategy bs = null;
+      SerializableStrategy bs = null;
       try{
           bs = new BinaryStrategy(path);
-
           bs.openReadablePlaylist();
           Song songbs = null;
           while((songbs = (Song)bs.readSong()) != null)
@@ -374,8 +374,7 @@ public class Model{
     //XML Serialization , only Songlist
     public void saveSonglist(String path){
 
-
-        XMLStrategy xml = null;
+        SerializableStrategy xml = null;
              try{
                  xml = new XMLStrategy(path);
 
@@ -392,7 +391,8 @@ public class Model{
     //XML Serialization, only Songlist
     public void loadSonglist(String path){
 
-        XMLStrategy xml = null;
+        SerializableStrategy xml = null;
+
         try{
             xml = new XMLStrategy(path);
             xml.openReadableSongs();
