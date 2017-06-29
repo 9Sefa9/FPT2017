@@ -13,9 +13,10 @@ public class Controller{
     private View view;
     private SongList sl, sl2;
     private Song cs;
+    private String currentTime;
 
     public Controller(){
-
+        currentTime = "00:00";
     }
     public void link(Model model, View view) {
         try {
@@ -96,8 +97,9 @@ public class Controller{
                 this.view.setCurrentTitle(this.model.getCurrent().getTitle());
                 this.model.getMediaPlayer().currentTimeProperty().addListener((o, oldVa, newVa) -> {
                     this.view.getSongSlider().setValue((newVa.toSeconds()/this.model.getMediaPlayer().getTotalDuration().toSeconds()));
-                    this.view.getSongTime().setText((int)newVa.toMinutes() + ":" + this.songDurationToSecString(newVa));
-                    this.view.getSongDuration().setText((int)this.model.getMediaPlayer().getTotalDuration().toMinutes() + ":" + this.songDurationToSecString(this.model.getMediaPlayer().getTotalDuration()));
+                    this.currentTime = this.songDurationToMinString(newVa) + ":" + this.songDurationToSecString(newVa);
+                    this.view.getSongTime().setText(currentTime);
+                    this.view.getSongDuration().setText(this.songDurationToMinString(this.model.getMediaPlayer().getTotalDuration()) + ":" + this.songDurationToSecString(this.model.getMediaPlayer().getTotalDuration()));
                 });
             });
 
@@ -115,7 +117,22 @@ public class Controller{
 
     }
 
-    public String songDurationToSecString(Duration dur)
+    private String songDurationToMinString(Duration dur)
+    {
+        int mins = (int)dur.toMinutes();
+        String min;
+        if(mins < 10)
+        {
+            min = "0" + Integer.toString(mins);
+        }
+        else
+        {
+            min = Integer.toString(mins);
+        }
+        return min;
+    }
+
+    private String songDurationToSecString(Duration dur)
     {
         int secs = (int)dur.toSeconds();
         String sec;
@@ -132,6 +149,14 @@ public class Controller{
             sec = Integer.toString(secs);
         }
         return sec;
+    }
+
+    public String getCurrentTime(){
+        return this.currentTime;
+    }
+
+    public void updateCurrentTime(String time){
+        this.view.getSongTime().setText(time);
     }
 
 }

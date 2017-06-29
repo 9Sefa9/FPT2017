@@ -125,11 +125,11 @@ public class View extends BorderPane{
 
         songSlider = new Slider(0, 1, 0);
 
-        HBox hBox = new HBox(150);
+        HBox hBox = new HBox(140);
 
         //Song durations
-        songTime = new Text("0:00");
-        songDuration = new Text("0:00");
+        songTime = new Text("00:00");
+        songDuration = new Text("00:00");
         hBox.getChildren().addAll(songTime, songDuration);
 
         vBox.setPadding(new Insets(40, 0, 0, 0));
