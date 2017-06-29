@@ -1,13 +1,7 @@
 package networking;
 
 import controller.Controller;
-import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import model.Model;
-import view.View;
-
 import java.io.IOException;
 import java.net.*;
 
