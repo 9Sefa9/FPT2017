@@ -1,24 +1,50 @@
 package networking;
 
-import java.io.*;
 import java.net.MalformedURLException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.rmi.Naming;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.server.UnicastRemoteObject;
 
-public class TCPServer {
+public class TCPServer extends UnicastRemoteObject implements IContainer{
 
+    public TCPServer() throws RemoteException{
+
+    }
+    /*
     public void initialization() throws RemoteException,MalformedURLException{
         LocateRegistry.createRegistry(5020);
 
-        Remote tcpcontainer = new TCPContainer();
-        Naming.rebind("//localhost:1099/tcpcontainer", tcpcontainer);
-        System.out.println("tcpcontainer started...");
+        //Remote tcpcontainer = new IContainer();
+        //Naming.rebind("//localhost:1099/tcpcontainer", tcpcontainer);
+        // System.out.println("tcpcontainer started...");
+    }
+    */
+    @Override
+    public void setPassword(String pw) throws RemoteException {
+
     }
 
+    @Override
+    public String getPassword(String pw) throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public boolean checkPassword(String pw) throws RemoteException {
+        return false;
+    }
+
+    @Override
+    public void setName(String name) throws RemoteException {
+
+    }
+
+    @Override
+    public String getName() throws RemoteException {
+        return null;
+    }
 }
 
 

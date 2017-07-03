@@ -9,7 +9,7 @@ public class TCPClient {
 
     private String password;
     public void initialization() throws RemoteException, NotBoundException,MalformedURLException{
-        TCPContainer container = (TCPContainer) Naming.lookup("//localhost/tcpcontainer");
+        IContainer container = (IContainer) Naming.lookup("//localhost/tcpcontainer");
 
         //zum server senden
         container.setName("d");
