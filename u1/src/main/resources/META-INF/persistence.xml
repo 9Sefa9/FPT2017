@@ -9,7 +9,7 @@
         <class>model.SongCopy</class>
         <properties>
             <property name="openjpa.ConnectionDriverName" value="org.postgresql.Driver"/>
-            <property name="openjpa.ConnectionURL" value="jdbc:sqlite:C:\Users\Leon\Documents\SQLite\SongDB.db"/>
+            <property name="openjpa.ConnectionURL" value="jdbc:sqlite:C:\Users\Sefa\Desktop\SQLite\Library.db"/>
             <property name="openjpa.RuntimeUnenhancedClasses" value="supported"/>
             <property name="openjpa.jdbc.SynchronizeMappings" value="false"/>
         </properties>
