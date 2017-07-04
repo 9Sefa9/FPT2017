@@ -55,7 +55,8 @@ public class TCPServer extends Thread {
                     if (incomingmsg.equals(this.password)) {
                         System.out.println(incomingmsg);
                         System.out.println("PASSSWORD CORRECT\n");
-                        out.flush();
+                        //eventuell teilaufgabe e)
+
                     } else {
                         System.out.println("PASSWORD INCORRECT!");
                         out.flush();
