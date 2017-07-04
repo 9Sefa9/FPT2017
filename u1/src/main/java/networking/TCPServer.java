@@ -6,7 +6,11 @@ import java.net.*;
 
 public class TCPServer extends Thread {
 
-    protected String password;
+    private String password = "test";
+
+    public static void main(String[] args){
+        new TCPServer().start();
+    }
     //nimmt Client entgegen.
     public void run() {
         try (ServerSocket server = new ServerSocket(5020)) {
@@ -15,8 +19,8 @@ public class TCPServer extends Thread {
             while (true) {
                 try {
                     Socket socket = server.accept();
-                    connections++;
-                    new TCPServerThread(connections, socket).start();
+                    connections+=1;
+                    new TCPServerThread(connections, socket,password).start();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -24,38 +28,54 @@ public class TCPServer extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
 }
   //Stellt eine Verbindung mit dem Client auf.
   class TCPServerThread extends Thread {
     private int name;
+    private String password;
     private Socket socket;
 
-    public TCPServerThread(int name, Socket socket) {
+    public TCPServerThread(int name, Socket socket, String password) {
         this.name = name;
+        this.password = password;
         this.socket = socket;
     }
 
     public void run() {
-        System.out.println("Connected to Client #:"+name+"...");
+        System.out.println("Connected with Client #:"+name+"...");
         try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             OutputStream out = socket.getOutputStream()) {
+             PrintWriter out = new PrintWriter(socket.getOutputStream())) {
 
-            while(true){
-            if((in.readLine().equals(this.password));
+            String incomingmsg = "";
+            try {
+            while((incomingmsg = in.readLine()) != null){
 
+                    if (incomingmsg.equals(this.password)) {
+                        System.out.println(incomingmsg);
+                        System.out.println("PASSSWORD CORRECT\n");
+                        out.flush();
+                    } else {
+                        System.out.println("PASSWORD INCORRECT!");
+                        out.flush();
+                        System.out.println("Disconnected with Client #" + name + "...");
+                        name-=1;
+                        socket.close();
+                        break;
+                    }
             }
-            out.write(2);
-            out.flush();
-
-            System.out.println("Connection #"+ name +" closed");
-            socket.close();
-        } catch (IOException e1) {
+            }catch(SocketException s){
+                System.out.println("Client #"+name+" Disconnected...");
+                name-=1;
+                socket.close();
+            }
+        } catch (IOException  e1) {
             e1.printStackTrace();
         }
 
     }
+
 }
 
     /*
