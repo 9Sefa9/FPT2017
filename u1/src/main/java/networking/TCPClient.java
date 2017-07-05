@@ -36,7 +36,7 @@ public class TCPClient extends Thread{
     }
 }
 /*
-        IContainer container = (IContainer) Naming.lookup("//localhost/tcpcontainer");
+        ContainerImpl container = (ContainerImpl) Naming.lookup("//localhost/tcpcontainer");
 
         //zum server senden
         container.setName("d");

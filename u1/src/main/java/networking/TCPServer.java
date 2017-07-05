@@ -65,13 +65,14 @@ public class TCPServer extends Thread {
 
                 if(ClientPassword.equals(this.ServerPassword)) {
                     System.out.println("PASSWORD::CORRECT");
-                    System.out.println("CREATING RMI FOR "+this.ClientName/*greif auf arraylist zu*/);
-                    // Führe rmi durch o.ä..
+                    System.out.println("SERVICENAME::REMOTE OBJECT TO "+this.ClientName);
+                    // Führe rmi durch was ist ein DIENSTNAME ?
+
+                    out.write();
 
                     clientlist.add(ClientName);
                     LocateRegistry.createRegistry(5020);
-                    Remote
-                    out.write("SERVICENAME::REMOTE OBJECT>> "+out.write());
+
                 }else{
                     System.out.println("PASSWORD::INCORRECT, CLOSING CONNECTION...");
                     out.flush();
