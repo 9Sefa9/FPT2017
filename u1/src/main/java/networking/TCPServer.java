@@ -3,14 +3,16 @@ package networking;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
 public class TCPServer extends Thread {
 
-    private String password = "test";
+    private String password = "123";
 
     public static void main(String[] args){
         new TCPServer().start();
     }
+
     //nimmt Client entgegen.
     public void run() {
         try (ServerSocket server = new ServerSocket(5020)) {
@@ -20,7 +22,7 @@ public class TCPServer extends Thread {
                 try {
                     Socket socket = server.accept();
                     connections+=1;
-                    new TCPServerThread(connections, socket,password).start();
+                    new TCPServerThread(socket,password).start();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -33,25 +35,38 @@ public class TCPServer extends Thread {
 }
   //Stellt eine Verbindung mit dem Client auf.
   class TCPServerThread extends Thread {
-    private int name;
+    private ArrayList<Object> ar;
     private String password;
     private Socket socket;
 
-    public TCPServerThread(int name, Socket socket, String password) {
-        this.name = name;
+    public TCPServerThread(Socket socket, String password) {
         this.password = password;
         this.socket = socket;
     }
 
     public void run() {
-        System.out.println("Connected with Client #:"+name+"...");
+        System.out.println("Connected with Client...");
         try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              PrintWriter out = new PrintWriter(socket.getOutputStream())) {
 
             String incomingmsg = "";
             try {
-            while((incomingmsg = in.readLine()) != null){
+            //while((incomingmsg = in.readLine()) != null){
 
+                System.out.println("CLIENT NAME: "+in.readLine());
+                if(in.readLine().equals(this.password)) {
+                    System.out.println("PASSWORD::CORRECT");
+                    System.out.println("CREATING RMI FOR"/*greif auf arraylist zu*/);
+                    // Führe rmi durch o.ä..
+                    ar.
+
+                }else{
+                    System.out.println("PASSWORD::INCORRECT, CLOSING CONNECTION...");
+                    out.flush();
+                    socket.close();
+                }
+            //}
+                /*
                     if (incomingmsg.equals(this.password)) {
                         System.out.println(incomingmsg);
                         System.out.println("PASSSWORD CORRECT\n");
@@ -59,16 +74,13 @@ public class TCPServer extends Thread {
 
                     } else {
                         System.out.println("PASSWORD INCORRECT!");
-                        out.flush();
-                        System.out.println("Disconnected with Client #" + name + "...");
-                        name-=1;
-                        socket.close();
-                        break;
+
                     }
-            }
+                    */
+
+
             }catch(SocketException s){
-                System.out.println("Client #"+name+" Disconnected...");
-                name-=1;
+                System.out.println("Client Disconnected...");
                 socket.close();
             }
         } catch (IOException  e1) {

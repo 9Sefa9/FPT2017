@@ -10,18 +10,22 @@ import java.util.Scanner;
 
 public class TCPClient extends Thread{
 
-    private String name="NAME",password="PASSWORD";
+    private String name="client",password="123";
 
     public TCPClient(String name, String password){
         this.name  = name;
         this.password = password;
     }
-    public void writeToServer(){
+    public static void main(String[]args){
         try (Socket serverCon = new Socket("localhost", 5020);
              BufferedReader in = new BufferedReader(new InputStreamReader(serverCon.getInputStream()));
              PrintWriter out = new PrintWriter(serverCon.getOutputStream())) {
 
-            out.write(this.name);
+            out.write("client\n");
+            out.flush();
+
+            out.write("123");
+            out.flush();
 
         } catch (IOException e) {
             e.printStackTrace();
