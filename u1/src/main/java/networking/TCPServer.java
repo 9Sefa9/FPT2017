@@ -5,6 +5,8 @@ import com.sun.deploy.util.SessionState;
 
 import java.io.*;
 import java.net.*;
+import java.rmi.Remote;
+import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 
 public class TCPServer extends Thread {
@@ -66,6 +68,10 @@ public class TCPServer extends Thread {
                     System.out.println("CREATING RMI FOR "+this.ClientName/*greif auf arraylist zu*/);
                     // Führe rmi durch o.ä..
 
+                    clientlist.add(ClientName);
+                    LocateRegistry.createRegistry(5020);
+                    Remote
+                    out.write("SERVICENAME::REMOTE OBJECT>> "+out.write());
                 }else{
                     System.out.println("PASSWORD::INCORRECT, CLOSING CONNECTION...");
                     out.flush();
