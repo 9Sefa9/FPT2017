@@ -21,11 +21,14 @@ public class TCPClient extends Thread{
              BufferedReader in = new BufferedReader(new InputStreamReader(serverCon.getInputStream()));
              PrintWriter out = new PrintWriter(serverCon.getOutputStream())) {
 
+            //sendet passwort
+            out.write("123\n");
+            out.flush();
+
+            //sendet Dienstnamen
             out.write("client\n");
             out.flush();
 
-            out.write("123");
-            out.flush();
 
         } catch (IOException e) {
             e.printStackTrace();

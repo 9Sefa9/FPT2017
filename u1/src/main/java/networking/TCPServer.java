@@ -1,13 +1,16 @@
 package networking;
 
 
+import com.sun.deploy.util.SessionState;
+
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 
 public class TCPServer extends Thread {
 
-    private String password = "123";
+    private String ServerPassword = "123";
+    private ArrayList<Object> clientlist;
 
     public static void main(String[] args){
         new TCPServer().start();
@@ -16,13 +19,12 @@ public class TCPServer extends Thread {
     //nimmt Client entgegen.
     public void run() {
         try (ServerSocket server = new ServerSocket(5020)) {
-            int connections = 0;
 
             while (true) {
                 try {
                     Socket socket = server.accept();
-                    connections+=1;
-                    new TCPServerThread(socket,password).start();
+                    clientlist = new ArrayList<>();
+                    new TCPServerThread(socket,ServerPassword,clientlist).start();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -31,17 +33,20 @@ public class TCPServer extends Thread {
             e.printStackTrace();
         }
     }
-
 }
   //Stellt eine Verbindung mit dem Client auf.
   class TCPServerThread extends Thread {
-    private ArrayList<Object> ar;
-    private String password;
+
+    ArrayList<Object> clientlist;
+    private String ServerPassword;
+    private String ClientPassword;
+    private String ClientName;
     private Socket socket;
 
-    public TCPServerThread(Socket socket, String password) {
-        this.password = password;
+    public TCPServerThread(Socket socket, String ServerPassword,ArrayList<Object> clientlist) {
+        this.ServerPassword = ServerPassword;
         this.socket = socket;
+        this.clientlist = clientlist;
     }
 
     public void run() {
@@ -49,35 +54,23 @@ public class TCPServer extends Thread {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              PrintWriter out = new PrintWriter(socket.getOutputStream())) {
 
-            String incomingmsg = "";
             try {
-            //while((incomingmsg = in.readLine()) != null){
+                this.ClientPassword = in.readLine();
+                this.ClientName = in.readLine();
 
-                System.out.println("CLIENT NAME: "+in.readLine());
-                if(in.readLine().equals(this.password)) {
+                System.out.println(ClientPassword);
+                System.out.println(ClientName);
+
+                if(ClientPassword.equals(this.ServerPassword)) {
                     System.out.println("PASSWORD::CORRECT");
-                    System.out.println("CREATING RMI FOR"/*greif auf arraylist zu*/);
+                    System.out.println("CREATING RMI FOR "+this.ClientName/*greif auf arraylist zu*/);
                     // Führe rmi durch o.ä..
-                    ar.
 
                 }else{
                     System.out.println("PASSWORD::INCORRECT, CLOSING CONNECTION...");
                     out.flush();
                     socket.close();
                 }
-            //}
-                /*
-                    if (incomingmsg.equals(this.password)) {
-                        System.out.println(incomingmsg);
-                        System.out.println("PASSSWORD CORRECT\n");
-                        //eventuell teilaufgabe e)
-
-                    } else {
-                        System.out.println("PASSWORD INCORRECT!");
-
-                    }
-                    */
-
 
             }catch(SocketException s){
                 System.out.println("Client Disconnected...");
