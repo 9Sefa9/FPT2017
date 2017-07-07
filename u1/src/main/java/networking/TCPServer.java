@@ -68,7 +68,6 @@ public class TCPServer extends Thread {
                     System.out.println("SERVICENAME::REMOTE OBJECT TO "+this.ClientName);
                     // Führe rmi durch was ist ein DIENSTNAME ?
 
-
                     synchronized (clientlist){
                         clientlist.add(ClientName);
                     }
@@ -76,9 +75,10 @@ public class TCPServer extends Thread {
                     out.write("remObj");
                     out.flush();
 
-                    LocateRegistry.createRegistry(5020);//TODO
+                    this.socket.close();
+                    LocateRegistry.createRegistry(5020);
                     Remote remObj = new ContainerImpl();
-                    Naming.rebind("//localhost:5020/remObj", remObj);
+                    Naming.rebind("//127.0.0.1:5020/remObj", remObj);
 
                     System.out.println("RMI STARTED...");
                 }else{

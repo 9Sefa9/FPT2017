@@ -34,11 +34,11 @@ public class TCPClient extends Thread{
             System.out.println("ACCESSING TO REMOTE OBJECT:: "+remoteobject);
 
             try {
-                Thread.sleep(2000);
+                Thread.sleep(500);
             }catch (Exception e){
                 e.printStackTrace();
             }
-            Container c = (Container)Naming.lookup(remoteobject);
+            Container c = (Container)Naming.lookup("//127.0.0.1:5020/"+remoteobject);
             System.out.println("Das ist ein : "+c.test("test")+"!");
 
         } catch (IOException e) {
