@@ -1,7 +1,6 @@
 package networking;
 
-
-import com.sun.deploy.util.SessionState;
+import controller.Controller;
 
 import java.io.*;
 import java.net.*;
@@ -77,10 +76,11 @@ public class TCPServer extends Thread {
                     out.write("remObj");
                     out.flush();
 
-                    // LocateRegistry.createRegistry(5020);
-                    //Remote remObj = new Controller();
-                    //Naming.rebind("//localhost:5020/remObj", remObj);
+                    LocateRegistry.createRegistry(5020);//TODO
+                    Remote remObj = new ContainerImpl();
+                    Naming.rebind("//localhost:5020/remObj", remObj);
 
+                    System.out.println("RMI STARTED...");
                 }else{
                     System.out.println("PASSWORD::INCORRECT, CLOSING CONNECTION...");
                     out.flush();

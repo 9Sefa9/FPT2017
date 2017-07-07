@@ -4,6 +4,7 @@ import controller.Controller;
 import javafx.application.Platform;
 import java.io.IOException;
 import java.net.*;
+import java.rmi.RemoteException;
 
 public class UDPClient extends Thread{
 
@@ -39,7 +40,13 @@ public class UDPClient extends Thread{
 
                     String time = new String(packet.getData(), 0, packet.getLength());
 
-                    Platform.runLater(() -> controller.updateCurrentTime(time));
+                    Platform.runLater(() -> {
+                        try {
+                            controller.updateCurrentTime(time);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    });
 
                     try {
                         Thread.sleep(1000);

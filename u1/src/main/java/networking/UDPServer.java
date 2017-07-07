@@ -6,6 +6,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.rmi.RemoteException;
 import java.util.Scanner;
 
 public class UDPServer extends Thread{
@@ -46,31 +47,33 @@ public class UDPServer extends Thread{
         }
 
         public void run(){
+            try {
+                InetAddress ia = this.packet.getAddress();
+                int port = packet.getPort();
+                int length = packet.getLength();
+                byte[] data = packet.getData();
 
-            InetAddress ia = this.packet.getAddress();
-            int port = packet.getPort();
-            int length = packet.getLength();
-            byte[] data = packet.getData();
+                System.out.printf("Anfrage von %s vom Port %d mit der Länge %d:%n%s%n",
+                        ia, port, length, new String(data, 0, length));
 
-            System.out.printf("Anfrage von %s vom Port %d mit der Länge %d:%n%s%n",
-                    ia, port, length, new String(data, 0, length));
+                String da = new String(packet.getData());
+                Scanner scanner = new Scanner(da).useDelimiter(":");
+                String command = scanner.next();
 
-            String da = new String(packet.getData());
-            Scanner scanner = new Scanner(da).useDelimiter(":");
-            String command = scanner.next();
+                if (command.equals("CURRENTTIME")) {
 
-            if(command.equals("CURRENTTIME")){
+                    byte[] currentTime = controller.getCurrentTime().getBytes();
+                    packet = new DatagramPacket(currentTime, currentTime.length, ia, port);
 
-                byte[] currentTime = controller.getCurrentTime().getBytes();
-                packet = new DatagramPacket(currentTime, currentTime.length, ia, port);
+                } else {
 
-            } else {
+                    byte[] unknown = "Unknown command".getBytes();
+                    packet = new DatagramPacket(unknown, unknown.length, ia, port);
 
-                byte[] unknown = "Unknown command".getBytes();
-                packet = new DatagramPacket(unknown, unknown.length, ia, port);
-
+                }
+            }catch (RemoteException e){
+                e.printStackTrace();
             }
-
             try {
                 datagramSocket.send(packet);
             } catch (IOException e) {

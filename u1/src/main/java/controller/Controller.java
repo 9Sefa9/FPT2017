@@ -7,6 +7,7 @@ import model.Song;
 import model.SongList;
 import view.View;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -21,7 +22,7 @@ public class Controller extends UnicastRemoteObject{
     public Controller() throws RemoteException{
         currentTime = "00:00";
     }
-    public void link(Model model, View view) {
+    public void link(Model model, View view) throws RemoteException {
         try {
             this.model = model;
             this.view = view;
@@ -99,11 +100,15 @@ public class Controller extends UnicastRemoteObject{
             this.cs.pathProperty().addListener((v, oldV, newV) -> {
                 this.view.setCurrentTitle(this.model.getCurrent().getTitle());
                 this.model.getMediaPlayer().currentTimeProperty().addListener((o, oldVa, newVa) -> {
-                    this.view.getSongSlider().setValue((newVa.toSeconds()/this.model.getMediaPlayer().getTotalDuration().toSeconds()));
-                    this.currentTime = this.songDurationToMinString(newVa) + ":" + this.songDurationToSecString(newVa);
-                    this.view.getSongTime().setText(currentTime);
-                    this.view.getSongDuration().setText(this.songDurationToMinString(this.model.getMediaPlayer().getTotalDuration()) + ":" + this.songDurationToSecString(this.model.getMediaPlayer().getTotalDuration()));
-                });
+                    try {
+                        this.view.getSongSlider().setValue((newVa.toSeconds() / this.model.getMediaPlayer().getTotalDuration().toSeconds()));
+                        this.currentTime = this.songDurationToMinString(newVa) + ":" + this.songDurationToSecString(newVa);
+                        this.view.getSongTime().setText(currentTime);
+                        this.view.getSongDuration().setText(this.songDurationToMinString(this.model.getMediaPlayer().getTotalDuration()) + ":" + this.songDurationToSecString(this.model.getMediaPlayer().getTotalDuration()));
+                    }catch (RemoteException e){
+                        e.printStackTrace();
+                    }
+                    });
             });
 
             //interpreter setten
@@ -120,7 +125,7 @@ public class Controller extends UnicastRemoteObject{
 
     }
 
-    private String songDurationToMinString(Duration dur)
+    private String songDurationToMinString(Duration dur) throws RemoteException
     {
         int mins = (int)dur.toMinutes();
         String min;
@@ -135,7 +140,7 @@ public class Controller extends UnicastRemoteObject{
         return min;
     }
 
-    private String songDurationToSecString(Duration dur)
+    private String songDurationToSecString(Duration dur) throws RemoteException
     {
         int secs = (int)dur.toSeconds();
         String sec;
@@ -154,12 +159,12 @@ public class Controller extends UnicastRemoteObject{
         return sec;
     }
 
-    public String getCurrentTime(){
+    public String getCurrentTime() throws RemoteException{
         return this.currentTime;
     }
 
     //Updated/setzt Die aktuelle spielzeit
-    public void updateCurrentTime(String time){
+    public void updateCurrentTime(String time) throws RemoteException{
         this.view.getSongTime().setText(time);
     }
 

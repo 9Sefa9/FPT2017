@@ -16,7 +16,7 @@ public class TCPClient extends Thread{
     public TCPClient(String password){
         this.password = password;
     }
-    public static void main(String[]args){
+    public static void main(String[]args)throws RemoteException,NotBoundException{
         try (Socket serverCon = new Socket("localhost", 5020);
              BufferedReader in = new BufferedReader(new InputStreamReader(serverCon.getInputStream()));
              PrintWriter out = new PrintWriter(serverCon.getOutputStream())) {
@@ -30,22 +30,19 @@ public class TCPClient extends Thread{
             out.flush();
 
             remoteobject= in.readLine();
-            System.out.println("RECEIVED::"+remoteobject);
+            System.out.println("RECEIVED REMOTEOBJECT::"+remoteobject);
+            System.out.println("ACCESSING TO REMOTE OBJECT:: "+remoteobject);
 
-
-
-
+            try {
+                Thread.sleep(2000);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            Container c = (Container)Naming.lookup(remoteobject);
+            System.out.println("Das ist ein : "+c.test("test")+"!");
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 }
-/*
-        ContainerImpl container = (ContainerImpl) Naming.lookup("//localhost/tcpcontainer");
-
-        //zum server senden
-        container.setName("d");
-
-        boolean checkpassw = container.checkPassword(password);
-        */
