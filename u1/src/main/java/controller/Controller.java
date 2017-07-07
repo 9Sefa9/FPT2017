@@ -7,7 +7,10 @@ import model.Song;
 import model.SongList;
 import view.View;
 
-public class Controller{
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+
+public class Controller extends UnicastRemoteObject{
 
     private Model model;
     private View view;
@@ -15,7 +18,7 @@ public class Controller{
     private Song cs;
     private String currentTime;
 
-    public Controller(){
+    public Controller() throws RemoteException{
         currentTime = "00:00";
     }
     public void link(Model model, View view) {
@@ -155,6 +158,7 @@ public class Controller{
         return this.currentTime;
     }
 
+    //Updated/setzt Die aktuelle spielzeit
     public void updateCurrentTime(String time){
         this.view.getSongTime().setText(time);
     }

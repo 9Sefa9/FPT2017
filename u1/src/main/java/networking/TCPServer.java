@@ -5,6 +5,7 @@ import com.sun.deploy.util.SessionState;
 
 import java.io.*;
 import java.net.*;
+import java.rmi.Naming;
 import java.rmi.Remote;
 import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class TCPServer extends Thread {
     }
 
     public void run() {
-        System.out.println("Connected with Client...");
+        System.out.println("CLIENT CONNECTED...");
         try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              PrintWriter out = new PrintWriter(socket.getOutputStream())) {
 
@@ -60,18 +61,25 @@ public class TCPServer extends Thread {
                 this.ClientPassword = in.readLine();
                 this.ClientName = in.readLine();
 
-                System.out.println(ClientPassword);
-                System.out.println(ClientName);
+                System.out.println("CLIENTPASWORD: "+ClientPassword);
+                System.out.println("ClIENTNAME: "+ClientName);
 
                 if(ClientPassword.equals(this.ServerPassword)) {
                     System.out.println("PASSWORD::CORRECT");
                     System.out.println("SERVICENAME::REMOTE OBJECT TO "+this.ClientName);
                     // Führe rmi durch was ist ein DIENSTNAME ?
 
-                    out.write();
 
-                    clientlist.add(ClientName);
-                    LocateRegistry.createRegistry(5020);
+                    synchronized (clientlist){
+                        clientlist.add(ClientName);
+                    }
+
+                    out.write("remObj");
+                    out.flush();
+
+                    // LocateRegistry.createRegistry(5020);
+                    //Remote remObj = new Controller();
+                    //Naming.rebind("//localhost:5020/remObj", remObj);
 
                 }else{
                     System.out.println("PASSWORD::INCORRECT, CLOSING CONNECTION...");

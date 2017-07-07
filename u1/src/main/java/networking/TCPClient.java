@@ -1,6 +1,7 @@
 package networking;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.Socket;
 import java.rmi.Naming;
@@ -10,10 +11,9 @@ import java.util.Scanner;
 
 public class TCPClient extends Thread{
 
-    private String name="client",password="123";
+    private static String password="123",remoteobject;
 
-    public TCPClient(String name, String password){
-        this.name  = name;
+    public TCPClient(String password){
         this.password = password;
     }
     public static void main(String[]args){
@@ -26,8 +26,14 @@ public class TCPClient extends Thread{
             out.flush();
 
             //sendet Dienstnamen
-            out.write("client\n");
+            out.write(InetAddress.getLocalHost().getHostName()+"@"+InetAddress.getLocalHost().getHostAddress()+"\n");
             out.flush();
+
+            remoteobject= in.readLine();
+            System.out.println("RECEIVED::"+remoteobject);
+
+
+
 
 
         } catch (IOException e) {

@@ -127,7 +127,7 @@ public class View extends BorderPane{
 
         HBox hBox = new HBox(140);
 
-        //Song durations
+        //Down Frame Song durations
         songTime = new Text("00:00");
         songDuration = new Text("00:00");
         hBox.getChildren().addAll(songTime, songDuration);
