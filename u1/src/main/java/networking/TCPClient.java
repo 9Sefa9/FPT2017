@@ -26,10 +26,11 @@ public class TCPClient extends Thread{
             out.flush();
 
             //sendet Dienstnamen
-            out.write(InetAddress.getLocalHost().getHostName()+"@"+InetAddress.getLocalHost().getHostAddress()+"\n");
+            System.out.println(InetAddress.getLocalHost().getHostAddress());
+            out.write(InetAddress.getLocalHost().getHostAddress()+"\n");
             out.flush();
 
-            remoteobject= in.readLine();
+            remoteobject = in.readLine();
             System.out.println("RECEIVED REMOTEOBJECT::"+remoteobject);
             System.out.println("ACCESSING TO REMOTE OBJECT:: "+remoteobject);
 
@@ -38,6 +39,7 @@ public class TCPClient extends Thread{
             }catch (Exception e){
                 e.printStackTrace();
             }
+            //
             Container c = (Container)Naming.lookup("//127.0.0.1:5020/"+remoteobject);
             System.out.println("Das ist ein : "+c.test("test")+"!");
 
