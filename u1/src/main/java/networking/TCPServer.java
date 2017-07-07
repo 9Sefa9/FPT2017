@@ -9,10 +9,12 @@ import java.rmi.Remote;
 import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 
+import static networking.TCPServer.clientlist;
+
 public class TCPServer extends Thread {
 
     private String ServerPassword = "123";
-    private ArrayList<Object> clientlist;
+    public static ArrayList<Object> clientlist;
 
     public static void main(String[] args){
         new TCPServer().start();
@@ -21,6 +23,10 @@ public class TCPServer extends Thread {
     //nimmt Client entgegen.
     public void run() {
         try (ServerSocket server = new ServerSocket(5020)) {
+
+            LocateRegistry.createRegistry(5021);
+            Remote remObj = new ContainerImpl();
+            Naming.rebind("//127.0.0.1:5021/remObj", remObj);
 
             while (true) {
                 try {
@@ -39,16 +45,15 @@ public class TCPServer extends Thread {
   //Stellt eine Verbindung mit dem Client auf.
   class TCPServerThread extends Thread {
 
-    ArrayList<Object> clientlist;
     private String ServerPassword;
     private String ClientPassword;
     private String ClientName;
     private Socket socket;
 
-    public TCPServerThread(Socket socket, String ServerPassword,ArrayList<Object> clientlist) {
+    public TCPServerThread(Socket socket, String ServerPassword,ArrayList<Object> clientlists) {
         this.ServerPassword = ServerPassword;
         this.socket = socket;
-        this.clientlist = clientlist;
+        clientlist = clientlists;
     }
 
     public void run() {
@@ -70,15 +75,13 @@ public class TCPServer extends Thread {
 
                     synchronized (clientlist){
                         clientlist.add(ClientName);
+                        System.out.println(clientlist);
                     }
 
                     out.write("remObj");
                     out.flush();
 
                     this.socket.close();
-                    LocateRegistry.createRegistry(5020);
-                    Remote remObj = new ContainerImpl();
-                    Naming.rebind("//127.0.0.1:5020/remObj", remObj);
 
                     System.out.println("RMI STARTED...");
                 }else{
