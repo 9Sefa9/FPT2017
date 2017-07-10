@@ -102,53 +102,6 @@ public class TCPServer extends Thread {
 
 }
 
-    /*
-    public TCPServer() throws RemoteException,MalformedURLException {
-        super();
-        initialization();
-    }
-
-    public void initialization() throws RemoteException,MalformedURLException{
-        TCPServer tcp = new TCPServer();
-        Registry registry = LocateRegistry.createRegistry(5020);
-        registry.rebind("//localhost:1099/tcp", tcp);
-
-    }
-
-    @Override
-    public void setPassword(String pw) throws RemoteException {
-
-    }
-
-    @Override
-    public String getPassword(String pw) throws RemoteException {
-        return null;
-    }
-
-    @Override
-    public boolean checkPassword(String pw) throws RemoteException {
-        return false;
-    }
-
-    @Override
-    public void setName(String name) throws RemoteException {
-
-    }
-
-    @Override
-    public String getName() throws RemoteException {
-        return null;
-    }
-    */
-
-
-
-
-
-
-
-
-
 
 
 
