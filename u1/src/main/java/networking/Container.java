@@ -19,6 +19,6 @@ public interface Container extends Remote{
     void playButton() throws RemoteException;
     void pauseButton() throws RemoteException;
     void nextButton() throws RemoteException;
-    void updateAllSongs() throws RemoteException;
-    void updatePlaylist() throws RemoteException;
+    void updateAllSongs(SongList songs) throws RemoteException;
+    void updatePlaylist(SongList songs) throws RemoteException;
 }

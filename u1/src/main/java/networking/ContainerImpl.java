@@ -83,13 +83,13 @@ public class ContainerImpl extends UnicastRemoteObject implements Container {
     }
 
     @Override
-    public void updateAllSongs() throws RemoteException {
-        this.c.updateAllSongs(this.getAllSongs());
+    public void updateAllSongs(SongList songs) throws RemoteException {
+        this.c.updateAllSongs(songs);
     }
 
     @Override
-    public void updatePlaylist() throws RemoteException {
-        this.c.updatePlaylist(this.getPlaylist());
+    public void updatePlaylist(SongList songs) throws RemoteException {
+        this.c.updatePlaylist(songs);
     }
 
 }

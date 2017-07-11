@@ -45,12 +45,30 @@ public class Controller {
             //Lauscht und Updated regelmäßig die hinzugefügten Songs zum View.
             this.sl = new SongList();
             this.model.setAllsongs(this.sl);
-            this.sl.addListener((ListChangeListener<? super Song>) c -> this.model.updateLVSong(this.sl,this.view.getListviewsong(),this.view.getListviewplaylist()));
+            this.sl.addListener((ListChangeListener<? super Song>) c -> {
+                this.model.updateLVSong(this.sl,this.view.getListviewsong(),this.view.getListviewplaylist());
+                if(this.container != null) {
+                    try {
+                        this.container.updateAllSongs(this.sl);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
 
             //Lauscht und Updated regelmäßig die Playlist mit den zuvor "geaddeten" Songs.
             this.sl2 = new SongList();
             this.model.setPlaylist(this.sl2);
-            this.sl2.addListener((ListChangeListener<? super Song>) c -> this.model.updateLVPlaylist(this.sl2,this.view.getListviewsong(),this.view.getListviewplaylist()));
+            this.sl2.addListener((ListChangeListener<? super Song>) c -> {
+                this.model.updateLVPlaylist(this.sl2,this.view.getListviewsong(),this.view.getListviewplaylist());
+                if(this.container != null) {
+                    try {
+                        this.container.updatePlaylist(this.sl2);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
 
             //SetOnAction Methode für das auffinden/auswählen eines Musik Ordners
             this.view.getAddall().setOnAction(e -> {
@@ -88,7 +106,6 @@ public class Controller {
 
             //abspielen eines MP3 files
             this.view.getPlay().setOnAction(e -> {
-                this.model.playMp3(this.view.getListviewsong(), this.view.getListviewplaylist());
                 if (this.container != null) {
                     try {
                         this.container.playButton();
@@ -96,11 +113,11 @@ public class Controller {
                         e1.printStackTrace();
                     }
                 }
+                else this.model.playMp3(this.view.getListviewsong(), this.view.getListviewplaylist());
             });
 
             //pausieren ines MP3 files
             this.view.getPause().setOnAction(e -> {
-                this.model.pauseMp3();
                 if (this.container != null) {
                     try {
                         this.container.pauseButton();
@@ -108,18 +125,18 @@ public class Controller {
                         e1.printStackTrace();
                     }
                 }
+                else this.model.pauseMp3();
             });
 
             //naechste mp3
             this.view.getNext().setOnAction(e -> {
-                this.model.nextMP3(this.view.getListviewplaylist());
                 if (this.container != null) {
                     try {
                         this.container.nextButton();
                     } catch (RemoteException e1) {
                         e1.printStackTrace();
                     }
-                }
+                } else this.model.nextMP3(this.view.getListviewplaylist());
             });
 
             //volume slider
