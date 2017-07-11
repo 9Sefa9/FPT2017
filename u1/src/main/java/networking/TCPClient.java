@@ -17,11 +17,13 @@ public class TCPClient extends Thread{
 
     private static String password="123",remoteobject;
     private Container c;
+    private Controller controller;
 
     public TCPClient(String password){
         this.password = password;
     }
-    public TCPClient(){
+    public TCPClient(Controller controller){
+        this.controller = controller;
     }
     public void run(){
         try (Socket serverCon = new Socket("localhost", 5020);
@@ -42,6 +44,7 @@ public class TCPClient extends Thread{
 
             try {
                 c = (Container) Naming.lookup("//127.0.0.1:5021/"+remoteobject);
+                c.registerClient(new ContainerImpl(controller));
                 //c.updateAllSongs();
                 //c.updatePlaylist();
                 System.out.println(c.getAllSongs());

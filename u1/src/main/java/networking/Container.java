@@ -21,4 +21,5 @@ public interface Container extends Remote{
     void nextButton() throws RemoteException;
     void updateAllSongs(SongList songs) throws RemoteException;
     void updatePlaylist(SongList songs) throws RemoteException;
+    void registerClient(Container c) throws RemoteException;
 }

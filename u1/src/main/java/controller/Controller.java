@@ -25,12 +25,35 @@ public class Controller {
     private Container container;
 
     public Controller(){
+        this.sl = new SongList();
+        this.sl2 = new SongList();
         currentTime = "00:00";
     }
 
     public Controller(Container c){
         currentTime = "00:00";
         this.container = c;
+        try {
+            this.sl = this.container.getAllSongs();
+            this.sl2 = this.container.getPlaylist();
+            this.updatePlaylist(this.sl2);
+            this.updateAllSongs(this.sl);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setup(Container c){
+        currentTime = "00:00";
+            this.container = c;
+            try {
+            this.sl = this.container.getAllSongs();
+            this.sl2 = this.container.getPlaylist();
+            this.updatePlaylist(this.sl2);
+            this.updateAllSongs(this.sl);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     public void link(Model model, View view){
@@ -43,10 +66,10 @@ public class Controller {
 
 
             //Lauscht und Updated regelmäßig die hinzugefügten Songs zum View.
-            this.sl = new SongList();
+
             this.model.setAllsongs(this.sl);
             this.sl.addListener((ListChangeListener<? super Song>) c -> {
-                this.model.updateLVSong(this.sl,this.view.getListviewsong(),this.view.getListviewplaylist());
+                this.model.updateLVSong(this.sl,this.view.getListviewsong(),this.view.getListviewplaylist()); //TODO: Delete Bug
                 if(this.container != null) {
                     try {
                         this.container.updateAllSongs(this.sl);
@@ -57,10 +80,10 @@ public class Controller {
             });
 
             //Lauscht und Updated regelmäßig die Playlist mit den zuvor "geaddeten" Songs.
-            this.sl2 = new SongList();
+
             this.model.setPlaylist(this.sl2);
             this.sl2.addListener((ListChangeListener<? super Song>) c -> {
-                this.model.updateLVPlaylist(this.sl2,this.view.getListviewsong(),this.view.getListviewplaylist());
+                this.model.updateLVPlaylist(this.sl2,this.view.getListviewsong(),this.view.getListviewplaylist()); //TODO: Delete Bug
                 if(this.container != null) {
                     try {
                         this.container.updatePlaylist(this.sl2);
@@ -296,6 +319,9 @@ public class Controller {
 
     public void updateAllSongs(SongList songs)
     {
+        this.sl = songs;
+        if(this.model != null)
+            this.model.setAllsongs(this.sl);
         Platform.runLater(() -> {
             this.view.getListviewsong().getItems().removeAll(this.view.getListviewsong().getItems());
             for (Song s : songs)
@@ -305,6 +331,9 @@ public class Controller {
 
     public void updatePlaylist(SongList songs)
     {
+        this.sl2 = songs;
+        if(this.model != null)
+            this.model.setPlaylist(this.sl2);
         Platform.runLater(() -> {
             this.view.getListviewplaylist().getItems().removeAll(this.view.getListviewplaylist().getItems());
             for (Song s : songs)

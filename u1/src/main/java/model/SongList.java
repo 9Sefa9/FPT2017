@@ -103,7 +103,8 @@ public class SongList extends ModifiableObservableListBase<Song> implements inte
 
     @Override
     protected Song doRemove(int index) {
-        this.list.remove(index);
+        if(this.list.size() > 0)
+            return this.list.remove(index);
         return null;
     }
 

@@ -5,10 +5,13 @@ import model.SongList;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 public class ContainerImpl extends UnicastRemoteObject implements Container {
 
     private Controller c;
+
+    private ArrayList<Container> containers = new ArrayList<Container>();
 
     public ContainerImpl() throws RemoteException{
 
@@ -23,73 +26,81 @@ public class ContainerImpl extends UnicastRemoteObject implements Container {
     }
 
     @Override
-    public SongList getAllSongs() {
+    public synchronized SongList getAllSongs() {
         return this.c.getAllSongs();
     }
 
     @Override
-    public SongList getPlaylist() {
+    public synchronized SongList getPlaylist() {
         return this.c.getPlaylist();
     }
 
     @Override
-    public void addAllButton() throws RemoteException {
+    public synchronized void addAllButton() throws RemoteException {
         this.c.addAllButton();
     }
 
     @Override
-    public void addToPlaylistButton() throws RemoteException {
+    public synchronized void addToPlaylistButton() throws RemoteException {
         this.c.addToPlaylistButton();
     }
 
     @Override
-    public void deleteSongButton() throws RemoteException {
+    public synchronized void deleteSongButton() throws RemoteException {
         this.c.deleteSongButton();
     }
 
     @Override
-    public void savePlaylistButton() throws RemoteException {
+    public synchronized void savePlaylistButton() throws RemoteException {
         this.c.savePlaylistButton();
     }
 
     @Override
-    public void loadPlaylistButton() throws RemoteException {
+    public synchronized void loadPlaylistButton() throws RemoteException {
         this.c.loadPlaylistButton();
     }
 
     @Override
-    public void loadSongListButton() throws RemoteException {
+    public synchronized void loadSongListButton() throws RemoteException {
         this.c.loadSongListButton();
     }
 
     @Override
-    public void saveSongListButton() throws RemoteException {
+    public synchronized void saveSongListButton() throws RemoteException {
         this.c.saveSongListButton();
     }
 
     @Override
-    public void playButton() throws RemoteException {
+    public synchronized void playButton() throws RemoteException {
         this.c.playButton();
     }
 
     @Override
-    public void pauseButton() throws RemoteException {
+    public synchronized void pauseButton() throws RemoteException {
         this.c.pauseButton();
     }
 
     @Override
-    public void nextButton() throws RemoteException {
+    public synchronized void nextButton() throws RemoteException {
         this.c.nextButton();
     }
 
     @Override
-    public void updateAllSongs(SongList songs) throws RemoteException {
+    public synchronized void updateAllSongs(SongList songs) throws RemoteException {
         this.c.updateAllSongs(songs);
     }
 
     @Override
-    public void updatePlaylist(SongList songs) throws RemoteException {
+    public synchronized void updatePlaylist(SongList songs) throws RemoteException {
+        System.out.println(containers);
+        for(Container cs : containers)
+            cs.updatePlaylist(songs);
         this.c.updatePlaylist(songs);
+    }
+
+    @Override
+    public synchronized void registerClient(Container c) throws RemoteException {
+        containers.add(c);
     }
 
 }

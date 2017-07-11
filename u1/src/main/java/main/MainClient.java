@@ -28,11 +28,15 @@ public class MainClient extends Application {
         //UDPClient udpClient = new UDPClient(controller);
         //udpClient.start();
 
-        TCPClient tcpClient = new TCPClient();
+        Controller controller = new Controller();
+
+        TCPClient tcpClient = new TCPClient(controller);
         tcpClient.start();
         tcpClient.join();
-        Controller controller = new Controller(tcpClient.getC());
+
+        controller.setup(tcpClient.getC());
         controller.link(m, v);
+
         primaryStage.setTitle("FPT Player v1.0");
         primaryStage.setScene(s);
         primaryStage.setResizable(false);
