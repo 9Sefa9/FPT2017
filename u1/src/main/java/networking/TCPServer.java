@@ -14,19 +14,25 @@ import static networking.TCPServer.clientlist;
 public class TCPServer extends Thread {
 
     private String ServerPassword = "123";
+    private Remote remObj;
     public static ArrayList<Object> clientlist;
 
-    public static void main(String[] args){
+    /*public static void main(String[] args){
         new TCPServer().start();
-    }
+    }*/
 
     //nimmt Client entgegen.
+
+    public TCPServer(Remote remObj){
+        this.remObj = remObj;
+    }
+
     public void run() {
         try (ServerSocket server = new ServerSocket(5020)) {
 
             LocateRegistry.createRegistry(5021);
-            Remote remObj = new ContainerImpl();
-            Naming.rebind("//127.0.0.1:5021/remObj", remObj);
+            //Remote remObj = new Controller();
+            Naming.rebind("//127.0.0.1:5021/remObj", this.remObj);
 
             while (true) {
                 try {
@@ -101,113 +107,3 @@ public class TCPServer extends Thread {
     }
 
 }
-
-    /*
-    public TCPServer() throws RemoteException,MalformedURLException {
-        super();
-        initialization();
-    }
-
-    public void initialization() throws RemoteException,MalformedURLException{
-        TCPServer tcp = new TCPServer();
-        Registry registry = LocateRegistry.createRegistry(5020);
-        registry.rebind("//localhost:1099/tcp", tcp);
-
-    }
-
-    @Override
-    public void setPassword(String pw) throws RemoteException {
-
-    }
-
-    @Override
-    public String getPassword(String pw) throws RemoteException {
-        return null;
-    }
-
-    @Override
-    public boolean checkPassword(String pw) throws RemoteException {
-        return false;
-    }
-
-    @Override
-    public void setName(String name) throws RemoteException {
-
-    }
-
-    @Override
-    public String getName() throws RemoteException {
-        return null;
-    }
-    */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-    public void run() {
-        try (ServerSocket server = new ServerSocket(5020)) {
-            int connections = 0;
-
-            while (true) {
-                try {
-                    Socket socket = server.accept();
-                    connections++;
-                    new TCPServerThread(connections, socket).start();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    class TCPServerThread extends Thread {
-        private int name;
-        private Socket socket;
-
-        public TCPServerThread(int name, Socket socket) {
-            this.name = name;
-            this.socket = socket;
-        }
-
-        public void run() {
-            String msg = "EchoServer: Verbindung " + name;
-            System.out.println(msg + " hergestellt");
-            try (InputStream in = socket.getInputStream();
-                 OutputStream out = socket.getOutputStream()) {
-
-                out.write(2);
-                out.flush();
-
-                System.out.println("Verbindung " + name + " wird beendet");
-                socket.close();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-
-        }
-    }
-    */
-

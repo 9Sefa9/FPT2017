@@ -5,6 +5,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.Model;
+import networking.ContainerImpl;
+import networking.TCPServer;
 import networking.UDPServer;
 import view.View;
 
@@ -23,8 +25,12 @@ public class MainServer extends Application {
         Controller controller = new Controller();
         controller.link(m, v);
 
-        UDPServer udpClient = new UDPServer(controller);
-        udpClient.start();
+        TCPServer tcpServer = new TCPServer(new ContainerImpl(controller));
+        //TCPServer tcpServer = new TCPServer(controller);
+        tcpServer.start();
+
+        //UDPServer udpClient = new UDPServer(controller);
+        //udpClient.start();
 
         primaryStage.setTitle("FPT Player v1.0");
         primaryStage.setScene(s);

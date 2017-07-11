@@ -8,6 +8,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Properties;
 

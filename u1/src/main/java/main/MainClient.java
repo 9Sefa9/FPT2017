@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.Model;
+import networking.TCPClient;
 import networking.UDPClient;
 import view.View;
 
@@ -21,12 +22,17 @@ public class MainClient extends Application {
         Scene s = new Scene(v);
         Model m = new Model();
 
-        Controller controller = new Controller();
+        //Controller controller = new Controller();
+        //controller.link(m, v);
+
+        //UDPClient udpClient = new UDPClient(controller);
+        //udpClient.start();
+
+        TCPClient tcpClient = new TCPClient();
+        tcpClient.start();
+        tcpClient.join();
+        Controller controller = new Controller(tcpClient.getC());
         controller.link(m, v);
-
-        UDPClient udpClient = new UDPClient(controller);
-        udpClient.start();
-
         primaryStage.setTitle("FPT Player v1.0");
         primaryStage.setScene(s);
         primaryStage.setResizable(false);
