@@ -69,7 +69,7 @@ public class Controller {
 
             this.model.setAllsongs(this.sl);
             this.sl.addListener((ListChangeListener<? super Song>) c -> {
-                this.model.updateLVSong(this.sl,this.view.getListviewsong(),this.view.getListviewplaylist()); //TODO: Delete Bug
+                this.model.updateLVSong(this.sl,this.view.getListviewsong(),this.view.getListviewplaylist());
                 if(this.container != null) {
                     try {
                         this.container.updateAllSongs(this.sl);
@@ -83,14 +83,7 @@ public class Controller {
 
             this.model.setPlaylist(this.sl2);
             this.sl2.addListener((ListChangeListener<? super Song>) c -> {
-                this.model.updateLVPlaylist(this.sl2,this.view.getListviewsong(),this.view.getListviewplaylist()); //TODO: Delete Bug
-                if(this.container != null) {
-                    try {
-                        this.container.updatePlaylist(this.sl2);
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
-                }
+                this.model.updateLVPlaylist(this.sl2,this.view.getListviewsong(),this.view.getListviewplaylist());
             });
 
             //SetOnAction Methode für das auffinden/auswählen eines Musik Ordners
@@ -101,10 +94,25 @@ public class Controller {
             //SetOnAction Methode für das hinzufügen der selektiv ausgewählten Song´s in die Playlist View
             this.view.getAddtoplaylist().setOnAction(e -> {
                 this.model.handleAddToPlaylistButton(this.view.getSelectedSongs());
+                if(this.container != null) {
+                    try {
+                        this.container.updatePlaylist(this.sl2);
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
+                }
             });
 
             this.view.getDeletesong().setOnAction(e -> {
                 this.model.deletesongFromPlaylist(this.view.getListviewplaylist());
+                System.out.println("Delete from Playlist");
+                if(this.container != null) {
+                    try {
+                        this.container.updatePlaylist(this.sl2);
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
+                }
             });
 
             //Speichert die Playlist in eine *.ps Datei ab.
@@ -340,6 +348,11 @@ public class Controller {
                 this.view.getListviewplaylist().getItems().add(s);
         } );
 
+    }
+
+    public void setContainer(Container container)
+    {
+        this.container = container;
     }
 
 }

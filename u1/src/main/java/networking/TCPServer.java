@@ -6,6 +6,7 @@ import java.io.*;
 import java.net.*;
 import java.rmi.Naming;
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 
@@ -23,16 +24,17 @@ public class TCPServer extends Thread {
 
     //nimmt Client entgegen.
 
-    public TCPServer(Remote remObj){
+    public TCPServer(Remote remObj) throws RemoteException, MalformedURLException {
         this.remObj = remObj;
+        LocateRegistry.createRegistry(5021);
+        //Remote remObj = new Controller();
+        Naming.rebind("//127.0.0.1:5021/remObj", this.remObj);
     }
 
     public void run() {
         try (ServerSocket server = new ServerSocket(5020)) {
 
-            LocateRegistry.createRegistry(5021);
-            //Remote remObj = new Controller();
-            Naming.rebind("//127.0.0.1:5021/remObj", this.remObj);
+
 
             while (true) {
                 try {

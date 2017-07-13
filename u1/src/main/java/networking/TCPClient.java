@@ -51,7 +51,6 @@ public class TCPClient extends Thread{
             } catch (NotBoundException e) {
                 e.printStackTrace();
             }
-            System.out.println("Das ist ein : "+c.test("test")+"!");
 
         } catch (IOException e) {
             e.printStackTrace();

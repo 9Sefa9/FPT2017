@@ -87,6 +87,9 @@ public class ContainerImpl extends UnicastRemoteObject implements Container {
 
     @Override
     public synchronized void updateAllSongs(SongList songs) throws RemoteException {
+        System.out.println(containers);
+        for(Container cs : containers)
+            cs.updateAllSongs(songs);
         this.c.updateAllSongs(songs);
     }
 

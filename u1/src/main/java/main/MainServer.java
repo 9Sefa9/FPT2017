@@ -23,12 +23,15 @@ public class MainServer extends Application {
         Model m = new Model();
 
         Controller controller = new Controller();
-        controller.link(m, v);
 
-        TCPServer tcpServer = new TCPServer(new ContainerImpl(controller));
+        ContainerImpl container = new ContainerImpl(controller);
+
+        TCPServer tcpServer = new TCPServer(container);
         //TCPServer tcpServer = new TCPServer(controller);
         tcpServer.start();
 
+        controller.setContainer(container);
+        controller.link(m, v);
         //UDPServer udpClient = new UDPServer(controller);
         //udpClient.start();
 
