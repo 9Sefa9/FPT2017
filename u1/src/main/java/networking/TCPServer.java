@@ -79,7 +79,6 @@ public class TCPServer extends Thread {
                 if(ClientPassword.equals(this.ServerPassword)) {
                     System.out.println("PASSWORD::CORRECT");
                     System.out.println("SERVICENAME::CREATE REMOTE OBJECT FOR "+this.ClientName);
-                    // Führe rmi durch was ist ein DIENSTNAME ?
 
                     synchronized (clientlist){
                         clientlist.add(ClientName);

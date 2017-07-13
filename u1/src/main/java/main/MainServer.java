@@ -27,7 +27,6 @@ public class MainServer extends Application {
         ContainerImpl container = new ContainerImpl(controller);
 
         TCPServer tcpServer = new TCPServer(container);
-        //TCPServer tcpServer = new TCPServer(controller);
         tcpServer.start();
 
         controller.setContainer(container);

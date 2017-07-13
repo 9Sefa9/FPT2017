@@ -22,12 +22,6 @@ public class MainClient extends Application {
         Scene s = new Scene(v);
         Model m = new Model();
 
-        //Controller controller = new Controller();
-        //controller.link(m, v);
-
-        //UDPClient udpClient = new UDPClient(controller);
-        //udpClient.start();
-
         Controller controller = new Controller();
 
         TCPClient tcpClient = new TCPClient(controller);
@@ -41,6 +35,12 @@ public class MainClient extends Application {
         primaryStage.setScene(s);
         primaryStage.setResizable(false);
         primaryStage.show();
+
+        //Controller controller = new Controller();
+        //controller.link(m, v);
+
+        //UDPClient udpClient = new UDPClient(controller);
+        //udpClient.start();
     }
 
 
