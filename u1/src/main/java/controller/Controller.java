@@ -1,28 +1,62 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.util.Duration;
 import model.Model;
 import model.Song;
 import model.SongList;
+import networking.Container;
+import networking.ContainerImpl;
 import view.View;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
-public class Controller extends UnicastRemoteObject{
+public class Controller {
 
     private Model model;
     private View view;
     private SongList sl, sl2;
     private Song cs;
     private String currentTime;
+    private Container container;
 
-    public Controller() throws RemoteException{
+    public Controller(){
+        this.sl = new SongList();
+        this.sl2 = new SongList();
         currentTime = "00:00";
     }
-    public void link(Model model, View view) throws RemoteException {
+
+    public Controller(Container c){
+        currentTime = "00:00";
+        this.container = c;
+        try {
+            this.sl = this.container.getAllSongs();
+            this.sl2 = this.container.getPlaylist();
+            this.updatePlaylist(this.sl2);
+            this.updateAllSongs(this.sl);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setup(Container c){
+        currentTime = "00:00";
+            this.container = c;
+            try {
+            this.sl = this.container.getAllSongs();
+            this.sl2 = this.container.getPlaylist();
+            this.updatePlaylist(this.sl2);
+            this.updateAllSongs(this.sl);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void link(Model model, View view){
         try {
             this.model = model;
             this.view = view;
@@ -32,46 +66,109 @@ public class Controller extends UnicastRemoteObject{
 
 
             //Lauscht und Updated regelmäßig die hinzugefügten Songs zum View.
-            this.sl = new SongList();
+
             this.model.setAllsongs(this.sl);
-            this.sl.addListener((ListChangeListener<? super Song>) c -> this.model.updateLVSong(this.sl,this.view.getListviewsong(),this.view.getListviewplaylist()));
+            this.sl.addListener((ListChangeListener<? super Song>) c -> {
+                this.model.updateLVSong(this.sl,this.view.getListviewsong(),this.view.getListviewplaylist());
+                if(this.container != null) {
+                    try {
+                        this.container.updateAllSongs(this.sl);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
 
             //Lauscht und Updated regelmäßig die Playlist mit den zuvor "geaddeten" Songs.
-            this.sl2 = new SongList();
+
             this.model.setPlaylist(this.sl2);
-            this.sl2.addListener((ListChangeListener<? super Song>) c -> this.model.updateLVPlaylist(this.sl2,this.view.getListviewsong(),this.view.getListviewplaylist()));
+            this.sl2.addListener((ListChangeListener<? super Song>) c -> {
+                this.model.updateLVPlaylist(this.sl2,this.view.getListviewsong(),this.view.getListviewplaylist());
+            });
 
             //SetOnAction Methode für das auffinden/auswählen eines Musik Ordners
             this.view.getAddall().setOnAction(e -> {
                 this.model.handleAddSongsButton();
-
             });
 
             //SetOnAction Methode für das hinzufügen der selektiv ausgewählten Song´s in die Playlist View
-            this.view.getAddtoplaylist().setOnAction(e -> this.model.handleAddToPlaylistButton(this.view.getSelectedSongs()));
+            this.view.getAddtoplaylist().setOnAction(e -> {
+                this.model.handleAddToPlaylistButton(this.view.getSelectedSongs());
+                if(this.container != null) {
+                    try {
+                        this.container.updatePlaylist(this.sl2);
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
 
-            this.view.getDeletesong().setOnAction(e -> this.model.deletesongFromPlaylist(this.view.getListviewplaylist()));
+            this.view.getDeletesong().setOnAction(e -> {
+                this.model.deletesongFromPlaylist(this.view.getListviewplaylist());
+                System.out.println("Delete from Playlist");
+                if(this.container != null) {
+                    try {
+                        this.container.updatePlaylist(this.sl2);
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
 
             //Speichert die Playlist in eine *.ps Datei ab.
-            this.view.getSavePlaylist().setOnAction(e -> this.model.handleSavePlaylist(this.model.getPlaylist().list));
+            this.view.getSavePlaylist().setOnAction(e -> {
+                this.model.handleSavePlaylist(this.model.getPlaylist().list);
+            });
 
             //ladet die Playlist und packt es in die Playlist-View
-            this.view.getLoadPlaylist().setOnAction(e -> this.model.handleLoadPlaylist(this.model.getPlaylist().list));
+            this.view.getLoadPlaylist().setOnAction(e -> {
+                this.model.handleLoadPlaylist(this.model.getPlaylist().list);
+            });
 
             //speichert die Songlist in eine *.xml datei
-            this.view.getLoadSonglist().setOnAction(e -> this.model.loadJPASonglist());
+            this.view.getLoadSonglist().setOnAction(e -> {
+                this.model.loadJPASonglist();
+            });
 
             //laded die Songlist in die Library
-            this.view.getSaveSonglist().setOnAction(e -> this.model.saveJPASonglist());
+            this.view.getSaveSonglist().setOnAction(e -> {
+                this.model.saveJPASonglist();
+            });
 
             //abspielen eines MP3 files
-            this.view.getPlay().setOnAction(e -> {this.model.playMp3(this.view.getListviewsong(), this.view.getListviewplaylist());});
+            this.view.getPlay().setOnAction(e -> {
+                if (this.container != null) {
+                    try {
+                        this.container.playButton();
+                    } catch (RemoteException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                else this.model.playMp3(this.view.getListviewsong(), this.view.getListviewplaylist());
+            });
 
             //pausieren ines MP3 files
-            this.view.getPause().setOnAction(e -> this.model.pauseMp3());
+            this.view.getPause().setOnAction(e -> {
+                if (this.container != null) {
+                    try {
+                        this.container.pauseButton();
+                    } catch (RemoteException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                else this.model.pauseMp3();
+            });
 
             //naechste mp3
-            this.view.getNext().setOnAction(e -> this.model.nextMP3(this.view.getListviewplaylist()));
+            this.view.getNext().setOnAction(e -> {
+                if (this.container != null) {
+                    try {
+                        this.container.nextButton();
+                    } catch (RemoteException e1) {
+                        e1.printStackTrace();
+                    }
+                } else this.model.nextMP3(this.view.getListviewplaylist());
+            });
 
             //volume slider
             this.view.getVolumeSlider().valueProperty().addListener(e -> this.model.setVolume(this.view.getVolumeSlider().getValue() / 100));
@@ -166,6 +263,96 @@ public class Controller extends UnicastRemoteObject{
     //Updated/setzt Die aktuelle spielzeit
     public void updateCurrentTime(String time) throws RemoteException{
         this.view.getSongTime().setText(time);
+    }
+
+    public SongList getAllSongs()
+    {
+        return this.model.getAllsongs();
+    }
+
+    public SongList getPlaylist()
+    {
+        return this.model.getPlaylist();
+    }
+
+    public void addAllButton()
+    {
+        this.model.handleAddSongsButton();
+    }
+
+    public void addToPlaylistButton()
+    {
+        this.model.handleAddToPlaylistButton(this.view.getSelectedSongs());
+    }
+
+    public void deleteSongButton()
+    {
+        this.model.deletesongFromPlaylist(this.view.getListviewplaylist());
+    }
+
+    public void savePlaylistButton()
+    {
+        this.model.handleSavePlaylist(this.model.getPlaylist().list);
+    }
+
+    public void loadPlaylistButton()
+    {
+        this.model.handleLoadPlaylist(this.model.getPlaylist().list);
+    }
+
+    public void loadSongListButton()
+    {
+        this.model.loadJPASonglist();
+    }
+
+    public void saveSongListButton()
+    {
+        this.model.saveJPASonglist();
+    }
+
+    public void playButton()
+    {
+        this.model.playMp3(this.view.getListviewsong(), this.view.getListviewplaylist());
+    }
+
+    public void pauseButton()
+    {
+        this.model.pauseMp3();
+    }
+
+    public void nextButton()
+    {
+        this.model.nextMP3(this.view.getListviewplaylist());
+    }
+
+    public void updateAllSongs(SongList songs)
+    {
+        this.sl = songs;
+        if(this.model != null)
+            this.model.setAllsongs(this.sl);
+        Platform.runLater(() -> {
+            this.view.getListviewsong().getItems().removeAll(this.view.getListviewsong().getItems());
+            for (Song s : songs)
+                this.view.getListviewsong().getItems().add(s);
+             } );
+    }
+
+    public void updatePlaylist(SongList songs)
+    {
+        this.sl2 = songs;
+        if(this.model != null)
+            this.model.setPlaylist(this.sl2);
+        Platform.runLater(() -> {
+            this.view.getListviewplaylist().getItems().removeAll(this.view.getListviewplaylist().getItems());
+            for (Song s : songs)
+                this.view.getListviewplaylist().getItems().add(s);
+        } );
+
+    }
+
+    public void setContainer(Container container)
+    {
+        this.container = container;
     }
 
 }

@@ -7,9 +7,10 @@ package model;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ModifiableObservableListBase;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SongList extends ModifiableObservableListBase<Song> implements interfaces.Song {
+public class SongList extends ModifiableObservableListBase<Song> implements interfaces.Song, Serializable {
 
     public ArrayList<Song> list = new ArrayList<>();
 
@@ -102,7 +103,8 @@ public class SongList extends ModifiableObservableListBase<Song> implements inte
 
     @Override
     protected Song doRemove(int index) {
-        this.list.remove(index);
+        if(this.list.size() > 0)
+            return this.list.remove(index);
         return null;
     }
 

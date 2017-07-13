@@ -233,8 +233,12 @@ public class Model{
     }
 
     public void deletesongFromPlaylist(ListView<Song> listviewplaylist){
-        if(listviewplaylist.getSelectionModel().isSelected(listviewplaylist.getSelectionModel().getSelectedIndex()))
-            this.playlist.remove(getCurrentPlaylistSong());
+        if(listviewplaylist.getSelectionModel().isSelected(listviewplaylist.getSelectionModel().getSelectedIndex())) {
+            System.out.println(this.playlist.size() + " " + listviewplaylist.getSelectionModel().getSelectedIndex());
+            System.out.println(this.playlist);
+            this.playlist.remove(listviewplaylist.getSelectionModel().getSelectedIndex());
+            System.out.println(this.playlist);
+        }
     }
 
 

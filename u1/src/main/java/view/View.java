@@ -10,6 +10,8 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 
+import java.io.Serializable;
+
 public class View extends BorderPane{
     private ListView<Song> listviewsong,listviewplaylist;
     private Button addsongs, loadPlaylist, loadSonglist, savePlaylist, saveSonglist,addtoplaylist,deletesong,commit,play,pause,next;
