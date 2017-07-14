@@ -34,6 +34,7 @@ public class MainClient extends Application {
         tcpClient.start();
         tcpClient.join();
 
+        //remote object wird an dem Controller übergeben
         controller.setup(tcpClient.getC());
         controller.link(m, v);
 

@@ -265,6 +265,7 @@ public class Controller {
         this.view.getSongTime().setText(time);
     }
 
+    // folgende Methoden werden von Container aufgerufen
     public SongList getAllSongs()
     {
         return this.model.getAllsongs();

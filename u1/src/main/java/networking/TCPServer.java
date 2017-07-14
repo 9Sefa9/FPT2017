@@ -35,11 +35,11 @@ public class TCPServer extends Thread {
         try (ServerSocket server = new ServerSocket(5020)) {
 
 
-
+            clientlist = new ArrayList<>();
             while (true) {
                 try {
                     Socket socket = server.accept();
-                    clientlist = new ArrayList<>();
+
                     new TCPServerThread(socket,ServerPassword,clientlist).start();
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -23,7 +23,7 @@ public class UDPClient extends Thread{
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-
+        // sendet mit 5001
         try (DatagramSocket datagramSocket = new DatagramSocket(5001)){
 
             try {
@@ -31,6 +31,7 @@ public class UDPClient extends Thread{
                     String command = "CURRENTTIME:";
                     byte buffer[] = null;
                     buffer = command.getBytes();
+                    //
                     DatagramPacket packet = new DatagramPacket(buffer, buffer.length, ia, 5000);
                     datagramSocket.send(packet);
 
